@@ -10,7 +10,7 @@ class CreateBuilderTest {
 
     @Test
     void canBuildAddressWithDefaults() {
-        Address.AddressBuilder.class;
+        Address address = Address.builder().build();
         Assertions.assertNotNull(address);
     }
 

@@ -30,10 +30,22 @@ public class CreateBuilder {
                 .addModifiers(Modifier.PRIVATE)
                 .build();
 
+        FieldSpec numberDefault = FieldSpec
+                .builder(int.class, "houseNumber")
+                .initializer("$L", 63)
+                .addModifiers(Modifier.PRIVATE)
+                .build();
+
+        FieldSpec streetNameDefault = FieldSpec
+                .builder(String.class, "streetName")
+                .initializer("$S", "Rances Lane")
+                .addModifiers(Modifier.PRIVATE)
+                .build();
+
         TypeSpec builder = TypeSpec.classBuilder("AddressBuilder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addField(number)
-                .addField(streetName)
+                .addField(numberDefault)
+                .addField(streetNameDefault)
                 .build();
 
         TypeName addressBuilder = ClassName.get("", "AddressBuilder");

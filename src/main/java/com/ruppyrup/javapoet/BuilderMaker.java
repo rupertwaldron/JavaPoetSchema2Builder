@@ -1,33 +1,44 @@
 package com.ruppyrup.javapoet;
 
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.WildcardTypeName;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class CreateBuilder {
+public class BuilderMaker {
+    private String className;
+    private Map<String, Object> fields = new HashMap<>();
 
-    public static void create() throws IOException {
+    private BuilderMaker(BuilderMakerBuilder builderMakerBuilder) {
+        this.className = builderMakerBuilder.className;
+        this.fields = builderMakerBuilder.fields;
+    }
+
+    public static BuilderMakerBuilder builder() {
+        return new BuilderMakerBuilder();
+    }
+
+    public void makeBuilder() throws IOException {
 
         FieldSpec number = FieldSpec
                 .builder(int.class, "houseNumber")
 //                .initializer("$L", 63)
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PUBLIC)
                 .build();
 
         FieldSpec streetName = FieldSpec
                 .builder(String.class, "streetName")
 //                .initializer("$S", "Rances Lane")
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PUBLIC)
                 .build();
 
         FieldSpec numberDefault = FieldSpec
@@ -91,6 +102,25 @@ public class CreateBuilder {
         file.writeTo(System.out);
 
         file.writeTo(new File("build/generated"));
+    }
+
+    public static class BuilderMakerBuilder {
+        private String className;
+        private Map<String, Object> fields = new HashMap<>();
+
+        public BuilderMaker build() {
+            return new BuilderMaker(this);
+        }
+
+        public BuilderMakerBuilder withClassName(String className) {
+            this.className = className;
+            return this;
+        }
+
+        public BuilderMakerBuilder withField(String name, Class<?> clazz) {
+            this.fields.put(name, clazz);
+            return this;
+        }
     }
 }
 

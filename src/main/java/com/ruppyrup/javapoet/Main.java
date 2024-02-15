@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        CreateBuilder.create();
+        BuilderMaker builderMaker = BuilderMaker.builder().build();
+        builderMaker.makeBuilder();
         CreateClass.create();
     }
 }

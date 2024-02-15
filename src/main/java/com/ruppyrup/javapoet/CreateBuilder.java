@@ -42,8 +42,17 @@ public class CreateBuilder {
                 .addModifiers(Modifier.PRIVATE)
                 .build();
 
+        TypeName addressName = ClassName.get("", "Address");
+
+        MethodSpec buildMethod = MethodSpec.methodBuilder("build")
+                .addModifiers( Modifier.PUBLIC)
+                .addStatement("return new $T(this)", addressName)
+                .returns(addressName)
+                .build();
+
         TypeSpec builder = TypeSpec.classBuilder("AddressBuilder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addMethod(buildMethod)
                 .addField(numberDefault)
                 .addField(streetNameDefault)
                 .build();
@@ -60,12 +69,19 @@ public class CreateBuilder {
                 .addModifiers(Modifier.PRIVATE)
                 .build();
 
+        MethodSpec staticBuilder = MethodSpec.methodBuilder("builder")
+                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                .addStatement("return new $T()", addressBuilder)
+                .returns(addressBuilder)
+                .build();
+
 
         TypeSpec address = TypeSpec
                 .classBuilder("Address")
                 .addType(builder)
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(constructor)
+                .addMethod(staticBuilder)
                 .addField(number)
                 .addField(streetName)
                 .build();

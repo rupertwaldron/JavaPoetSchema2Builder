@@ -1,6 +1,6 @@
 package com.ruppyrup.javapoet;
 
-import com.ruppyrup.javapoent.generated.Address;
+import com.ruppyrup.javapoet.generated.Address;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,10 @@ class BuilderMakerTest {
 
     @Test
     void useBuilderToMakeBuilder() throws IOException {
-        BuilderMaker builderMaker = BuilderMaker.builder().build();
+        BuilderMaker builderMaker = BuilderMaker.builder()
+                .withPackageName("com.ruppyrup.javapoet.generated")
+                .withClassName("Address")
+                .build();
         builderMaker.makeBuilder();
         Address address = Address.builder().build();
         assertThat(address.streetName).isEqualTo("Rances Lane");

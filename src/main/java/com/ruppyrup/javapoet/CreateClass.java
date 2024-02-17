@@ -66,7 +66,7 @@ public class CreateClass {
                 .addMethod(sumOfTen)
                 .build();
 
-        JavaFile file = JavaFile.builder("com.ruppyrup.javapoent.generated", person).build();
+        JavaFile file = JavaFile.builder("com.ruppyrup.javapoet.generated", person).build();
 
         file.writeTo(System.out);
 

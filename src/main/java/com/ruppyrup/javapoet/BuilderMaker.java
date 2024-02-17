@@ -15,12 +15,15 @@ import java.util.Map;
 
 
 public class BuilderMaker {
-    private String className;
+
+    private final String packageName;
+    private final String className;
     private Map<String, Object> fields = new HashMap<>();
 
     private BuilderMaker(BuilderMakerBuilder builderMakerBuilder) {
         this.className = builderMakerBuilder.className;
         this.fields = builderMakerBuilder.fields;
+        this.packageName = builderMakerBuilder.packageName;
     }
 
     public static BuilderMakerBuilder builder() {
@@ -53,28 +56,30 @@ public class BuilderMaker {
                 .addModifiers(Modifier.PRIVATE)
                 .build();
 
-        TypeName addressName = ClassName.get("", "Address");
+        TypeName classNameType = ClassName.get("", className);
 
         MethodSpec buildMethod = MethodSpec.methodBuilder("build")
                 .addModifiers( Modifier.PUBLIC)
-                .addStatement("return new $T(this)", addressName)
-                .returns(addressName)
+                .addStatement("return new $T(this)", classNameType)
+                .returns(classNameType)
                 .build();
 
-        TypeSpec builder = TypeSpec.classBuilder("AddressBuilder")
+        TypeSpec builder = TypeSpec.classBuilder(className + "Builder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(buildMethod)
                 .addField(numberDefault)
                 .addField(streetNameDefault)
                 .build();
 
-        TypeName addressBuilder = ClassName.get("", "AddressBuilder");
+        TypeName builderTypeName = ClassName.get("", className + "Builder");
+
+        String builderMethodName = className.toLowerCase() + "Builder";
 
         MethodSpec constructor = MethodSpec.constructorBuilder()
-                .addParameter(addressBuilder, "addressBuilder")
-                .addStatement("this.$N = addressBuilder.$N", "houseNumber", "houseNumber")
-                .addStatement("this.$N = addressBuilder.$N", "streetName", "streetName")
-//                .addParameter(ClassName.get(builder.getClass()), "addressBuilder")
+                .addParameter(builderTypeName, builderMethodName)
+                .addStatement("this.$N = $N.$N", "houseNumber", builderMethodName, "houseNumber")
+                .addStatement("this.$N = $N.$N", "streetName", builderMethodName, "streetName")
+//                .addParameter(ClassName.get(builder.getClass()), "builderTypeName")
 //                .addParameter(int.class, "houseNumber")
 //                .addParameter(String.class, "streetName")
                 .addModifiers(Modifier.PRIVATE)
@@ -82,13 +87,13 @@ public class BuilderMaker {
 
         MethodSpec staticBuilder = MethodSpec.methodBuilder("builder")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
-                .addStatement("return new $T()", addressBuilder)
-                .returns(addressBuilder)
+                .addStatement("return new $T()", builderTypeName)
+                .returns(builderTypeName)
                 .build();
 
 
-        TypeSpec address = TypeSpec
-                .classBuilder("Address")
+        TypeSpec classTypeSpec = TypeSpec
+                .classBuilder(className)
                 .addType(builder)
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(constructor)
@@ -97,7 +102,7 @@ public class BuilderMaker {
                 .addField(streetName)
                 .build();
 
-        JavaFile file = JavaFile.builder("com.ruppyrup.javapoent.generated", address).build();
+        JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
 
         file.writeTo(System.out);
 
@@ -105,11 +110,17 @@ public class BuilderMaker {
     }
 
     public static class BuilderMakerBuilder {
+        private String packageName;
         private String className;
         private Map<String, Object> fields = new HashMap<>();
 
         public BuilderMaker build() {
             return new BuilderMaker(this);
+        }
+
+        public BuilderMakerBuilder withPackageName(String packageName) {
+            this.packageName = packageName;
+            return this;
         }
 
         public BuilderMakerBuilder withClassName(String className) {

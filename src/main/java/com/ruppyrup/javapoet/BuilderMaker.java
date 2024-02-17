@@ -10,15 +10,18 @@ import com.squareup.javapoet.TypeSpec;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class BuilderMaker {
 
     private final String packageName;
     private final String className;
-    private Map<String, Object> fields = new HashMap<>();
+    private final List<SchemaField<?>> fields;
 
     private BuilderMaker(BuilderMakerBuilder builderMakerBuilder) {
         this.className = builderMakerBuilder.className;
@@ -32,17 +35,27 @@ public class BuilderMaker {
 
     public void makeBuilder() throws IOException {
 
+        List<FieldSpec.Builder> fieldSpecBuilders = fields.stream()
+                .map(sf -> {
+                    var builder = FieldSpec.builder(sf.clazz(), sf.name());
+                    builder.initializer("$S", sf.clazz().cast(sf.initialValue()));
+                    return builder;
+                })
+                .map(builder -> builder.addModifiers(Modifier.PUBLIC))
+                .toList();
+
+
         FieldSpec number = FieldSpec
                 .builder(int.class, "houseNumber")
 //                .initializer("$L", 63)
                 .addModifiers(Modifier.PUBLIC)
                 .build();
 
-        FieldSpec streetName = FieldSpec
-                .builder(String.class, "streetName")
-//                .initializer("$S", "Rances Lane")
-                .addModifiers(Modifier.PUBLIC)
-                .build();
+//        FieldSpec streetName = FieldSpec
+//                .builder(, "streetName")
+////                .initializer("$S", "Rances Lane")
+//                .addModifiers(Modifier.PUBLIC)
+//                .build();
 
         FieldSpec numberDefault = FieldSpec
                 .builder(int.class, "houseNumber")
@@ -68,8 +81,10 @@ public class BuilderMaker {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(buildMethod)
                 .addField(numberDefault)
-                .addField(streetNameDefault)
+                .addField(fieldSpecBuilders.get(0).build())
                 .build();
+
+
 
         TypeName builderTypeName = ClassName.get("", className + "Builder");
 
@@ -99,7 +114,7 @@ public class BuilderMaker {
                 .addMethod(constructor)
                 .addMethod(staticBuilder)
                 .addField(number)
-                .addField(streetName)
+                .addField(fieldSpecBuilders.get(0).build())
                 .build();
 
         JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
@@ -112,7 +127,7 @@ public class BuilderMaker {
     public static class BuilderMakerBuilder {
         private String packageName;
         private String className;
-        private Map<String, Object> fields = new HashMap<>();
+        private final List<SchemaField<?>> fields = new ArrayList<>();
 
         public BuilderMaker build() {
             return new BuilderMaker(this);
@@ -128,8 +143,8 @@ public class BuilderMaker {
             return this;
         }
 
-        public BuilderMakerBuilder withField(String name, Class<?> clazz) {
-            this.fields.put(name, clazz);
+        public BuilderMakerBuilder withField(SchemaField<?> schemaField) {
+            this.fields.add(schemaField);
             return this;
         }
     }

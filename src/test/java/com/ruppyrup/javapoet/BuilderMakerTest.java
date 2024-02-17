@@ -22,6 +22,7 @@ class BuilderMakerTest {
         BuilderMaker builderMaker = BuilderMaker.builder()
                 .withPackageName("com.ruppyrup.javapoet.generated")
                 .withClassName("Address")
+                .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
                 .build();
         builderMaker.makeBuilder();
         Address address = Address.builder().build();

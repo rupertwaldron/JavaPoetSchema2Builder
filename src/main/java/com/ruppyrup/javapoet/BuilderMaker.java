@@ -22,11 +22,13 @@ public class BuilderMaker {
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
+    private final FieldSpecFactory fieldSpecFactory;
 
     private BuilderMaker(BuilderMakerBuilder builderMakerBuilder) {
         this.className = builderMakerBuilder.className;
         this.fields = builderMakerBuilder.fields;
         this.packageName = builderMakerBuilder.packageName;
+        this.fieldSpecFactory = new FieldSpecFactory();
     }
 
     public static BuilderMakerBuilder builder() {
@@ -34,41 +36,6 @@ public class BuilderMaker {
     }
 
     public void makeBuilder() throws IOException {
-
-        List<FieldSpec.Builder> fieldSpecBuilders = fields.stream()
-                .map(sf -> {
-                    var builder = FieldSpec.builder(sf.clazz(), sf.name());
-                    builder.initializer("$S", sf.clazz().cast(sf.initialValue()));
-                    return builder;
-                })
-                .map(builder -> builder.addModifiers(Modifier.PUBLIC))
-                .toList();
-
-
-        FieldSpec number = FieldSpec
-                .builder(int.class, "houseNumber")
-//                .initializer("$L", 63)
-                .addModifiers(Modifier.PUBLIC)
-                .build();
-
-//        FieldSpec streetName = FieldSpec
-//                .builder(, "streetName")
-////                .initializer("$S", "Rances Lane")
-//                .addModifiers(Modifier.PUBLIC)
-//                .build();
-
-        FieldSpec numberDefault = FieldSpec
-                .builder(int.class, "houseNumber")
-                .initializer("$L", 63)
-                .addModifiers(Modifier.PRIVATE)
-                .build();
-
-        FieldSpec streetNameDefault = FieldSpec
-                .builder(String.class, "streetName")
-                .initializer("$S", "Rances Lane")
-                .addModifiers(Modifier.PRIVATE)
-                .build();
-
         TypeName classNameType = ClassName.get("", className);
 
         MethodSpec buildMethod = MethodSpec.methodBuilder("build")
@@ -77,23 +44,34 @@ public class BuilderMaker {
                 .returns(classNameType)
                 .build();
 
+        TypeName builderTypeName = ClassName.get("", className + "Builder");
+
+        String builderMethodName = className.toLowerCase() + "Builder";
+
+
+        List<FieldSpec.Builder> fieldSpecBuilders = fields.stream()
+                .map(fieldSpecFactory::creatFieldSpec)
+                .map(builder -> builder.addModifiers(Modifier.PUBLIC))
+                .toList();
+
+
+
+
         TypeSpec builder = TypeSpec.classBuilder(className + "Builder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(buildMethod)
-                .addField(numberDefault)
+                .addField(fieldSpecBuilders.get(1).build())
                 .addField(fieldSpecBuilders.get(0).build())
                 .build();
 
 
 
-        TypeName builderTypeName = ClassName.get("", className + "Builder");
 
-        String builderMethodName = className.toLowerCase() + "Builder";
 
         MethodSpec constructor = MethodSpec.constructorBuilder()
                 .addParameter(builderTypeName, builderMethodName)
-                .addStatement("this.$N = $N.$N", "houseNumber", builderMethodName, "houseNumber")
-                .addStatement("this.$N = $N.$N", "streetName", builderMethodName, "streetName")
+                .addStatement("this.$N = $N.$N", fields.get(0).name(), builderMethodName, fields.get(0).name())
+                .addStatement("this.$N = $N.$N", fields.get(1).name(), builderMethodName, fields.get(1).name())
 //                .addParameter(ClassName.get(builder.getClass()), "builderTypeName")
 //                .addParameter(int.class, "houseNumber")
 //                .addParameter(String.class, "streetName")
@@ -113,10 +91,14 @@ public class BuilderMaker {
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(constructor)
                 .addMethod(staticBuilder)
-                .addField(number)
+                .addField(fieldSpecBuilders.get(1).build())
                 .addField(fieldSpecBuilders.get(0).build())
                 .build();
 
+        createJavaFile(classTypeSpec);
+    }
+
+    private void createJavaFile(TypeSpec classTypeSpec) throws IOException {
         JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
 
         file.writeTo(System.out);

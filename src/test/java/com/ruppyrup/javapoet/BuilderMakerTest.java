@@ -26,8 +26,8 @@ class BuilderMakerTest {
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .build();
         builderMaker.makeBuilder();
-//        Address address = Address.builder().build();
-//        assertThat(address.streetName).isEqualTo("Rances Lane");
-//        assertThat(address.houseNumber).isEqualTo(63);
+        Address address = Address.builder().build();
+        assertThat(address.streetName).isEqualTo("Rances Lane");
+        assertThat(address.houseNumber).isEqualTo(63);
     }
 }

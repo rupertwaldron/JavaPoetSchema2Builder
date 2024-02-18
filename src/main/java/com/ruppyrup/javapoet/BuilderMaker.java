@@ -11,14 +11,10 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 public class BuilderMaker {
-
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
@@ -38,72 +34,71 @@ public class BuilderMaker {
     public void makeBuilder() throws IOException {
         TypeName classNameType = ClassName.get("", className);
 
-        MethodSpec buildMethod = MethodSpec.methodBuilder("build")
-                .addModifiers( Modifier.PUBLIC)
-                .addStatement("return new $T(this)", classNameType)
-                .returns(classNameType)
-                .build();
+        createJavaFile(getClassType(classNameType, getFieldSpecBuilderList()));
+    }
 
-        TypeName builderTypeName = ClassName.get("", className + "Builder");
-
-        String builderMethodName = className.toLowerCase() + "Builder";
-
-
-        List<FieldSpec.Builder> fieldSpecBuilders = fields.stream()
+    private List<FieldSpec.Builder> getFieldSpecBuilderList() {
+        return fields.stream()
                 .map(fieldSpecFactory::creatFieldSpec)
                 .map(builder -> builder.addModifiers(Modifier.PUBLIC))
                 .toList();
+    }
 
+    private TypeSpec getClassType(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+        TypeName builderTypeName = ClassName.get("", className + "Builder");
+        String builderMethodName = className.toLowerCase() + "Builder";
 
-
-
-        TypeSpec builder = TypeSpec.classBuilder(className + "Builder")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addMethod(buildMethod)
-                .addField(fieldSpecBuilders.get(1).build())
-                .addField(fieldSpecBuilders.get(0).build())
-                .build();
-
-
-
-
-
-        MethodSpec constructor = MethodSpec.constructorBuilder()
-                .addParameter(builderTypeName, builderMethodName)
-                .addStatement("this.$N = $N.$N", fields.get(0).name(), builderMethodName, fields.get(0).name())
-                .addStatement("this.$N = $N.$N", fields.get(1).name(), builderMethodName, fields.get(1).name())
-//                .addParameter(ClassName.get(builder.getClass()), "builderTypeName")
-//                .addParameter(int.class, "houseNumber")
-//                .addParameter(String.class, "streetName")
-                .addModifiers(Modifier.PRIVATE)
-                .build();
-
-        MethodSpec staticBuilder = MethodSpec.methodBuilder("builder")
-                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
-                .addStatement("return new $T()", builderTypeName)
-                .returns(builderTypeName)
-                .build();
-
-
-        TypeSpec classTypeSpec = TypeSpec
+        TypeSpec.Builder classTypeSpecBuilder = TypeSpec
                 .classBuilder(className)
-                .addType(builder)
+                .addType(getBuilder(classNameType, fieldSpecBuilders))
                 .addModifiers(Modifier.PUBLIC)
-                .addMethod(constructor)
-                .addMethod(staticBuilder)
-                .addField(fieldSpecBuilders.get(1).build())
-                .addField(fieldSpecBuilders.get(0).build())
-                .build();
+                .addMethod(createConstructor(builderTypeName, builderMethodName))
+                .addMethod(createStaticBuilder(builderTypeName, builderMethodName));
 
-        createJavaFile(classTypeSpec);
+        fieldSpecBuilders.forEach(fsb -> classTypeSpecBuilder.addField(fsb.build()));
+        return classTypeSpecBuilder.build();
+    }
+
+    private TypeSpec getBuilder(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className + "Builder")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addMethod(createBuildMethod(classNameType));
+
+
+        fieldSpecBuilders.forEach(fsb -> typeSpecBuilder.addField(fsb.build()));
+        return typeSpecBuilder.build();
     }
 
     private void createJavaFile(TypeSpec classTypeSpec) throws IOException {
         JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
 
         file.writeTo(System.out);
-
         file.writeTo(new File("build/generated"));
+    }
+
+    private MethodSpec createConstructor(TypeName builderTypeName, String builderMethodName) {
+        MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
+                .addParameter(builderTypeName, builderMethodName)
+                .addModifiers(Modifier.PRIVATE);
+
+        fields.forEach(field -> constructorBuilder.addStatement("this.$N = $N.$N", field.name(), builderMethodName, field.name()));
+        return constructorBuilder.build();
+    }
+
+    private MethodSpec createStaticBuilder(TypeName builderTypeName, String builderMethodName) {
+        return MethodSpec.methodBuilder("builder")
+                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                .addStatement("return new $T()", builderTypeName)
+                .returns(builderTypeName)
+                .build();
+    }
+
+    private MethodSpec createBuildMethod(TypeName classNameType) {
+        return MethodSpec.methodBuilder("build")
+                .addModifiers( Modifier.PUBLIC)
+                .addStatement("return new $T(this)", classNameType)
+                .returns(classNameType)
+                .build();
     }
 
     public static class BuilderMakerBuilder {

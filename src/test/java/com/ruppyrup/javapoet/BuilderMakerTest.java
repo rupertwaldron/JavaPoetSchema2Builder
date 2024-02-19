@@ -5,6 +5,7 @@ import com.ruppyrup.javapoet.generated.Address;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,6 +26,7 @@ class BuilderMakerTest {
                 .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("name", String.class, null))
+                .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .build();
         builderMaker.makeBuilder();
         Address address = Address.builder()

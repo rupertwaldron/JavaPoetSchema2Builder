@@ -6,6 +6,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
@@ -33,7 +34,6 @@ public class BuilderMaker {
 
     public void makeBuilder() throws IOException {
         TypeName classNameType = ClassName.get("", className);
-
         createJavaFile(getClassType(classNameType, getFieldSpecBuilderList()));
     }
 
@@ -50,7 +50,7 @@ public class BuilderMaker {
 
         TypeSpec.Builder classTypeSpecBuilder = TypeSpec
                 .classBuilder(className)
-                .addType(getBuilder(classNameType, fieldSpecBuilders))
+                .addType(getBuilder(classNameType, fieldSpecBuilders, builderTypeName))
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(createConstructor(builderTypeName, builderMethodName))
                 .addMethod(createStaticBuilder(builderTypeName, builderMethodName));
@@ -59,14 +59,25 @@ public class BuilderMaker {
         return classTypeSpecBuilder.build();
     }
 
-    private TypeSpec getBuilder(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+    private TypeSpec getBuilder(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders, TypeName builderTypeName) {
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className + "Builder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(createBuildMethod(classNameType));
 
-
+        fields.forEach(field -> typeSpecBuilder.addMethod(getFieldSetterForField(field, builderTypeName)));
         fieldSpecBuilders.forEach(fsb -> typeSpecBuilder.addField(fsb.build()));
+
         return typeSpecBuilder.build();
+    }
+
+    private MethodSpec getFieldSetterForField(SchemaField<?> schemaField, TypeName builderTypeName) {
+        return MethodSpec.methodBuilder("with" + StringUtils.capitalize(schemaField.name()))
+                .addParameter(schemaField.clazz(), schemaField.name())
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement("this.$N = $N", schemaField.name(), schemaField.name())
+                .addStatement("return this")
+                .returns(builderTypeName)
+                .build();
     }
 
     private void createJavaFile(TypeSpec classTypeSpec) throws IOException {

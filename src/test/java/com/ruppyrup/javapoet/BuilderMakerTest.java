@@ -24,10 +24,15 @@ class BuilderMakerTest {
                 .withClassName("Address")
                 .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
+                .withField(new SchemaField<>("name", String.class, null))
                 .build();
         builderMaker.makeBuilder();
-        Address address = Address.builder().build();
+        Address address = Address.builder()
+                .withName("Rupert")
+                .withHouseNumber(7)
+                .build();
         assertThat(address.streetName).isEqualTo("Rances Lane");
-        assertThat(address.houseNumber).isEqualTo(63);
+        assertThat(address.name).isEqualTo("Rupert");
+        assertThat(address.houseNumber).isEqualTo(7);
     }
 }

@@ -7,7 +7,8 @@ public class Main {
 //        BuilderMaker builderMaker = BuilderMaker.builder()
 //                .withPackageName("com.ruppyrup.javapoet.generated")
 //                .withClassName("Address")
-//                .withField("streetName", String.class)
+//                .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
+//                .withField(new SchemaField<>("houseNumber", Integer.class, 63))
 //                .build();
 //        builderMaker.makeBuilder();
         CreateClass.create();

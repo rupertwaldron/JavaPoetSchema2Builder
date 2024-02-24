@@ -16,6 +16,7 @@ import java.util.List;
 
 
 public class BuilderMaker {
+    private final String dir;
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
@@ -25,6 +26,7 @@ public class BuilderMaker {
         this.className = builderMakerBuilder.className;
         this.fields = builderMakerBuilder.fields;
         this.packageName = builderMakerBuilder.packageName;
+        this.dir = builderMakerBuilder.dir;
         this.fieldSpecFactory = new FieldSpecFactory();
     }
 
@@ -84,7 +86,7 @@ public class BuilderMaker {
         JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
 
         file.writeTo(System.out);
-        file.writeTo(new File("build/generated"));
+        file.writeTo(new File(dir));
     }
 
     private MethodSpec createConstructor(TypeName builderTypeName, String builderMethodName) {
@@ -113,6 +115,7 @@ public class BuilderMaker {
     }
 
     public static class BuilderMakerBuilder {
+        private String dir;
         private String packageName;
         private String className;
         private final List<SchemaField<?>> fields = new ArrayList<>();
@@ -133,6 +136,11 @@ public class BuilderMaker {
 
         public BuilderMakerBuilder withField(SchemaField<?> schemaField) {
             this.fields.add(schemaField);
+            return this;
+        }
+
+        public BuilderMakerBuilder withDir(String dir) {
+            this.dir = dir;
             return this;
         }
     }

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CreateClass {
 
-    public static void create() throws IOException {
+    public static void create(String dir) throws IOException {
         FieldSpec name = FieldSpec
                 .builder(String.class, "name")
                 .addModifiers(Modifier.PRIVATE)
@@ -70,7 +70,7 @@ public class CreateClass {
 
         file.writeTo(System.out);
 
-        file.writeTo(new File("build/generated"));
+        file.writeTo(new File(dir));
 
     }
 

@@ -4,6 +4,8 @@ import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 
+import java.lang.reflect.Field;
+
 public class FieldSpecFactory {
 
     public FieldSpec.Builder creatFieldSpec(SchemaField<?> schemaField) {
@@ -13,11 +15,17 @@ public class FieldSpecFactory {
         } else if (schemaField.clazz().getName().equals("java.lang.Integer")) {
             builder.initializer("$L", schemaField.initialValue());
         } else if (schemaField.clazz().getName().equals("[Ljava.lang.String;")) {
-            String[] testArr = new String[] { "1", "2" };
-            String literal = "{\"" + String.join("\",\"", testArr) + "\"}";
-            ArrayTypeName stringArray = ArrayTypeName.of(String.class);
-            CodeBlock block = CodeBlock.builder().add("new $1T $2L", stringArray, literal).build();
-            builder.initializer(block);
+            try {
+                Field f = schemaField.getClass().getDeclaredField("initialValue");
+                f.setAccessible(true);
+                String[] initialValue = (String[])f.get(schemaField);
+                String literal = "{\"" + String.join("\",\"", initialValue) + "\"}";
+                ArrayTypeName stringArray = ArrayTypeName.of(String.class);
+                CodeBlock block = CodeBlock.builder().add("new $1T $2L", stringArray, literal).build();
+                builder.initializer(block);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());
         }

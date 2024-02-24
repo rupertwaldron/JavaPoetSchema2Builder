@@ -1,8 +1,5 @@
 package com.ruppyrup.javapoet;
 
-import com.ruppyrup.javapoet.generated.Address;
-
-import org.assertj.core.api.AbstractObjectAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -13,7 +10,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -56,7 +52,7 @@ class BuilderMakerTest {
             Object createdObject = cls.getMethod("build").invoke(builder);
             assertThatFieldIsSet(createdObject, "streetName", "Rances Lane");
             assertThatFieldIsSet(createdObject, "houseNumber", 63);
-            assertThatFieldIsSet(createdObject, "family", new String[]{"1", "2"});
+            assertThatFieldIsSet(createdObject, "family", new String[]{"Ben", "Sam", "Joe"});
 
         } catch (Exception e) {
             throw new RuntimeException(e);

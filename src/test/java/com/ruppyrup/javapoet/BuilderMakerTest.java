@@ -52,6 +52,7 @@ class BuilderMakerTest {
             Object createdObject = cls.getMethod("build").invoke(builder);
             assertThatFieldIsSet(createdObject, "streetName", "Rances Lane");
             assertThatFieldIsSet(createdObject, "houseNumber", 63);
+            assertThatFieldIsNull(createdObject, "name");
             assertThatFieldIsSet(createdObject, "family", new String[]{"Ben", "Sam", "Joe"});
 
         } catch (Exception e) {
@@ -69,5 +70,9 @@ class BuilderMakerTest {
 
     private static void assertThatFieldIsSet(Object createdObject, String fieldName, String[] expectedResult) throws IllegalAccessException, NoSuchFieldException {
         assertThat(createdObject.getClass().getField(fieldName).get(createdObject)).isEqualTo(expectedResult);
+    }
+
+    private static void assertThatFieldIsNull(Object createdObject, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        assertThat(createdObject.getClass().getField(fieldName).get(createdObject)).isNull();
     }
 }

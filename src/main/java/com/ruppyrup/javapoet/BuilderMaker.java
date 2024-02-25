@@ -42,7 +42,7 @@ public class BuilderMaker {
     private List<FieldSpec.Builder> fieldBuilders() {
         return fields.stream()
                 .map(fieldSpecFactory::creatFieldSpec)
-                .map(builder -> builder.addModifiers(Modifier.PUBLIC))
+                .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .toList();
     }
 

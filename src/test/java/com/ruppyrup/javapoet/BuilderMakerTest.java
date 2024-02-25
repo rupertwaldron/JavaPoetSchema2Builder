@@ -1,5 +1,6 @@
 package com.ruppyrup.javapoet;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -10,6 +11,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -23,7 +25,7 @@ class BuilderMakerTest {
     File tempdir;
 
     @Test
-    void useBuilderToMakeBuilder() throws IOException {
+    void checkGeneratedClassHasCorrectFieldValues() throws IOException {
         BuilderMaker builderMaker = BuilderMaker.builder()
                 .withDir(tempdir.getPath())
                 .withPackageName(PACKAGE_NAME)
@@ -62,15 +64,57 @@ class BuilderMakerTest {
         }
     }
 
-    private static void assertThatFieldIsSet(Object createdObject, String fieldName, String expectedResult) throws IllegalAccessException, NoSuchFieldException {
-        assertThat(createdObject.getClass().getField(fieldName).get(createdObject)).isEqualTo(expectedResult);
+
+    @Test
+    void checkGettersReturnCorrectFieldValues() throws IOException {
+        BuilderMaker builderMaker = BuilderMaker.builder()
+                .withDir(tempdir.getPath())
+                .withPackageName(PACKAGE_NAME)
+                .withClassName("Address")
+                .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
+                .withField(new SchemaField<>("name", String.class, null))
+                .withField(new SchemaField<>("houseNumber", Integer.class, 63))
+                .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
+                .withField(new SchemaField<>("county", Object.class, "County"))
+                .build();
+        builderMaker.makeBuilder();
+
+        File input = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
+        Assertions.assertTrue(input.exists());
+
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+
+        Iterable<? extends JavaFileObject> files = fileManager.getJavaFileObjectsFromFiles(List.of(input));
+
+        compiler.getTask(null, fileManager, null, null, null, files).call();
+
+        fileManager.close();
+
+        try(URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{tempdir.toURI().toURL()})) {
+            Class<?> cls = urlClassLoader.loadClass(PACKAGE_NAME + ".Address$AddressBuilder");
+            Object builder = cls.getConstructor().newInstance();
+            Object createdObject = cls.getMethod("build").invoke(builder);
+
+            assertThatMethodReturns(createdObject, "getHouseNumber", 63);
+            assertThatMethodReturns(createdObject, "getName", null);
+            assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
+            assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static void assertThatFieldIsSet(Object createdObject, String fieldName, Integer expectedResult) throws IllegalAccessException, NoSuchFieldException {
-        assertThat(createdObject.getClass().getField(fieldName).get(createdObject)).isEqualTo(expectedResult);
+    private static void assertThatMethodReturns(Object createdObject, String methodName, Object expectedResult) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        assertThat(createdObject.getClass().getMethod(methodName).invoke(createdObject)).isEqualTo(expectedResult);
     }
 
-    private static void assertThatFieldIsSet(Object createdObject, String fieldName, String[] expectedResult) throws IllegalAccessException, NoSuchFieldException {
+    private static void assertThatGetterReturnsCorrectType(Object createdObject, String methodName, String type) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        assertThat(createdObject.getClass().getMethod(methodName).invoke(createdObject).getClass().getName().toLowerCase()).isEqualTo(PACKAGE_NAME + "." + type);
+    }
+
+    private static void assertThatFieldIsSet(Object createdObject, String fieldName, Object expectedResult) throws IllegalAccessException, NoSuchFieldException {
         assertThat(createdObject.getClass().getField(fieldName).get(createdObject)).isEqualTo(expectedResult);
     }
 

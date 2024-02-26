@@ -57,7 +57,6 @@ public class BuilderMaker {
 
     private void childObjectBuilders() {
         objects.stream()
-                .map(SchemaObject::className)
                 .map(childObjectFactory::creatFieldSpec)
                 .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
@@ -76,6 +75,7 @@ public class BuilderMaker {
 
         fieldSpecBuilders.forEach(fsb -> classTypeSpecBuilder.addField(fsb.build()));
         fields.forEach(field -> classTypeSpecBuilder.addMethod(createGetterFor(field)));
+        objects.forEach(object -> classTypeSpecBuilder.addMethod(createGetterFor(new SchemaField<>(object.className(), Object.class, null))));
         return classTypeSpecBuilder.build();
     }
 
@@ -97,6 +97,7 @@ public class BuilderMaker {
                 .addMethod(createBuildMethod(classNameType));
 
         fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
+        objects.forEach(object -> builderType.addMethod(buildersWithMethods(new SchemaField<>(object.className(), Object.class, null), builderTypeName)));
         fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
 
         return builderType.build();

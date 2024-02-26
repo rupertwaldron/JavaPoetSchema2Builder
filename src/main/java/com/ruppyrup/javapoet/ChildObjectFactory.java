@@ -9,16 +9,19 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class ChildObjectFactory {
-    public FieldSpec.Builder creatFieldSpec(String childClassName) {
-        String name = StringUtils.capitalize(childClassName);
-        var builder = FieldSpec.builder(Object.class, childClassName);
+    public FieldSpec.Builder creatFieldSpec(SchemaObject schemaObject) {
+        String name = StringUtils.capitalize(schemaObject.className());
+        var builder = FieldSpec.builder(Object.class, schemaObject.className());
         builder.initializer("$L.builder().build()", name);
 
-        BuilderMaker builderMaker = BuilderMaker.builder()
+        BuilderMaker.BuilderMakerBuilder builderMakerBuilder = BuilderMaker.builder()
                 .withDir("build/generated")
                 .withPackageName("com.ruppyrup.javapoet.generated")
-                .withClassName(name)
-                .build();
+                .withClassName(name);
+
+        schemaObject.fields().forEach(builderMakerBuilder::withField);
+
+        BuilderMaker builderMaker = builderMakerBuilder.build();
         try {
             builderMaker.makeBuilder();
         } catch (IOException e) {

@@ -28,6 +28,11 @@ class BuilderMakerTest {
 
     @Test
     void checkGettersReturnCorrectFieldValues() throws IOException {
+        List<SchemaField<?>> countyFields = List.of(
+                new SchemaField<>("countyName", String.class, "Berks"),
+                new SchemaField<>("postCode", String.class, "RG40 2LG")
+        );
+
         BuilderMaker builderMaker = BuilderMaker.builder()
                 .withDir(tempdir.getPath())
                 .withPackageName(PACKAGE_NAME)
@@ -36,7 +41,7 @@ class BuilderMakerTest {
                 .withField(new SchemaField<>("name", String.class, null))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
-                .withObject(new SchemaObject("county", List.of()))
+                .withObject(new SchemaObject("county", countyFields))
                 .build();
         builderMaker.makeBuilder();
 
@@ -61,6 +66,11 @@ class BuilderMakerTest {
             assertThatMethodReturns(createdObject, "getName", null);
             assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
             assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
+
+            Object childObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
+
+            assertThatMethodReturns(childObject, "getPostCode", "RG40 2LG");
+            assertThatMethodReturns(childObject, "getCountyName", "Berks");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

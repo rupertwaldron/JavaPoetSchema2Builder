@@ -1,6 +1,7 @@
 package com.ruppyrup.javapoet;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -12,7 +13,7 @@ public class Main {
                 .withField(new SchemaField<>("name", String.class, null))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
-                .withField(new SchemaField<>("county", Object.class, "County"))
+                .withObject(new SchemaObject("county", List.of()))
                 .build();
         builderMaker.makeBuilder();
         CreateClass.create("build/generated");

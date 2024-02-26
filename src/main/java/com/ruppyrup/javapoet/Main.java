@@ -19,7 +19,8 @@ public class Main {
                 .withField(new SchemaField<>("name", String.class, null))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
-                .withObject(new SchemaObject("county", countyFields))
+                .withField(new SchemaField<>("county", Object.class, countyFields))
+//                .withObject(new SchemaObject("county", countyFields))
                 .build();
         builderMaker.makeBuilder();
         CreateClass.create("build/generated");

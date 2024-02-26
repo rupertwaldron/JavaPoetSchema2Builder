@@ -1,6 +1,5 @@
 package com.ruppyrup.javapoet;
 
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -11,7 +10,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -41,7 +39,7 @@ class BuilderMakerTest {
                 .withField(new SchemaField<>("name", String.class, null))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
-                .withObject(new SchemaObject("county", countyFields))
+                .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
         builderMaker.makeBuilder();
 

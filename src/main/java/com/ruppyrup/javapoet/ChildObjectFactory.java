@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class ChildObjectFactory {
-    public FieldSpec.Builder creatFieldSpec(SchemaObject schemaObject) {
-        String name = StringUtils.capitalize(schemaObject.className());
-        var builder = FieldSpec.builder(Object.class, schemaObject.className());
+    public void creatFieldSpec(SchemaField<?> schemaField, FieldSpec.Builder builder) {
+        String name = StringUtils.capitalize(schemaField.name());
         builder.initializer("$L.builder().build()", name);
 
         BuilderMaker.BuilderMakerBuilder builderMakerBuilder = BuilderMaker.builder()
@@ -19,7 +19,7 @@ public class ChildObjectFactory {
                 .withPackageName("com.ruppyrup.javapoet.generated")
                 .withClassName(name);
 
-        schemaObject.fields().forEach(builderMakerBuilder::withField);
+        ((List<SchemaField<?>>) schemaField.initialValue()).forEach(builderMakerBuilder::withField);
 
         BuilderMaker builderMaker = builderMakerBuilder.build();
         try {
@@ -27,7 +27,5 @@ public class ChildObjectFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return builder;
     }
 }

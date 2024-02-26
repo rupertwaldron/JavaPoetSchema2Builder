@@ -12,6 +12,13 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class FieldSpecFactory {
 
+    private final ChildObjectFactory childObjectFactory;
+
+    public FieldSpecFactory(ChildObjectFactory childObjectFactory) {
+        this.childObjectFactory = childObjectFactory;
+    }
+
+
     public FieldSpec.Builder creatFieldSpec(SchemaField<?> schemaField) {
         var builder = FieldSpec.builder(schemaField.clazz(), schemaField.name());
         if (schemaField.clazz().getName().equals("java.lang.String")) {
@@ -31,23 +38,7 @@ public class FieldSpecFactory {
                 throw new RuntimeException(e);
             }
         } else if (schemaField.clazz().getName().equals("java.lang.Object")) {
-            BuilderMaker builderMaker = BuilderMaker.builder()
-                    .withDir("build/generated")
-                    .withPackageName("com.ruppyrup.javapoet.generated")
-                    .withClassName((String) schemaField.initialValue())
-                    .build();
-            try {
-                builderMaker.makeBuilder();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-//            try {
-//                builder = FieldSpec.builder(Class.forName(capitalize(schemaField.name())), schemaField.name());
-//            } catch (ClassNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
-            builder.initializer("$L.builder().build()", schemaField.initialValue());
+            childObjectFactory.creatFieldSpec(schemaField, builder);
 
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());

@@ -12,7 +12,6 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -21,20 +20,16 @@ public class BuilderMaker {
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
-    private final List<SchemaObject> objects;
     private final FieldSpecFactory fieldSpecFactory;
-    private final ChildObjectFactory childObjectFactory;
 
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
     private BuilderMaker(BuilderMakerBuilder builderMakerBuilder) {
         this.className = builderMakerBuilder.className;
         this.fields = builderMakerBuilder.fields;
-        this.objects = builderMakerBuilder.objects;
         this.packageName = builderMakerBuilder.packageName;
         this.dir = builderMakerBuilder.dir;
-        this.fieldSpecFactory = new FieldSpecFactory();
-        this.childObjectFactory = new ChildObjectFactory();
+        this.fieldSpecFactory = new FieldSpecFactory(new ChildObjectFactory());
     }
 
     public static BuilderMakerBuilder builder() {
@@ -44,20 +39,12 @@ public class BuilderMaker {
     public void makeBuilder() throws IOException {
         TypeName generatedClass = ClassName.get("", className);
         fieldBuilders();
-        childObjectBuilders();
         createJavaFile(generatedClassSpec(generatedClass, fieldSpecBuilders));
     }
 
     private void fieldBuilders() {
         fields.stream()
                 .map(fieldSpecFactory::creatFieldSpec)
-                .map(builder -> builder.addModifiers(Modifier.PRIVATE))
-                .forEach(fieldSpecBuilders::add);
-    }
-
-    private void childObjectBuilders() {
-        objects.stream()
-                .map(childObjectFactory::creatFieldSpec)
                 .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
@@ -75,21 +62,8 @@ public class BuilderMaker {
 
         fieldSpecBuilders.forEach(fsb -> classTypeSpecBuilder.addField(fsb.build()));
         fields.forEach(field -> classTypeSpecBuilder.addMethod(createGetterFor(field)));
-        objects.forEach(object -> classTypeSpecBuilder.addMethod(createGetterFor(new SchemaField<>(object.className(), Object.class, null))));
         return classTypeSpecBuilder.build();
     }
-
-//    private TypeSpec objectClass(FieldSpec fieldSpec) {
-//        TypeSpec.Builder objectType = TypeSpec.classBuilder(fieldSpec.name)
-//                .addModifiers(Modifier.PUBLIC)
-//                .addMethod(createBuildMethod(classNameType));
-//
-//        fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
-//        fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
-//
-//        return builderType.build();
-//    }
-
 
     private TypeSpec builderForGeneratedClass(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders, TypeName builderTypeName) {
         TypeSpec.Builder builderType = TypeSpec.classBuilder(className + "Builder")
@@ -97,7 +71,6 @@ public class BuilderMaker {
                 .addMethod(createBuildMethod(classNameType));
 
         fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
-        objects.forEach(object -> builderType.addMethod(buildersWithMethods(new SchemaField<>(object.className(), Object.class, null), builderTypeName)));
         fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
 
         return builderType.build();
@@ -158,7 +131,6 @@ public class BuilderMaker {
         private String packageName;
         private String className;
         private final List<SchemaField<?>> fields = new ArrayList<>();
-        private final List<SchemaObject> objects = new ArrayList<>();
 
         public BuilderMaker build() {
             return new BuilderMaker(this);
@@ -176,11 +148,6 @@ public class BuilderMaker {
 
         public BuilderMakerBuilder withField(SchemaField<?> schemaField) {
             this.fields.add(schemaField);
-            return this;
-        }
-
-        public BuilderMakerBuilder withObject(SchemaObject schemaObject) {
-            this.objects.add(schemaObject);
             return this;
         }
 

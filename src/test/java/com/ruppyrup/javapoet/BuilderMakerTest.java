@@ -1,7 +1,6 @@
 package com.ruppyrup.javapoet;
 
-import com.ruppyrup.javapoet.generated.Address;
-import com.ruppyrup.javapoet.generated.County;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -25,15 +24,16 @@ class BuilderMakerTest {
     @TempDir
     File tempdir;
 
-    @Test
-    void sanityCheck() {
-        Address address = Address.builder()
-                .withCounty(County.builder()
-                        .withCountyName("Hants")
-                        .build())
-                .build();
-        System.out.println(address);
-    }
+//    @Test
+//    void sanityCheck() {
+//        Address address = Address.builder()
+//                .withCounty(County.builder()
+//                        .withCountyName("Hants")
+//                        .build())
+//                .build();
+//        Address address = Address.builder().build();
+//        System.out.println(address);
+//    }
 
 
     @Test

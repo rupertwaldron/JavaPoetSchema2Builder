@@ -21,6 +21,7 @@ public class BuilderMaker {
     private final String className;
     private final List<SchemaField<?>> fields;
     private final FieldSpecFactory fieldSpecFactory;
+    private final ChildObjectMaker childObjectMaker;
 
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
@@ -29,7 +30,8 @@ public class BuilderMaker {
         this.fields = builderMakerBuilder.fields;
         this.packageName = builderMakerBuilder.packageName;
         this.dir = builderMakerBuilder.dir;
-        this.fieldSpecFactory = new FieldSpecFactory(new ChildObjectMaker());
+        this.childObjectMaker = new ChildObjectMaker();
+        this.fieldSpecFactory = new FieldSpecFactory();
     }
 
     public static BuilderMakerBuilder builder() {
@@ -39,7 +41,14 @@ public class BuilderMaker {
     public void makeBuilder() throws IOException {
         TypeName generatedClass = ClassName.get("", className);
         fieldBuilders();
+        generateChildObjects();
         createJavaFile(generatedClassSpec(generatedClass, fieldSpecBuilders));
+    }
+
+    private void generateChildObjects() {
+        fields.stream()
+                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .forEach(childObjectMaker::makeChild);
     }
 
     private void fieldBuilders() {

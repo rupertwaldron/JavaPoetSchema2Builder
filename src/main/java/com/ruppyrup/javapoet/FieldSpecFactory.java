@@ -8,14 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 
 public class FieldSpecFactory {
-
-    private final ChildObjectMaker childObjectMaker;
-
-    public FieldSpecFactory(ChildObjectMaker childObjectMaker) {
-        this.childObjectMaker = childObjectMaker;
-    }
-
-
     public FieldSpec.Builder creatFieldSpec(SchemaField<?> schemaField) {
         var builder = FieldSpec.builder(schemaField.clazz(), schemaField.name());
         if (schemaField.clazz().getName().equals("java.lang.String")) {
@@ -37,8 +29,6 @@ public class FieldSpecFactory {
         } else if (schemaField.clazz().getName().equals("java.lang.Object")) {
             String name = StringUtils.capitalize(schemaField.name());
             builder.initializer("$L.builder().build()", name);
-            childObjectMaker.makeChild(schemaField);
-
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());
         }

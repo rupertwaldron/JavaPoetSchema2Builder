@@ -1,6 +1,11 @@
 package com.ruppyrup.javapoet;
 
 
+import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
+import com.ruppyrup.javapoet.generated.Address;
+import com.ruppyrup.javapoet.generated.County;
+import com.ruppyrup.javapoet.makers.ClassGenerator;
+import com.ruppyrup.javapoet.models.SchemaField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -18,22 +23,22 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BuilderMakerTest {
+class ClassGeneratorTest {
 
     private static final String PACKAGE_NAME = "com.ruppyrup.javapoet.generated";
     @TempDir
     File tempdir;
 
-//    @Test
-//    void sanityCheck() {
+    @Test
+    void sanityCheck() {
 //        Address address = Address.builder()
 //                .withCounty(County.builder()
 //                        .withCountyName("Hants")
 //                        .build())
 //                .build();
-//        Address address = Address.builder().build();
-//        System.out.println(address);
-//    }
+        Address address = Address.builder().build();
+        System.out.println(address);
+    }
 
 
     @Test
@@ -43,7 +48,7 @@ class BuilderMakerTest {
                 new SchemaField<>("postCode", String.class, "RG40 2LG")
         );
 
-        BuilderMaker builderMaker = BuilderMaker.builder()
+        ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
                 .withDir(tempdir.getPath())
                 .withPackageName(PACKAGE_NAME)
                 .withClassName("Address")
@@ -53,7 +58,10 @@ class BuilderMakerTest {
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
-        builderMaker.makeBuilder();
+
+        ClassGenerator classGenerator = new ClassGenerator(classGenerationBuilder);
+
+        classGenerator.makeBuilder();
 
         File input = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
         Assertions.assertTrue(input.exists());

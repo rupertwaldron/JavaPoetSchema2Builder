@@ -1,5 +1,9 @@
-package com.ruppyrup.javapoet;
+package com.ruppyrup.javapoet.makers;
 
+import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
+import com.ruppyrup.javapoet.factories.FieldSpecFactory;
+import com.ruppyrup.javapoet.makers.ChildObjectMaker;
+import com.ruppyrup.javapoet.models.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -15,27 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BuilderMaker {
+public class ClassGenerator {
     private final String dir;
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
     private final FieldSpecFactory fieldSpecFactory;
     private final ChildObjectMaker childObjectMaker;
-
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
-    private BuilderMaker(BuilderMakerBuilder builderMakerBuilder) {
-        this.className = builderMakerBuilder.className;
-        this.fields = builderMakerBuilder.fields;
-        this.packageName = builderMakerBuilder.packageName;
-        this.dir = builderMakerBuilder.dir;
+    public ClassGenerator(ClassGenerationBuilder classGenerationBuilder) {
+        this.className = classGenerationBuilder.getClassName();
+        this.fields = classGenerationBuilder.getFields();
+        this.packageName = classGenerationBuilder.getPackageName();
+        this.dir = classGenerationBuilder.getDir();
         this.childObjectMaker = new ChildObjectMaker();
         this.fieldSpecFactory = new FieldSpecFactory();
-    }
-
-    public static BuilderMakerBuilder builder() {
-        return new BuilderMakerBuilder();
     }
 
     public void makeBuilder() throws IOException {
@@ -133,37 +132,6 @@ public class BuilderMaker {
                 .addStatement("return new $T(this)", classNameType)
                 .returns(classNameType)
                 .build();
-    }
-
-    public static class BuilderMakerBuilder {
-        private String dir;
-        private String packageName;
-        private String className;
-        private final List<SchemaField<?>> fields = new ArrayList<>();
-
-        public BuilderMaker build() {
-            return new BuilderMaker(this);
-        }
-
-        public BuilderMakerBuilder withPackageName(String packageName) {
-            this.packageName = packageName;
-            return this;
-        }
-
-        public BuilderMakerBuilder withClassName(String className) {
-            this.className = className;
-            return this;
-        }
-
-        public BuilderMakerBuilder withField(SchemaField<?> schemaField) {
-            this.fields.add(schemaField);
-            return this;
-        }
-
-        public BuilderMakerBuilder withDir(String dir) {
-            this.dir = dir;
-            return this;
-        }
     }
 }
 

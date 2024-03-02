@@ -5,17 +5,14 @@ import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-
-import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class FieldSpecFactory {
 
-    private final ChildObjectFactory childObjectFactory;
+    private final ChildObjectMaker childObjectMaker;
 
-    public FieldSpecFactory(ChildObjectFactory childObjectFactory) {
-        this.childObjectFactory = childObjectFactory;
+    public FieldSpecFactory(ChildObjectMaker childObjectMaker) {
+        this.childObjectMaker = childObjectMaker;
     }
 
 
@@ -38,7 +35,9 @@ public class FieldSpecFactory {
                 throw new RuntimeException(e);
             }
         } else if (schemaField.clazz().getName().equals("java.lang.Object")) {
-            childObjectFactory.creatFieldSpec(schemaField, builder);
+            String name = StringUtils.capitalize(schemaField.name());
+            builder.initializer("$L.builder().build()", name);
+            childObjectMaker.makeChild(schemaField);
 
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());

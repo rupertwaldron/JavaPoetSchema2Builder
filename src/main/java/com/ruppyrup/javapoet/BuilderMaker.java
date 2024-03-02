@@ -29,7 +29,7 @@ public class BuilderMaker {
         this.fields = builderMakerBuilder.fields;
         this.packageName = builderMakerBuilder.packageName;
         this.dir = builderMakerBuilder.dir;
-        this.fieldSpecFactory = new FieldSpecFactory(new ChildObjectFactory());
+        this.fieldSpecFactory = new FieldSpecFactory(new ChildObjectMaker());
     }
 
     public static BuilderMakerBuilder builder() {

@@ -18,8 +18,8 @@ public class ChildObjectMaker {
 
         ClassGenerationBuilder builder = generationBuilder.build();
         try {
-            ClassGenerator classGenerator = new ClassGenerator(builder);
-            classGenerator.makeBuilder();
+            ClassMaker classMaker = new ClassMaker(builder);
+            classMaker.makeBuilder();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

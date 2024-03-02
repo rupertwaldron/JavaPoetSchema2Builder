@@ -3,8 +3,7 @@ package com.ruppyrup.javapoet;
 
 import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.generated.Address;
-import com.ruppyrup.javapoet.generated.County;
-import com.ruppyrup.javapoet.makers.ClassGenerator;
+import com.ruppyrup.javapoet.makers.ClassMaker;
 import com.ruppyrup.javapoet.models.SchemaField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ClassGeneratorTest {
+class ClassMakerTest {
 
     private static final String PACKAGE_NAME = "com.ruppyrup.javapoet.generated";
     @TempDir
@@ -59,9 +58,9 @@ class ClassGeneratorTest {
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
 
-        ClassGenerator classGenerator = new ClassGenerator(classGenerationBuilder);
+        ClassMaker classMaker = new ClassMaker(classGenerationBuilder);
 
-        classGenerator.makeBuilder();
+        classMaker.makeBuilder();
 
         File input = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
         Assertions.assertTrue(input.exists());

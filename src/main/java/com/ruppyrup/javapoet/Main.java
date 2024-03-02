@@ -2,7 +2,7 @@ package com.ruppyrup.javapoet;
 
 import com.ruppyrup.javapoet.demo.CreateClass;
 import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
-import com.ruppyrup.javapoet.makers.ClassGenerator;
+import com.ruppyrup.javapoet.makers.ClassMaker;
 import com.ruppyrup.javapoet.models.SchemaField;
 
 import java.io.IOException;
@@ -26,8 +26,8 @@ public class Main {
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
 
-        ClassGenerator classGenerator = new ClassGenerator(classGenerationBuilder);
-        classGenerator.makeBuilder();
+        ClassMaker classMaker = new ClassMaker(classGenerationBuilder);
+        classMaker.makeBuilder();
 
 
 //        BuilderMaker builderMaker = BuilderMaker.builder()

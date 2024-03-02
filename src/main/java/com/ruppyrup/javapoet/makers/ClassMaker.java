@@ -2,7 +2,6 @@ package com.ruppyrup.javapoet.makers;
 
 import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.factories.FieldSpecFactory;
-import com.ruppyrup.javapoet.makers.ChildObjectMaker;
 import com.ruppyrup.javapoet.models.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ClassGenerator {
+public class ClassMaker {
     private final String dir;
     private final String packageName;
     private final String className;
@@ -28,7 +27,7 @@ public class ClassGenerator {
     private final ChildObjectMaker childObjectMaker;
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
-    public ClassGenerator(ClassGenerationBuilder classGenerationBuilder) {
+    public ClassMaker(ClassGenerationBuilder classGenerationBuilder) {
         this.className = classGenerationBuilder.getClassName();
         this.fields = classGenerationBuilder.getFields();
         this.packageName = classGenerationBuilder.getPackageName();

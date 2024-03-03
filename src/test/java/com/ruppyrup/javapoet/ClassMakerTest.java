@@ -42,9 +42,15 @@ class ClassMakerTest {
 
     @Test
     void checkGettersReturnCorrectFieldValues() throws IOException {
+
+        List<SchemaField<?>> postCode = List.of(
+                new SchemaField<>("firstPart", String.class, "RG40"),
+                new SchemaField<>("secondPart", String.class, "2LG")
+        );
+
         List<SchemaField<?>> countyFields = List.of(
                 new SchemaField<>("countyName", String.class, "Berks"),
-                new SchemaField<>("postCode", String.class, "RG40 2LG")
+                new SchemaField<>("postCode", Object.class, postCode)
         );
 
         ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
@@ -84,10 +90,14 @@ class ClassMakerTest {
             assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
             assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
 
-            Object childObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
+            Object countryObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
 
-            assertThatMethodReturns(childObject, "getPostCode", "RG40 2LG");
-            assertThatMethodReturns(childObject, "getCountyName", "Berks");
+            assertThatMethodReturns(countryObject, "getCountyName", "Berks");
+
+            Object postCodeObject = countryObject.getClass().getMethod("getPostCode").invoke(countryObject);
+
+            assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
+            assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

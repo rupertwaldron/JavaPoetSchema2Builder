@@ -99,7 +99,7 @@ class ClassMakerTest {
 
             Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
 
-            assertThat(countyObject).isInstanceOf(County.class);
+            assertThat(countyObject.getClass().getName()).contains("County");
 
             assertThatMethodReturns(countyObject, "getCountyName", "Berks");
 

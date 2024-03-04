@@ -39,6 +39,7 @@ class ClassMakerTest {
 //                .build();
         Address address = Address.builder().build();
         County county = address.getCounty();
+        PostCode postCode = county.getPostCode();
         System.out.println(address);
     }
 
@@ -104,6 +105,7 @@ class ClassMakerTest {
             assertThatMethodReturns(countyObject, "getCountyName", "Berks");
 
             Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
+            assertThat(postCodeObject.getClass().getName()).contains("PostCode");
 
             assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
             assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");

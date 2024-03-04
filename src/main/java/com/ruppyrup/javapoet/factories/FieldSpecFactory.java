@@ -2,8 +2,10 @@ package com.ruppyrup.javapoet.factories;
 
 import com.ruppyrup.javapoet.models.SchemaField;
 import com.squareup.javapoet.ArrayTypeName;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.TypeName;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -29,6 +31,8 @@ public class FieldSpecFactory {
             }
         } else if (schemaField.clazz().getName().equals("java.lang.Object")) {
             String name = StringUtils.capitalize(schemaField.name());
+            TypeName childTypeName = ClassName.get("", name);
+            builder = FieldSpec.builder(childTypeName, schemaField.name());
             builder.initializer("$L.builder().build()", name);
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());

@@ -8,19 +8,19 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.lang.model.element.Modifier;
 
-public class GetterMethodFactory {
-    public MethodSpec.Builder getGetterMethod(SchemaField<?> schemaField) {
+public class WithMethodFactory {
+    public MethodSpec.Builder getWithMethod(SchemaField<?> schemaField) {
         String className = StringUtils.capitalize(schemaField.name());
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("get" + className)
-                .addModifiers(Modifier.PUBLIC);
+        var builder = MethodSpec.methodBuilder("with" + className)
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement("this.$N = $N", schemaField.name(), schemaField.name())
+                .addStatement("return this");
 
         if (schemaField.clazz().getName().equals("java.lang.Object")) {
             TypeName childTypeName = ClassName.get("", className);
-            builder.addStatement("return this.$N", schemaField.name())
-                    .returns(childTypeName);
+            builder.addParameter(childTypeName, schemaField.name());
         } else {
-            builder.addStatement("return this.$N", schemaField.name())
-                    .returns(schemaField.clazz());
+            builder.addParameter(schemaField.clazz(), schemaField.name());
         }
         return builder;
     }

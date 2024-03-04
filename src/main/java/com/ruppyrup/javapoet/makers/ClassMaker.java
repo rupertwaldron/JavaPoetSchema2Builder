@@ -3,6 +3,7 @@ package com.ruppyrup.javapoet.makers;
 import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.factories.FieldSpecFactory;
 import com.ruppyrup.javapoet.factories.GetterMethodFactory;
+import com.ruppyrup.javapoet.factories.WithMethodFactory;
 import com.ruppyrup.javapoet.models.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -27,6 +28,7 @@ public class ClassMaker {
     private final FieldSpecFactory fieldSpecFactory;
     private final GetterMethodFactory getterMethodFactory;
     private final ChildObjectMaker childObjectMaker;
+    private final WithMethodFactory withMethodFactory;
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
     public ClassMaker(ClassGenerationBuilder classGenerationBuilder) {
@@ -37,6 +39,7 @@ public class ClassMaker {
         this.childObjectMaker = new ChildObjectMaker();
         this.fieldSpecFactory = new FieldSpecFactory();
         this.getterMethodFactory = new GetterMethodFactory();
+        this.withMethodFactory = new WithMethodFactory();
     }
 
     public void makeBuilder() throws IOException {
@@ -87,11 +90,7 @@ public class ClassMaker {
     }
 
     private MethodSpec buildersWithMethods(SchemaField<?> schemaField, TypeName builderTypeName) {
-        return MethodSpec.methodBuilder("with" + StringUtils.capitalize(schemaField.name()))
-                .addParameter(schemaField.clazz(), schemaField.name())
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.$N = $N", schemaField.name(), schemaField.name())
-                .addStatement("return this")
+        return withMethodFactory.getWithMethod(schemaField)
                 .returns(builderTypeName)
                 .build();
     }

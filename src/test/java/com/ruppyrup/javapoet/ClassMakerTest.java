@@ -3,6 +3,8 @@ package com.ruppyrup.javapoet;
 
 import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.generated.Address;
+import com.ruppyrup.javapoet.generated.County;
+import com.ruppyrup.javapoet.generated.PostCode;
 import com.ruppyrup.javapoet.makers.ClassMaker;
 import com.ruppyrup.javapoet.models.SchemaField;
 import org.junit.jupiter.api.Assertions;
@@ -36,8 +38,13 @@ class ClassMakerTest {
 //                        .build())
 //                .build();
         Address address = Address.builder().build();
+        County county = address.getCounty();
         System.out.println(address);
     }
+
+//    public County getCounty() {
+//        return (County) this.county;
+//    }
 
 
     @Test
@@ -90,11 +97,13 @@ class ClassMakerTest {
             assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
             assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
 
-            Object countryObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
+            Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
 
-            assertThatMethodReturns(countryObject, "getCountyName", "Berks");
+            assertThat(countyObject).isInstanceOf(County.class);
 
-            Object postCodeObject = countryObject.getClass().getMethod("getPostCode").invoke(countryObject);
+            assertThatMethodReturns(countyObject, "getCountyName", "Berks");
+
+            Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
 
             assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
             assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");

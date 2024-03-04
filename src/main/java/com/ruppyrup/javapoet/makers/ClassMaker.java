@@ -2,6 +2,7 @@ package com.ruppyrup.javapoet.makers;
 
 import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.factories.FieldSpecFactory;
+import com.ruppyrup.javapoet.factories.GetterMethodFactory;
 import com.ruppyrup.javapoet.models.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -24,6 +25,7 @@ public class ClassMaker {
     private final String className;
     private final List<SchemaField<?>> fields;
     private final FieldSpecFactory fieldSpecFactory;
+    private final GetterMethodFactory getterMethodFactory;
     private final ChildObjectMaker childObjectMaker;
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
@@ -34,6 +36,7 @@ public class ClassMaker {
         this.dir = classGenerationBuilder.getDir();
         this.childObjectMaker = new ChildObjectMaker();
         this.fieldSpecFactory = new FieldSpecFactory();
+        this.getterMethodFactory = new GetterMethodFactory();
     }
 
     public void makeBuilder() throws IOException {
@@ -110,11 +113,7 @@ public class ClassMaker {
     }
 
     private MethodSpec createGetterFor(SchemaField<?> field) {
-        MethodSpec.Builder getterMethods = MethodSpec.methodBuilder("get" + StringUtils.capitalize(field.name()))
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("return this.$N", field.name())
-                .returns(field.clazz());
-        return getterMethods.build();
+        return getterMethodFactory.getGetterMethod(field).build();
     }
 
     private MethodSpec createStaticBuilder(TypeName builderTypeName) {

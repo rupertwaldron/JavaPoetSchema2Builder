@@ -43,10 +43,6 @@ class ClassMakerTest {
         System.out.println(address);
     }
 
-//    public County getCounty() {
-//        return (County) this.county;
-//    }
-
 
     @Test
     void checkGettersReturnCorrectFieldValues() throws IOException {

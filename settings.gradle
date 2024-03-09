@@ -1,2 +1,4 @@
 rootProject.name = 'JavaPoet'
+include 'maker'
+include 'parser'
 

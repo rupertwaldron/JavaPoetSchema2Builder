@@ -1,6 +1,6 @@
 package com.ruppyrup.javapoet;
 
-import com.ruppyrup.javapoet.demo.CreateClass;
+import com.ruppyrup.javapoet.maker.demo.CreateClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

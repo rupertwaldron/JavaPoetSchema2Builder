@@ -1,6 +1,6 @@
-package com.ruppyrup.javapoet.factories;
+package com.ruppyrup.javapoet.maker.factories;
 
-import com.ruppyrup.javapoet.models.SchemaField;
+import com.ruppyrup.javapoet.maker.models.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;

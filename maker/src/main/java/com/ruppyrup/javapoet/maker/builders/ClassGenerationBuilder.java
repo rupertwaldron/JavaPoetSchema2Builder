@@ -1,6 +1,6 @@
-package com.ruppyrup.javapoet.builders;
+package com.ruppyrup.javapoet.maker.builders;
 
-import com.ruppyrup.javapoet.models.SchemaField;
+import com.ruppyrup.javapoet.maker.models.SchemaField;
 import lombok.Getter;
 
 import java.util.ArrayList;

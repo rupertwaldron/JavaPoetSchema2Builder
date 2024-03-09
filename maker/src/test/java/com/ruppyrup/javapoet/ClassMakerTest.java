@@ -1,12 +1,12 @@
 package com.ruppyrup.javapoet;
 
 
-import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
-import com.ruppyrup.javapoet.generated.Address;
-import com.ruppyrup.javapoet.generated.County;
-import com.ruppyrup.javapoet.generated.PostCode;
-import com.ruppyrup.javapoet.makers.ClassMaker;
-import com.ruppyrup.javapoet.models.SchemaField;
+//import com.ruppyrup.javapoet.generated.Address;
+//import com.ruppyrup.javapoet.generated.County;
+//import com.ruppyrup.javapoet.generated.PostCode;
+import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
+import com.ruppyrup.javapoet.maker.makers.ClassMaker;
+import com.ruppyrup.javapoet.maker.models.SchemaField;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,15 +32,15 @@ class ClassMakerTest {
 
     @Test
     void sanityCheck() {
-//        Address address = Address.builder()
+//        Address  address = Address.builder()
 //                .withCounty(County.builder()
 //                        .withCountyName("Hants")
 //                        .build())
 //                .build();
-        Address address = Address.builder().build();
-        County county = address.getCounty();
-        PostCode postCode = county.getPostCode();
-        System.out.println(address);
+////        Address address = Address.builder().build();
+//        County county = address.getCounty();
+//        PostCode postCode = county.getPostCode();
+//        System.out.println(address);
     }
 
 

@@ -1,4 +1,4 @@
-package com.ruppyrup.javapoet.demo;
+package com.ruppyrup.javapoet.maker.demo;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;

@@ -1,17 +1,16 @@
-package com.ruppyrup.javapoet.makers;
+package com.ruppyrup.javapoet.maker.makers;
 
-import com.ruppyrup.javapoet.builders.ClassGenerationBuilder;
-import com.ruppyrup.javapoet.factories.FieldSpecFactory;
-import com.ruppyrup.javapoet.factories.GetterMethodFactory;
-import com.ruppyrup.javapoet.factories.WithMethodFactory;
-import com.ruppyrup.javapoet.models.SchemaField;
+import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
+import com.ruppyrup.javapoet.maker.factories.FieldSpecFactory;
+import com.ruppyrup.javapoet.maker.factories.GetterMethodFactory;
+import com.ruppyrup.javapoet.maker.factories.WithMethodFactory;
+import com.ruppyrup.javapoet.maker.models.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;

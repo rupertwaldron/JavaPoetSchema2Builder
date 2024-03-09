@@ -1,0 +1,31 @@
+plugins {
+    id 'application'
+}
+
+group = 'com.ruppyrup.maker'
+
+application {
+    mainClass = 'com.ruppyrup.javapoet.maker.Main'
+}
+
+
+
+dependencies {
+    implementation 'com.squareup:javapoet:1.10.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'org.projectlombok:lombok:1.18.30'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'com.jayway.jsonpath:json-path:2.9.0'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.6.1'
+}
+
+tasks.named('compileTestJava') {
+    it.dependsOn(tasks.named('run'))
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -72,13 +72,16 @@ class ClassMakerTest {
 
         classMaker.makeBuilder();
 
-        File input = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
-        Assertions.assertTrue(input.exists());
+        File input1 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
+        File input2 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "County.java");
+        File input3 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "PostCode.java");
+
+        List<File> javaFiles = List.of(input1, input2, input3);
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
 
-        Iterable<? extends JavaFileObject> files = fileManager.getJavaFileObjectsFromFiles(List.of(input));
+        Iterable<? extends JavaFileObject> files = fileManager.getJavaFileObjectsFromFiles(javaFiles);
 
         compiler.getTask(null, fileManager, null, null, null, files).call();
 

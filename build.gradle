@@ -33,28 +33,6 @@ test {
     useJUnitPlatform()
 }
 
-sourceSets {
-    test {
-        java.srcDirs += "${buildDir}/generated"
-    }
-    generated {
-        java {
-            srcDirs("${buildDir}/generated")
-        }
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-configurations {
-    // `integrationTestImplementation` extending from `implementation` means that all the declared dependencies of
-    // the production code also become dependencies of the integration tests.
-    generatedImplementation.extendsFrom implementation
-
-    // Same for the `integrationTestRuntimeOnly` configuration
-    generatedRuntimeOnly.extendsFrom runtimeOnly
-}
-
 
 task printSourceSetInformation() {
 

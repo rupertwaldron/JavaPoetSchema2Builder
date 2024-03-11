@@ -21,7 +21,7 @@ public class Main {
                 );
 
         ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
-                .withDir("build/generated")
+                .withDir("maker/build/generated")
                 .withPackageName("com.ruppyrup.javapoet.generated")
                 .withClassName("Address")
                 .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
@@ -35,6 +35,6 @@ public class Main {
         classMaker.makeBuilder();
 
         //demo
-        CreateClass.create("build/generated");
+        CreateClass.create("maker/build/generated");
     }
 }

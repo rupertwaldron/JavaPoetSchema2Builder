@@ -51,7 +51,7 @@ public class ClassMaker {
     private void generateChildObjects() {
         fields.stream()
                 .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
-                .forEach(childObjectMaker::makeChild);
+                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName));
     }
 
     private void fieldBuilders() {

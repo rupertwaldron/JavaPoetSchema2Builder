@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.List;
 
 public class ChildObjectMaker {
-    public void makeChild(SchemaField<?> schemaField) {
+    public void makeChild(SchemaField<?> schemaField, String dir, String packageName) {
         ClassGenerationBuilder.GenerationBuilder generationBuilder = ClassGenerationBuilder.builder()
-                .withDir("build/generated")
-                .withPackageName("com.ruppyrup.javapoet.generated")
+                .withDir(dir)
+                .withPackageName(packageName)
                 .withClassName(StringUtils.capitalize(schemaField.name()));
 
         ((List<SchemaField<?>>) schemaField.initialValue()).forEach(generationBuilder::withField);

@@ -12,7 +12,9 @@ import java.util.Map;
 public class SchemaFieldFactory {
 
     public static DummySchemaField<?> createSchemaField(Map.Entry<String, JsonNode> next) {
-        if (next.getValue().path("type").asText().equals("string")) {
+        if (next.getValue().path("type").asText().equals("object")) {
+            return new DummySchemaField<>(next.getKey(), Object.class, null);
+        } else if (next.getValue().path("type").asText().equals("string")) {
             return new DummySchemaField<>(next.getKey(), String.class, next.getValue().path("sample").textValue());
         } else if (next.getValue().path("type").asText().equals("integer")) {
             return new DummySchemaField<>(next.getKey(), Integer.class, next.getValue().path("sample").intValue());

@@ -8,8 +8,6 @@ application {
     mainClass = 'com.ruppyrup.javapoet.maker.Main'
 }
 
-
-
 dependencies {
     implementation 'com.squareup:javapoet:1.10.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'

@@ -1,0 +1,55 @@
+{
+  "$id": "https://example.com/complex-object.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Person",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "sample": "Rupert"
+    },
+    "age": {
+      "type": "integer",
+      "sample": 33,
+      "minimum": 0
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "sample": "Rances Lane"
+        },
+        "city": {
+          "type": "string",
+          "sample": "Wokingham"
+        },
+        "state": {
+          "type": "string",
+          "sample": "Berkshire"
+        },
+        "postalCode": {
+          "type": "string",
+          "pattern": "\\d{5}",
+          "sample": "RG10 1LG"
+        }
+      },
+      "required": ["street", "city", "state", "postalCode"]
+    },
+    "hobbies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "sample": ["fishing", "triathlon"]
+      }
+    },
+    "luckyNumbers": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "sample": [77, 39]
+      }
+    }
+  },
+  "required": ["name", "age"]
+}

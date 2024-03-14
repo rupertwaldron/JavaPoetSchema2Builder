@@ -1,6 +1,6 @@
 package com.ruppyrup.javapoet.maker.factories;
 
-import com.ruppyrup.javapoet.maker.models.SchemaField;
+import com.ruppyrup.javapoet.model.SchemaField;
 import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;

@@ -5,7 +5,7 @@ package com.ruppyrup.javapoet;
 //import com.ruppyrup.javapoet.generated.PostCode;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
-import com.ruppyrup.javapoet.maker.models.SchemaField;
+import com.ruppyrup.javapoet.model.SchemaField;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

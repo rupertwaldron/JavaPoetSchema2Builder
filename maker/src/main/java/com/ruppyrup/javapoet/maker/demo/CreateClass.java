@@ -71,7 +71,5 @@ public class CreateClass {
         file.writeTo(System.out);
 
         file.writeTo(new File(dir));
-
     }
-
 }

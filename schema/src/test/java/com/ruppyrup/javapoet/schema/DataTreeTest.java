@@ -39,10 +39,18 @@ class DataTreeTest {
 
         assertThat(field.name()).isEqualTo("name");
         assertThat(field.initialValue()).isEqualTo("Rupert");
+        assertThat(field.clazz()).isEqualTo(String.class);
 
         field = poetNode.traverse("city");
 
         assertThat(field.name()).isEqualTo("city");
         assertThat(field.initialValue()).isEqualTo("Wokingham");
+        assertThat(field.clazz()).isEqualTo(String.class);
+
+        field = poetNode.traverse("age");
+
+        assertThat(field.name()).isEqualTo("age");
+        assertThat(field.initialValue()).isEqualTo(33);
+        assertThat(field.clazz()).isEqualTo(Integer.class);
     }
 }

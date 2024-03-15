@@ -13,15 +13,23 @@ import java.nio.charset.StandardCharsets;
 
 public class FileParser implements PoetParser {
 
-    public JsonNode parse(String fileName) throws IOException {
-        System.out.println(new File(".").getAbsolutePath());
+    private final String dirOrFileForNow;
+    private final static ObjectMapper mapper = new ObjectMapper();
 
-        FileInputStream fisTargetFile = new FileInputStream(fileName);
 
-        String targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
-
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readTree(targetFileStr);
+    public FileParser(String dirOrFileForNow) {
+        this.dirOrFileForNow = dirOrFileForNow;
     }
 
+    public JsonNode parse() {
+        System.out.println(new File(".").getAbsolutePath());
+
+        String targetFileStr;
+        try (FileInputStream fisTargetFile = new FileInputStream(dirOrFileForNow)) {
+            targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
+            return mapper.readTree(targetFileStr);
+        } catch (IOException iox) {
+            throw new RuntimeException("Input stream failure whilst parsing: " + iox.getMessage());
+        }
+    }
 }

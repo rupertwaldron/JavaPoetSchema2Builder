@@ -15,8 +15,8 @@ class FileParserTest {
 
     @Test
     void parse() throws IOException {
-        FileParser fileParser = new FileParser();
-        JsonNode jsonNode = fileParser.parse("src/test/resources/nested_schema.json");
+        FileParser fileParser = new FileParser("src/test/resources/nested_schema.json");
+        JsonNode jsonNode = fileParser.parse();
 
         FileInputStream expectedIS = new FileInputStream("src/test/resources/expected_output.json");
         String expectedString = IOUtils.toString(expectedIS, StandardCharsets.UTF_8);

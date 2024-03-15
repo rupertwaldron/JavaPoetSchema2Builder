@@ -13,7 +13,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Hello from Java Poet");
-        PoetParser poetParser = new FileParser();
+        PoetParser poetParser = new FileParser("src/main/resources/nested_schema.json");
         IDataTree dataTree = new DataTree();
         PoetNode run = App.run(poetParser, dataTree);
         System.out.println(run);

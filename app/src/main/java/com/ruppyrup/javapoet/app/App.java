@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class App {
 
-    public static PoetNode run(PoetParser poetParser, IDataTree dataTree) throws IOException {
-        JsonNode parse = poetParser.parse("app/src/main/resources/nested_schema.json");
+    public static PoetNode run(PoetParser poetParser, IDataTree dataTree) {
+        JsonNode parse = poetParser.parse();
         PoetNode treeNode = dataTree.buildFromNode(parse);
         return treeNode;
     }

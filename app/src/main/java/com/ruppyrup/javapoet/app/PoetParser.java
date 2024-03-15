@@ -5,5 +5,5 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 
 public interface PoetParser {
-    JsonNode parse(String node) throws IOException;
+    JsonNode parse();
 }

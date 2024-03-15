@@ -4,8 +4,8 @@ plugins {
 
 group = 'com.ruppyrup.parser'
 
-application {
-    mainClass = 'com.ruppyrup.javapoet.maker.Main'
+test {
+    useJUnitPlatform()
 }
 
 dependencies {

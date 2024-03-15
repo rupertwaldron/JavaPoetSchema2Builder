@@ -19,6 +19,7 @@ dependencies {
     implementation 'com.jayway.jsonpath:json-path:2.9.0'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.6.1'
 }
 
 test {

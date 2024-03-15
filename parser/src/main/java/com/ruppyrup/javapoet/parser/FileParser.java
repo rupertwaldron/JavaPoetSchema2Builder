@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 public class FileParser implements PoetParser {
 
     public JsonNode parse(String fileName) throws IOException {
-        FileInputStream fisTargetFile = new FileInputStream("parser/src/main/resources/nested_schema.json");
+        FileInputStream fisTargetFile = new FileInputStream("src/main/resources/nested_schema.json");
 
         String targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
 

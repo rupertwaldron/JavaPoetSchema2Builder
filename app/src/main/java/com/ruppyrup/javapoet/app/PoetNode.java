@@ -9,6 +9,5 @@ public interface PoetNode {
     SchemaField<?> getSchemaField();
     LinkedList<PoetNode> getChildren();
     SchemaField<?> traverse(String fieldName);
-
     void print();
 }

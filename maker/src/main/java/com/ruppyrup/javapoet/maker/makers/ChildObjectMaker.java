@@ -14,6 +14,8 @@ public class ChildObjectMaker {
                 .withPackageName(packageName)
                 .withClassName(StringUtils.capitalize(schemaField.name()));
 
+        if (schemaField.initialValue() == null) return;
+
         ((List<SchemaField<?>>) schemaField.initialValue()).forEach(generationBuilder::withField);
 
         ClassGenerationBuilder builder = generationBuilder.build();

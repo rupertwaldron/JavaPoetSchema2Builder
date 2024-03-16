@@ -31,26 +31,24 @@ class DataTreeTest {
             throw new RuntimeException("Input stream failure whilst parsing: " + iox.getMessage());
         }
 
-
         DataTree dataTree = new DataTree();
         PoetNode poetNode = dataTree.buildFromNode(root);
 
-        SchemaField<?> field = poetNode.traverse("name");
+        SchemaField<?> schemaField = new SchemaField<>("name", String.class, "Rupert");
+        assertField(poetNode, schemaField);
 
-        assertThat(field.name()).isEqualTo("name");
-        assertThat(field.initialValue()).isEqualTo("Rupert");
-        assertThat(field.clazz()).isEqualTo(String.class);
+        schemaField = new SchemaField<>("city", String.class, "Wokingham");
+        assertField(poetNode, schemaField);
 
-        field = poetNode.traverse("city");
+        schemaField = new SchemaField<>("age", Integer.class, 33);
+        assertField(poetNode, schemaField);
 
-        assertThat(field.name()).isEqualTo("city");
-        assertThat(field.initialValue()).isEqualTo("Wokingham");
-        assertThat(field.clazz()).isEqualTo(String.class);
+    }
 
-        field = poetNode.traverse("age");
-
-        assertThat(field.name()).isEqualTo("age");
-        assertThat(field.initialValue()).isEqualTo(33);
-        assertThat(field.clazz()).isEqualTo(Integer.class);
+    private void assertField(PoetNode poetNode, SchemaField<?> expected) {
+        SchemaField<?> field = poetNode.traverse(expected.name());
+        assertThat(field.name()).isEqualTo(expected.name());
+        assertThat(field.initialValue()).isEqualTo(expected.initialValue());
+        assertThat(field.clazz()).isEqualTo(expected.clazz());
     }
 }

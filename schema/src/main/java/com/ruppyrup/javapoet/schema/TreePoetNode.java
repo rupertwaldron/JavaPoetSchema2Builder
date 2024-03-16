@@ -3,10 +3,9 @@ package com.ruppyrup.javapoet.schema;
 
 import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.model.SchemaField;
-import lombok.Getter;
 
 import java.util.LinkedList;
-import java.util.List;
+
 import java.util.Queue;
 
 
@@ -34,7 +33,7 @@ public class TreePoetNode implements PoetNode {
            PoetNode node = fieldsToVisit.poll();
            if (fieldName.equals(node.getSchemaField().name())) return node.getSchemaField();
            if (!node.getChildren().isEmpty()) fieldsToVisit.addAll(node.getChildren());
-           System.out.println("Checking field: " + node.getSchemaField().name());
+           System.out.println("Field: " + node.getSchemaField());
        }
 
        return null;
@@ -49,5 +48,10 @@ public class TreePoetNode implements PoetNode {
     @Override
     public LinkedList<PoetNode> getChildren() {
         return children;
+    }
+
+    @Override
+    public void print() {
+        traverse("");
     }
 }

@@ -15,7 +15,7 @@ public class Main {
         System.out.println("Hello from Java Poet");
         PoetParser poetParser = new FileParser("src/main/resources/nested_schema.json");
         IDataTree dataTree = new DataTree();
-        PoetNode run = App.run(poetParser, dataTree);
-        System.out.println(run);
+        PoetNode rootNode = App.run(poetParser, dataTree);
+        rootNode.print();
     }
 }

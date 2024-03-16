@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DataTreeTest {
     private final static ObjectMapper mapper = new ObjectMapper();
@@ -47,8 +46,6 @@ class DataTreeTest {
 
     private void assertField(PoetNode poetNode, SchemaField<?> expected) {
         SchemaField<?> field = poetNode.traverse(expected.name());
-        assertThat(field.name()).isEqualTo(expected.name());
-        assertThat(field.initialValue()).isEqualTo(expected.initialValue());
-        assertThat(field.clazz()).isEqualTo(expected.clazz());
+        assertThat(field).isEqualTo(expected);
     }
 }

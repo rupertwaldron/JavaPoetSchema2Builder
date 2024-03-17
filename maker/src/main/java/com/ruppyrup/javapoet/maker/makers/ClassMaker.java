@@ -1,10 +1,10 @@
 package com.ruppyrup.javapoet.maker.makers;
 
+import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.factories.FieldSpecFactory;
 import com.ruppyrup.javapoet.maker.factories.GetterMethodFactory;
 import com.ruppyrup.javapoet.maker.factories.WithMethodFactory;
-import com.ruppyrup.javapoet.model.SchemaField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;

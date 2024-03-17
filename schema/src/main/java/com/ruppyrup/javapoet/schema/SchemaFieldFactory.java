@@ -1,7 +1,7 @@
 package com.ruppyrup.javapoet.schema;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ruppyrup.javapoet.model.SchemaField;
+import com.ruppyrup.javapoet.app.SchemaField;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;

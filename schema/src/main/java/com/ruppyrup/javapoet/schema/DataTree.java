@@ -3,7 +3,7 @@ package com.ruppyrup.javapoet.schema;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ruppyrup.javapoet.app.IDataTree;
 import com.ruppyrup.javapoet.app.PoetNode;
-import com.ruppyrup.javapoet.model.SchemaField;
+import com.ruppyrup.javapoet.app.SchemaField;
 
 import java.util.Iterator;
 import java.util.Map;

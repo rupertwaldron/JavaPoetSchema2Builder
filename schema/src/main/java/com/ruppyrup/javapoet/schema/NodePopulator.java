@@ -1,7 +1,7 @@
 package com.ruppyrup.javapoet.schema;
 
 import com.ruppyrup.javapoet.app.PoetNode;
-import com.ruppyrup.javapoet.model.SchemaField;
+import com.ruppyrup.javapoet.app.SchemaField;
 
 import java.util.List;
 

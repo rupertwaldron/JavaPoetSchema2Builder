@@ -3,7 +3,6 @@ package com.ruppyrup.javapoet.maker;
 import com.ruppyrup.javapoet.maker.demo.CreateClass;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
-import com.ruppyrup.javapoet.model.SchemaField;
 
 import java.io.IOException;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.ruppyrup.javapoet.schema;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruppyrup.javapoet.app.PoetNode;
-import com.ruppyrup.javapoet.model.SchemaField;
+import com.ruppyrup.javapoet.app.SchemaField;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +37,7 @@ class NodePopulatorTest {
         PoetNode poetNode = dataTree.buildFromNode(root);
 
         NodePopulator nodePopulator = new NodePopulator();
-        
+
         nodePopulator.populate(poetNode);
 
         SchemaField<?> schemaField = new SchemaField<>("Person", Object.class, null);

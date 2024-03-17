@@ -1,4 +1,4 @@
-package com.ruppyrup.javapoet.model;
+package com.ruppyrup.javapoet.app;
 
 
 import lombok.AllArgsConstructor;

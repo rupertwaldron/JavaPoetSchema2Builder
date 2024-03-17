@@ -6,12 +6,13 @@ import com.ruppyrup.javapoet.model.SchemaField;
 
 import java.util.LinkedList;
 
+import java.util.List;
 import java.util.Queue;
 
 
 public class TreePoetNode implements PoetNode {
     private final SchemaField<?> schemaField;
-    private final LinkedList<PoetNode> children = new LinkedList<>();
+    private final List<PoetNode> children = new LinkedList<>();
 
     public TreePoetNode(SchemaField<?> schemaField) {
         this.schemaField = schemaField;
@@ -46,7 +47,7 @@ public class TreePoetNode implements PoetNode {
     }
 
     @Override
-    public LinkedList<PoetNode> getChildren() {
+    public List<PoetNode> getChildren() {
         return children;
     }
 

@@ -14,6 +14,7 @@ public class DataTree implements IDataTree {
     public PoetNode buildFromNode(JsonNode root) {
         PoetNode poetNode = new TreePoetNode(SchemaFieldFactory.createSchemaField(Map.entry(root.path("title").asText(), root)));
         myFillMap(root, poetNode);
+        NodePopulator.populate(poetNode);
         return poetNode;
     }
 

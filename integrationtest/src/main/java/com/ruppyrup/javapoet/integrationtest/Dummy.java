@@ -8,13 +8,19 @@ import com.ruppyrup.javapoet.maker.GeneratorImpl;
 import com.ruppyrup.javapoet.parser.FileParser;
 import com.ruppyrup.javapoet.schema.DataTree;
 
+import java.io.File;
+
 public class Dummy {
-    public static void main(String[] args) {
-        System.out.println("Hello from integration test");
-        System.out.println("Hello from Java Poet");
-        PoetParser poetParser = new FileParser("src/main/resources/nested_schema2.json");
+    public static void run(String filePath) {
+        System.out.println(new File(".").getAbsolutePath());
+        System.out.println("Hello from Java Poet" + System.getProperty("user.dir"));
+        PoetParser poetParser = new FileParser(filePath);
         IDataTree dataTree = new DataTree();
-        IGenerator generator = new GeneratorImpl();
+        IGenerator generator = new GeneratorImpl("integrationtest/generated", "com.ruppyrup.javapoet.generated");
         App.run(poetParser, dataTree, generator);
+    }
+
+    public static void main(String[] args) {
+        Dummy.run("integrationtest/src/test/resources/nested_schema2.json");
     }
 }

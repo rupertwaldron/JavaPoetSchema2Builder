@@ -25,11 +25,11 @@ test {
 
 sourceSets {
     test {
-        java.srcDirs += "${buildDir}/generated"
+        java.srcDirs += "${projectDir}/generated"
     }
     generated {
         java {
-            srcDirs("${buildDir}/generated")
+            srcDirs("${projectDir}/generated")
         }
         compileClasspath += sourceSets.main.output
         runtimeClasspath += sourceSets.main.output

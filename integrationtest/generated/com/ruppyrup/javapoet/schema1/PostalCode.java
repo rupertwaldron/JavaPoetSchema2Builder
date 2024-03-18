@@ -1,0 +1,46 @@
+package com.ruppyrup.javapoet.schema1;
+
+import java.lang.String;
+
+public class PostalCode {
+  private String codePart1 = "RG10";
+
+  private String codePart2 = "1LG";
+
+  private PostalCode(PostalCodeBuilder postalcodeBuilder) {
+    this.codePart1 = postalcodeBuilder.codePart1;
+    this.codePart2 = postalcodeBuilder.codePart2;
+  }
+
+  public static PostalCodeBuilder builder() {
+    return new PostalCodeBuilder();
+  }
+
+  public String getCodePart1() {
+    return this.codePart1;
+  }
+
+  public String getCodePart2() {
+    return this.codePart2;
+  }
+
+  public static class PostalCodeBuilder {
+    private String codePart1 = "RG10";
+
+    private String codePart2 = "1LG";
+
+    public PostalCode build() {
+      return new PostalCode(this);
+    }
+
+    public PostalCodeBuilder withCodePart1(String codePart1) {
+      this.codePart1 = codePart1;
+      return this;
+    }
+
+    public PostalCodeBuilder withCodePart2(String codePart2) {
+      this.codePart2 = codePart2;
+      return this;
+    }
+  }
+}

@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class NodePopulatorTest {
 
@@ -34,7 +33,7 @@ class NodePopulatorTest {
         }
 
         DataTree dataTree = new DataTree();
-        PoetNode poetNode = dataTree.buildFromNode(root);
+        PoetNode poetNode = dataTree.buildFromNode(root, "Person");
 
         NodePopulator nodePopulator = new NodePopulator();
 

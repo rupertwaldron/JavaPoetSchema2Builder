@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class DataTree implements IDataTree {
     @Override
-    public PoetNode buildFromNode(JsonNode root) {
-        PoetNode poetNode = new TreePoetNode(SchemaFieldFactory.createSchemaField(Map.entry(root.path("title").asText(), root)));
+    public PoetNode buildFromNode(JsonNode root, String className) {
+        PoetNode poetNode = new TreePoetNode(SchemaFieldFactory.createSchemaField(Map.entry(className, root)));
         myFillMap(root, poetNode);
         NodePopulator.populate(poetNode);
         return poetNode;

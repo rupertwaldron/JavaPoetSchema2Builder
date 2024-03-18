@@ -8,16 +8,8 @@ import com.ruppyrup.javapoet.maker.makers.ClassMaker;
 import java.io.IOException;
 
 public class GeneratorImpl implements IGenerator {
-    private final String outputDirectory;
-    private final String packageName;
 
-    public GeneratorImpl(String outputDirectory, String packageName) {
-        this.outputDirectory = outputDirectory;
-        this.packageName = packageName;
-    }
-
-
-    public void generate(PoetNode poetNode) {
+    public void generate(PoetNode poetNode, String outputDirectory, String packageName) {
         String className = poetNode.getSchemaField().name();
         ClassGenerationBuilder.GenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
                 .withDir(outputDirectory)

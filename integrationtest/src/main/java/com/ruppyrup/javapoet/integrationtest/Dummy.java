@@ -16,7 +16,7 @@ public class Dummy {
         System.out.println("Hello from Java Poet" + System.getProperty("user.dir"));
         PoetParser poetParser = new FileParser();
         IDataTree dataTree = new DataTree();
-        IGenerator generator = new GeneratorImpl("integrationtest/generated", "com.ruppyrup.javapoet.generated");
+        IGenerator generator = new GeneratorImpl();
         App app = new App(poetParser, dataTree, generator);
         app.run(filePath);
     }

@@ -31,7 +31,7 @@ class DataTreeTest {
         }
 
         DataTree dataTree = new DataTree();
-        PoetNode poetNode = dataTree.buildFromNode(root);
+        PoetNode poetNode = dataTree.buildFromNode(root, "Person");
 
         SchemaField<?> schemaField = new SchemaField<>("name", String.class, "Rupert");
         assertField(poetNode, schemaField);

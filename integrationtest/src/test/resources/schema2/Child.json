@@ -6,11 +6,11 @@
   "properties": {
     "name": {
       "type": "string",
-      "sample": "Rupert"
+      "sample": "Sam"
     },
     "age": {
       "type": "integer",
-      "sample": 33,
+      "sample": 15,
       "minimum": 0
     },
     "address": {
@@ -18,15 +18,15 @@
       "properties": {
         "street": {
           "type": "string",
-          "sample": "Rances Lane"
+          "sample": "Samphire Close"
         },
         "city": {
           "type": "string",
-          "sample": "Wokingham"
+          "sample": "Solihull"
         },
         "state": {
           "type": "string",
-          "sample": "Berkshire"
+          "sample": "West Midlands"
         },
         "postalCode": {
           "type": "object",
@@ -34,12 +34,12 @@
             "codePart1": {
               "type": "string",
               "pattern": "\\d{3}",
-              "sample": "RG10"
+              "sample": "B94"
             },
             "codePart2": {
               "type": "string",
               "pattern": "\\d{3}",
-              "sample": "1LG"
+              "sample": "2PX"
             }
           }
         }
@@ -50,14 +50,14 @@
       "type": "array",
       "items": {
         "type": "string",
-        "sample": ["fishing", "triathlon"]
+        "sample": ["xbox", "more xbox"]
       }
     },
     "luckyNumbers": {
       "type": "array",
       "items": {
         "type": "integer",
-        "sample": [77, 39]
+        "sample": [3, 29]
       }
     }
   },

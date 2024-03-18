@@ -12,15 +12,10 @@ import java.nio.charset.StandardCharsets;
 
 public class FileParser implements PoetParser {
 
-    private final String dirOrFileForNow;
     private final static ObjectMapper mapper = new ObjectMapper();
 
 
-    public FileParser(String dirOrFileForNow) {
-        this.dirOrFileForNow = dirOrFileForNow;
-    }
-
-    public JsonNode parse() {
+    public JsonNode parse(String dirOrFileForNow) {
         System.out.println(new File(".").getAbsolutePath());
 
         String targetFileStr;

@@ -14,13 +14,14 @@ public class Dummy {
     public static void run(String filePath) {
         System.out.println(new File(".").getAbsolutePath());
         System.out.println("Hello from Java Poet" + System.getProperty("user.dir"));
-        PoetParser poetParser = new FileParser(filePath);
+        PoetParser poetParser = new FileParser();
         IDataTree dataTree = new DataTree();
         IGenerator generator = new GeneratorImpl("integrationtest/generated", "com.ruppyrup.javapoet.generated");
-        App.run(poetParser, dataTree, generator);
+        App app = new App(poetParser, dataTree, generator);
+        app.run(filePath);
     }
 
     public static void main(String[] args) {
-        Dummy.run("integrationtest/src/test/resources/nested_schema2.json");
+        Dummy.run("integrationtest/src/test/resources/schema1/nested_schema1.json");
     }
 }

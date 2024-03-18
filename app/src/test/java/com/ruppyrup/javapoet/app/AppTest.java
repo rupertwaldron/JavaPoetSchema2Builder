@@ -8,7 +8,7 @@ class AppTest {
 
     @Test
     void integrationTest() {
-        App app = new App();
+        App app = new App(null, null, null);
         assertNotNull(app);
     }
 

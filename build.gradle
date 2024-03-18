@@ -1,5 +1,5 @@
 plugins {
-    id 'application'
+    id 'java-library'
 }
 
 group = 'com.ruppyrup.javapoet'
@@ -18,15 +18,15 @@ allprojects {
     }
 }
 
-application {
-    mainClass = 'com.ruppyrup.javapoet.Main'
-}
+//application {
+//    mainClass = 'com.ruppyrup.javapoet.Main'
+//}
 
 dependencies {
-    implementation project(':app')
-    implementation project(':parser')
-    implementation project(':schema')
-    implementation project(':maker')
+//    implementation project(':app')
+//    implementation project(':parser')
+//    implementation project(':schema')
+//    implementation project(':maker')
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.assertj:assertj-core:3.6.1'
@@ -35,28 +35,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-sourceSets {
-    test {
-        java.srcDirs += "${buildDir}/generated"
-    }
-    generated {
-        java {
-            srcDirs("${buildDir}/generated")
-        }
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-configurations {
-    // `integrationTestImplementation` extending from `implementation` means that all the declared dependencies of
-    // the production code also become dependencies of the integration tests.
-    generatedImplementation.extendsFrom implementation
-
-    // Same for the `integrationTestRuntimeOnly` configuration
-    generatedRuntimeOnly.extendsFrom runtimeOnly
 }
 
 

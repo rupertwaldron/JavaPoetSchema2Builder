@@ -11,7 +11,7 @@ public class GeneratorImpl implements IGenerator {
     public void generate(PoetNode poetNode) {
         String className = poetNode.getSchemaField().name();
         ClassGenerationBuilder.GenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
-                .withDir("build/generated")
+                .withDir("integrationtest/build/generated")
                 .withPackageName("com.ruppyrup.javapoet.generated")
                 .withClassName(className);
 

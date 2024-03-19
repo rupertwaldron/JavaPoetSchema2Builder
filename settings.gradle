@@ -1,7 +1,19 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenLocal()
+    }
+}
+
+
 rootProject.name = 'JavaPoet'
 include 'maker'
 include 'parser'
 include 'schema'
 include 'app'
 include 'integrationtest'
+include 'plugin'
 

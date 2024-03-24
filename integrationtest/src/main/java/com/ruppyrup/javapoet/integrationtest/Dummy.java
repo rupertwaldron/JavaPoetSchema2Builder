@@ -18,7 +18,7 @@ public class Dummy {
         IDataTree dataTree = new DataTree();
         IGenerator generator = new GeneratorImpl();
         App app = new App(poetParser, dataTree, generator);
-        app.run(filePath);
+        app.run(filePath, "generated");
     }
 
     public static void main(String[] args) {

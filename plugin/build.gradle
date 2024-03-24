@@ -11,11 +11,6 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
 // Add a source set for the functional test suite
 sourceSets {
     functionalTest {
@@ -24,6 +19,19 @@ sourceSets {
 
 configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
 configurations.functionalTestRuntimeOnly.extendsFrom(configurations.testRuntimeOnly)
+
+dependencies {
+    implementation project(':app')
+    implementation project(':parser')
+    implementation project(':schema')
+    implementation project(':maker')
+    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    functionalTestImplementation('commons-io:commons-io:2.15.1')
+    functionalTestImplementation 'org.assertj:assertj-core:3.6.1'
+}
+
 
 // Add a task to run the functional tests
 tasks.register('functionalTest', Test) {

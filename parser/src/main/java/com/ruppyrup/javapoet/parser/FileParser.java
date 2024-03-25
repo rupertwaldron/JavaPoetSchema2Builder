@@ -14,7 +14,6 @@ public class FileParser implements PoetParser {
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
-
     public JsonNode parse(String dirOrFileForNow) {
         System.out.println(new File(".").getAbsolutePath());
 
@@ -22,7 +21,7 @@ public class FileParser implements PoetParser {
         try (FileInputStream fisTargetFile = new FileInputStream(dirOrFileForNow)) {
             targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
             return mapper.readTree(targetFileStr);
-        } catch (IOException iox) {
+        } catch (Exception iox) {
             throw new RuntimeException("Input stream failure whilst parsing: " + iox.getMessage());
         }
     }

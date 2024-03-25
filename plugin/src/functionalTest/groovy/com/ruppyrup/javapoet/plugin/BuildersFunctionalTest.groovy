@@ -41,7 +41,7 @@ println System.getProperty("user.dir")
 
 
 poetBuilder {
-    schemaDir = '/src/functionalTest/resources'
+    schemaDir = 'src/functionalTest/resources'
     outputDir = "${projectDir.getPath()}"
 }
 """

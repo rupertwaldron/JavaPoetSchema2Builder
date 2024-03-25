@@ -31,7 +31,9 @@ class Schema2BuilderPlugin implements Plugin<Project> {
                 IDataTree dataTree = new DataTree()
                 IGenerator generator = new GeneratorImpl()
                 App app = new App(poetParser, dataTree, generator)
-                app.run(System.getProperty("user.dir") + extension.schemaDir.get(), extension.outputDir.get())
+                println "Directory is :: " + System.getProperty("user.dir") + extension.schemaDir.get()
+
+                app.run(System.getProperty("user.dir") + "/" + extension.schemaDir.get(), extension.outputDir.get())
             }
         }
 

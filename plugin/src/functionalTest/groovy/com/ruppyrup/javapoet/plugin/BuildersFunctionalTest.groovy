@@ -32,6 +32,7 @@ class BuildersFunctionalTest extends Specification {
         settingsFile << ""
         buildFile << """
 plugins {
+    id 'java-library'
     id 'com.ruppyrup.javapoet.plugin.poetBuilder'
 }
 

@@ -49,6 +49,17 @@ tasks.named('check') {
     dependsOn(tasks.functionalTest)
 }
 
-test {
-    useJUnitPlatform()
+jar.finalizedBy(publishToMavenLocal)
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }

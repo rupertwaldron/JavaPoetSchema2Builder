@@ -17,8 +17,6 @@ allprojects {
         mavenCentral()
     }
 
-    jar.finalizedBy(publishToMavenLocal)
-
     dependencies {
         testImplementation platform('org.junit:junit-bom:5.10.0')
         testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -27,19 +25,6 @@ allprojects {
 
     test {
         useJUnitPlatform()
-    }
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                groupId = project.group
-                artifactId = project.name
-                version = project.version
-            }
-        }
-        repositories {
-            mavenLocal()
-        }
     }
 
     task printSourceSetInformation() {

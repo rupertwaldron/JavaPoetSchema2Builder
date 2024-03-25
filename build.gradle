@@ -41,32 +41,22 @@ allprojects {
             mavenLocal()
         }
     }
-}
 
-//dependencies {
-//    testImplementation platform('org.junit:junit-bom:5.10.0')
-//    testImplementation 'org.junit.jupiter:junit-jupiter'
-//    testImplementation 'org.assertj:assertj-core:3.6.1'
-//}
-//
-//
-//test {
-//    useJUnitPlatform()
-//}
+    task printSourceSetInformation() {
 
-
-task printSourceSetInformation() {
-
-    doLast {
-        sourceSets.each { srcSet ->
-            println "[" + srcSet.name + "]"
-            print "-->Source directories: " + srcSet.allJava.srcDirs + "\n"
-            print "-->Output directories: " + srcSet.output.classesDirs.files + "\n"
-            print "-->Compile classpath:\n"
-            srcSet.compileClasspath.files.each {
-                print "  " + it.path + "\n"
+        doLast {
+            sourceSets.each { srcSet ->
+                println "[" + srcSet.name + "]"
+                print "-->Source directories: " + srcSet.allJava.srcDirs + "\n"
+                print "-->Output directories: " + srcSet.output.classesDirs.files + "\n"
+                print "-->Compile classpath:\n"
+                srcSet.compileClasspath.files.each {
+                    print "  " + it.path + "\n"
+                }
+                println ""
             }
-            println ""
         }
     }
 }
+
+

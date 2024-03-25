@@ -27,7 +27,7 @@ class GreetingFunctionalTest extends Specification {
         settingsFile << ""
         buildFile << """
 plugins {
-    id 'com.ruppyrup.javapoet.plugin.greeting'
+    id 'com.ruppyrup.javapoet.plugin.poetBuilder'
 }
 """
 

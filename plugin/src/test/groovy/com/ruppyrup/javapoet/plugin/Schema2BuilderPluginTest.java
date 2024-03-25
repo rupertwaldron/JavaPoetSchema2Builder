@@ -11,9 +11,10 @@ class Schema2BuilderPluginTest {
     void pluginRegistersATask() {
         // Create a test project and apply the plugin
         Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("com.ruppyrup.javapoet.plugin.greeting");
+        project.getPlugins().apply("com.ruppyrup.javapoet.plugin.poetBuilder");
 
         // Verify the result
         assertNotNull(project.getTasks().findByName("greeting"));
+        assertNotNull(project.getTasks().findByName("generateBuilders"));
     }
 }

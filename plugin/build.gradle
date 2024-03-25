@@ -1,14 +1,6 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
-    id 'maven-publish'
-}
-
-group = 'com.ruppyrup.javapoet.plugin'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
 }
 
 // Add a source set for the functional test suite
@@ -45,8 +37,8 @@ gradlePlugin.testSourceSets.add(sourceSets.functionalTest)
 gradlePlugin {
     // Define the plugin
     plugins {
-        greeting {
-            id = 'com.ruppyrup.javapoet.plugin.greeting'
+        poetBuilder {
+            id = 'com.ruppyrup.javapoet.plugin.poetBuilder'
             implementationClass = 'com.ruppyrup.javapoet.plugin.Schema2BuilderPlugin'
         }
     }

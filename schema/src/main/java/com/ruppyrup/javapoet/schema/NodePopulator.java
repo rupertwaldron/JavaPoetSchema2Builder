@@ -4,6 +4,7 @@ import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.app.SchemaField;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NodePopulator {
 
@@ -12,7 +13,7 @@ public class NodePopulator {
             if (node.getSchemaField().clazz().getName().equals("java.lang.Object") && !node.getChildren().isEmpty()) {
                 List<? extends SchemaField<?>> schemaFields = node.getChildren().stream()
                         .map(PoetNode::getSchemaField)
-                        .toList();
+                        .collect(Collectors.toList());
                 ((SchemaField<Object>)node.getSchemaField()).initialValue(schemaFields);
             }
             populate(node);

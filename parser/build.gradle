@@ -1,12 +1,3 @@
-plugins {
-    id 'java-library'
-}
-
-group = 'com.ruppyrup.parser'
-
-test {
-    useJUnitPlatform()
-}
 
 dependencies {
     implementation project(':app')

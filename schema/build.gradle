@@ -1,9 +1,7 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
-
-group = 'com.ruppyrup.javapoet.schema'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()

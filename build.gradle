@@ -1,7 +1,8 @@
 
 allprojects {
-    apply plugin: 'java-library'
+//    apply plugin: 'java-library'
     apply plugin: 'maven-publish'
+    apply plugin: 'java-gradle-plugin'
 
     version = '1.0-SNAPSHOT'
     group = 'com.ruppyrup.javapoet'

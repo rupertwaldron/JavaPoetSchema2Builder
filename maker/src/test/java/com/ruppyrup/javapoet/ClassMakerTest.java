@@ -1,8 +1,5 @@
 package com.ruppyrup.javapoet;
 
-//import com.ruppyrup.javapoet.generated.Address;
-//import com.ruppyrup.javapoet.generated.County;
-//import com.ruppyrup.javapoet.generated.PostCode;
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
@@ -29,20 +26,6 @@ class ClassMakerTest {
     File tempdir;
 
     @Test
-    void sanityCheck() {
-//        Address address = Address.builder()
-//                .withCounty(County.builder()
-//                        .withCountyName("Hants")
-//                        .build())
-//                .build();
-////        Address address = Address.builder().build();
-//        County county = address.getCounty();
-//        PostCode postCode = county.getPostCode();
-//        System.out.println(address);
-    }
-
-
-    @Test
     void checkGettersReturnCorrectFieldValues() throws IOException {
 
         List<SchemaField<?>> postCode = List.of(
@@ -62,6 +45,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
                 .withField(new SchemaField<>("name", String.class, null))
                 .withField(new SchemaField<>("yearsInHouse", Number.class, 16.9))
+                .withField(new SchemaField<>("meterReadings", Number[].class, new Number[]{16.9, 120.9, 200.64}))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
@@ -96,6 +80,8 @@ class ClassMakerTest {
             assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
             assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
             assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
+            assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
+            assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
 
             Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
 
@@ -109,9 +95,17 @@ class ClassMakerTest {
             assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
             assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
 
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void assertThatMethodReturnsArray(Object createdObject, String methodName, Number... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        assertThat(((Number[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
+    }
+    private static void assertThatMethodReturnsArray(Object createdObject, String methodName, String... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        assertThat(((String[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
     }
 
     private static void assertThatMethodReturns(Object createdObject, String methodName, Object expectedResult) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

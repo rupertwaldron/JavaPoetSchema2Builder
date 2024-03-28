@@ -11,7 +11,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import static com.ruppyrup.javapoet.maker.factories.FieldType.*;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER_ARRAY;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER_ARRAY;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.OBJECT;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING_ARRAY;
 
 public class FieldSpecFactory {
 
@@ -24,34 +30,11 @@ public class FieldSpecFactory {
         } else if (schemaField.clazz().getName().equals(NUMBER.typeIdentifier)) {
             builder.initializer("$L", schemaField.initialValue());
         } else if (schemaField.clazz().getName().equals(STRING_ARRAY.typeIdentifier)) {
-            try {
-                Field f = schemaField.getClass().getDeclaredField("initialValue");
-                f.setAccessible(true);
-                String[] initialValue = (String[]) f.get(schemaField);
-                String literal = "{\"" + String.join("\",\"", initialValue) + "\"}";
-                ArrayTypeName stringArray = ArrayTypeName.of(String.class);
-                CodeBlock block = CodeBlock.builder().add("new $1T $2L", stringArray, literal).build();
-                builder.initializer(block);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            setUpStringArray(schemaField, builder);
         } else if (schemaField.clazz().getName().equals(INTEGER_ARRAY.typeIdentifier)) {
-            try {
-                Field f = schemaField.getClass().getDeclaredField("initialValue");
-                f.setAccessible(true);
-                Integer[] initialValue = (Integer[]) f.get(schemaField);
-                StringBuilder sb = new StringBuilder("{");
-                Arrays.stream(initialValue)
-                        .forEach(i -> sb.append(i).append(","));
-                sb.deleteCharAt(sb.length() - 1);
-                sb.append("}");
-
-                ArrayTypeName integerArray = ArrayTypeName.of(Integer.class);
-                CodeBlock block = CodeBlock.builder().add("new $1T $2L", integerArray, sb.toString()).build();
-                builder.initializer(block);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            setUpArray(schemaField, builder, Integer.class);
+        } else if (schemaField.clazz().getName().equals(NUMBER_ARRAY.typeIdentifier)) {
+            setUpArray(schemaField, builder, Number.class);
         } else if (schemaField.clazz().getName().equals(OBJECT.typeIdentifier)) {
             String name = StringUtils.capitalize(schemaField.name());
             TypeName childTypeName = ClassName.get("", name);
@@ -61,5 +44,38 @@ public class FieldSpecFactory {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());
         }
         return builder;
+    }
+
+    private static void setUpStringArray(SchemaField<?> schemaField, FieldSpec.Builder builder) {
+        try {
+            Field f = schemaField.getClass().getDeclaredField("initialValue");
+            f.setAccessible(true);
+            String[] initialValue = (String[]) f.get(schemaField);
+            String literal = "{\"" + String.join("\",\"", initialValue) + "\"}";
+            ArrayTypeName stringArray = ArrayTypeName.of(String.class);
+            CodeBlock block = CodeBlock.builder().add("new $1T $2L", stringArray, literal).build();
+            builder.initializer(block);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static <T> void setUpArray(SchemaField<?> schemaField, FieldSpec.Builder builder, Class<T> type) {
+        try {
+            Field f = schemaField.getClass().getDeclaredField("initialValue");
+            f.setAccessible(true);
+            T[] initialValue = (T[])f.get(schemaField);
+            StringBuilder sb = new StringBuilder("{");
+            Arrays.stream(initialValue)
+                    .forEach(i -> sb.append(i).append(","));
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("}");
+
+            ArrayTypeName numberArray = ArrayTypeName.of(type);
+            CodeBlock block = CodeBlock.builder().add("new $1T $2L", numberArray, sb.toString()).build();
+            builder.initializer(block);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

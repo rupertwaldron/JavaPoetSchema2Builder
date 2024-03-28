@@ -9,7 +9,6 @@ import com.ruppyrup.javapoet.parser.FileParser
 import com.ruppyrup.javapoet.schema.DataTree
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
@@ -39,19 +38,19 @@ class Schema2BuilderPlugin implements Plugin<Project> {
         })
 
         rootProject.afterEvaluate { ignored ->
-            configureJava(rootProject)
+            configureJava(rootProject, extension)
         }
     }
 
-    private void configureJava(Project rootProject) {
+    private void configureJava(Project rootProject, PoetBuilderExtension extension) {
         for (Project project : rootProject.getAllprojects()) {
             if (project.getPlugins().hasPlugin(JavaPlugin.class)) {
-                createLocalTestSourceSet(project)
+                createLocalTestSourceSet(project, extension)
                 setDependencies(project)
             } else {
                 project.getPlugins().whenPluginAdded(plugin -> {
                     if (plugin instanceof JavaPlugin) {
-                        createLocalTestSourceSet(project);
+                        createLocalTestSourceSet(project, extension);
                     }
                 });
             }
@@ -67,17 +66,23 @@ class Schema2BuilderPlugin implements Plugin<Project> {
     }
 
 
-    private void createLocalTestSourceSet(Project project) {
+    private void createLocalTestSourceSet(Project project, PoetBuilderExtension extension) {
         project.afterEvaluate(ignored -> {
-            JavaPluginExtension javaPlugin = project.getExtensions().getByType(JavaPluginExtension.class);
-//            ConfigurationContainer configurations = project.getConfigurations();
-            DependencyHandler dependencies = project.getDependencies();
+            JavaPluginExtension javaPlugin = project.getExtensions().getByType(JavaPluginExtension.class)
+//            ConfigurationContainer configurations = project.getConfigurations()
+            DependencyHandler dependencies = project.getDependencies()
 
             javaPlugin.getSourceSets().stream()
 //                    .filter(sourceSet -> sourceSet.getName().toLowerCase().contains("test"))
                     .forEach(sourceSet -> {
+
+                        sourceSet.java {
+                            println "Source directory added -> " + extension.outputDir.get()
+                            srcDirs += extension.outputDir.get()
+                        }
+
 //                      SourceSet integrationTestSourceSet = javaPlugin.getSourceSets().getByName("integrationTest");
-                        String implementation = sourceSet.getImplementationConfigurationName();
+                        String implementation = sourceSet.getImplementationConfigurationName()
 
                         dependencies.add(implementation, "com.ruppyrup.javapoet:app:1.0-SNAPSHOT")
                         dependencies.add(implementation, "com.ruppyrup.javapoet:maker:1.0-SNAPSHOT")
@@ -90,7 +95,6 @@ class Schema2BuilderPlugin implements Plugin<Project> {
                         sourceSet.getJava().getSrcDirs().forEach(System.out::println);
 
                     })
-
         })
     }
 }

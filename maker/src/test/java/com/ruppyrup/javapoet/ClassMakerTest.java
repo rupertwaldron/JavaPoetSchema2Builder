@@ -61,6 +61,7 @@ class ClassMakerTest {
                 .withClassName("Address")
                 .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
                 .withField(new SchemaField<>("name", String.class, null))
+                .withField(new SchemaField<>("yearsInHouse", Number.class, 16.9))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
@@ -93,6 +94,7 @@ class ClassMakerTest {
             assertThatMethodReturns(createdObject, "getHouseNumber", 63);
             assertThatMethodReturns(createdObject, "getName", null);
             assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
+            assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
             assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
 
             Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);

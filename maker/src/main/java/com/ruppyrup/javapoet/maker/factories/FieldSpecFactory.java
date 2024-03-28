@@ -11,14 +11,19 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import static com.ruppyrup.javapoet.maker.factories.FieldType.*;
+
 public class FieldSpecFactory {
+
     public FieldSpec.Builder creatFieldSpec(SchemaField<?> schemaField) {
         var builder = FieldSpec.builder(schemaField.clazz(), schemaField.name());
-        if (schemaField.clazz().getName().equals("java.lang.String")) {
+        if (schemaField.clazz().getName().equals(STRING.typeIdentifier)) {
             builder.initializer("$S", schemaField.initialValue());
-        } else if (schemaField.clazz().getName().equals("java.lang.Integer")) {
+        } else if (schemaField.clazz().getName().equals(INTEGER.typeIdentifier)) {
             builder.initializer("$L", schemaField.initialValue());
-        } else if (schemaField.clazz().getName().equals("[Ljava.lang.String;")) {
+        } else if (schemaField.clazz().getName().equals(NUMBER.typeIdentifier)) {
+            builder.initializer("$L", schemaField.initialValue());
+        } else if (schemaField.clazz().getName().equals(STRING_ARRAY.typeIdentifier)) {
             try {
                 Field f = schemaField.getClass().getDeclaredField("initialValue");
                 f.setAccessible(true);
@@ -30,7 +35,7 @@ public class FieldSpecFactory {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        } else if (schemaField.clazz().getName().equals("[Ljava.lang.Integer;")) {
+        } else if (schemaField.clazz().getName().equals(INTEGER_ARRAY.typeIdentifier)) {
             try {
                 Field f = schemaField.getClass().getDeclaredField("initialValue");
                 f.setAccessible(true);
@@ -47,7 +52,7 @@ public class FieldSpecFactory {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        } else if (schemaField.clazz().getName().equals("java.lang.Object")) {
+        } else if (schemaField.clazz().getName().equals(OBJECT.typeIdentifier)) {
             String name = StringUtils.capitalize(schemaField.name());
             TypeName childTypeName = ClassName.get("", name);
             builder = FieldSpec.builder(childTypeName, schemaField.name());

@@ -45,4 +45,8 @@ allprojects {
     }
 }
 
+wrapper {
+    distributionUrl = 'https://services.gradle.org/distributions/gradle-8.6-all.zip'
+}
+
 

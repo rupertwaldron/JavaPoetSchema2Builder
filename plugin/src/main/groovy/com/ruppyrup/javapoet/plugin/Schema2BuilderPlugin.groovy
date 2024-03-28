@@ -9,7 +9,7 @@ import com.ruppyrup.javapoet.parser.FileParser
 import com.ruppyrup.javapoet.schema.DataTree
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.ConfigurationContainer
+import org.gradle.api.Task
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
@@ -19,12 +19,13 @@ class Schema2BuilderPlugin implements Plugin<Project> {
         // Register a task
         rootProject.getTasks().register("greeting", task -> {
             task.doLast(s -> System.out.println("Hello from plugin 'com.ruppyrup.javapoet.plugin.greeting'"));
-        });
+        })
 
         def extension = rootProject.extensions.create('poetBuilder', PoetBuilderExtension)
 
-        rootProject.getTasks().register('generateBuilders') {
-            doLast {
+        rootProject.getTasks().register('generateBuilders', task ->  {
+            task.doLast {
+
                 println "Schema directory is -> ${extension.schemaDir.get()}"
 
                 PoetParser poetParser = new FileParser()
@@ -35,11 +36,18 @@ class Schema2BuilderPlugin implements Plugin<Project> {
 
                 app.run(System.getProperty("user.dir") + "/" + extension.schemaDir.get(), extension.outputDir.get())
             }
-        }
+        })
 
+        rootProject.afterEvaluate { ignored ->
+            configureJava(rootProject)
+        }
+    }
+
+    private void configureJava(Project rootProject) {
         for (Project project : rootProject.getAllprojects()) {
             if (project.getPlugins().hasPlugin(JavaPlugin.class)) {
-                createLocalTestSourceSet(project);
+                createLocalTestSourceSet(project)
+                setDependencies(project)
             } else {
                 project.getPlugins().whenPluginAdded(plugin -> {
                     if (plugin instanceof JavaPlugin) {
@@ -48,7 +56,14 @@ class Schema2BuilderPlugin implements Plugin<Project> {
                 });
             }
         }
+    }
 
+    private void setDependencies(Project project) {
+        project.afterEvaluate(ignored -> {
+            def task = project.tasks.generateBuilders
+            task.dependsOn(project.tasks.processResources)
+            project.tasks.compileJava.dependsOn(task)
+        })
     }
 
 
@@ -74,8 +89,8 @@ class Schema2BuilderPlugin implements Plugin<Project> {
                         System.out.println("---------------------- " + sourceSet.getName() + " Output dir -------------------------");
                         sourceSet.getJava().getSrcDirs().forEach(System.out::println);
 
-                    });
+                    })
 
-        });
+        })
     }
 }

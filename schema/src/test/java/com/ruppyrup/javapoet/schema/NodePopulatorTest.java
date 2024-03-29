@@ -16,7 +16,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NodePopulatorTest {
-
     private final static ObjectMapper mapper = new ObjectMapper();
 
     @Test
@@ -35,20 +34,23 @@ class NodePopulatorTest {
         DataTree dataTree = new DataTree();
         PoetNode poetNode = dataTree.buildFromNode(root, "Person");
 
-        NodePopulator nodePopulator = new NodePopulator();
-
-        nodePopulator.populate(poetNode);
+        NodePopulator.populate(poetNode);
 
         SchemaField<?> schemaField = new SchemaField<>("Person", Object.class, null);
         assertField(poetNode, schemaField);
 
-        SchemaField<?> field = poetNode.traverse("address");
-        assertThat(field.initialValue()).isInstanceOf(List.class);
+        SchemaField<?> address = poetNode.traverse("address");
+        assertThat(address.initialValue()).isInstanceOf(List.class);
+        SchemaField<?> yearsInHouse = poetNode.traverse("yearsInHouse");
+        assertThat(yearsInHouse.initialValue()).isEqualTo(16.9);
+        SchemaField<?> postCode = poetNode.traverse("postalCode");
+        assertThat(postCode.initialValue()).isEqualTo("RG10 1LG");
+        SchemaField<?> meterReadings = poetNode.traverse("meterReadings");
+        assertThat((Number[]) meterReadings.initialValue()).contains(16.9, 120.9, 200.64);
     }
 
     private void assertField(PoetNode poetNode, SchemaField<?> expected) {
         SchemaField<?> field = poetNode.traverse(expected.name());
         assertThat(field).isEqualTo(expected);
     }
-
 }

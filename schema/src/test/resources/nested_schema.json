@@ -49,6 +49,22 @@
         "type": "integer",
         "sample": [77, 39]
       }
+    },
+    "yearsInHouse": {
+      "type": "number",
+      "sample": 16.9,
+      "minimum": 0.0
+    },
+    "meterReadings": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "sample": [
+          16.9,
+          120.9,
+          200.64
+        ]
+      }
     }
   },
   "required": ["name", "age"]

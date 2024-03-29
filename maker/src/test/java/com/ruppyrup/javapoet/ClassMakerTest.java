@@ -3,6 +3,7 @@ package com.ruppyrup.javapoet;
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -26,8 +27,66 @@ class ClassMakerTest {
     File tempdir;
 
     @Test
-    void checkGettersReturnCorrectFieldValues() throws IOException {
+    void checkGettersReturnCorrectFieldValues() throws Exception {
+        //given
+        ClassMaker classMaker = getClassMaker();
 
+        //when
+        classMaker.makeBuilder();
+        compileGeneratedFiles();
+        Object createdObject = buildObject();
+
+        //then
+        assertThatMethodReturns(createdObject, "getHouseNumber", 63);
+        assertThatMethodReturns(createdObject, "getName", null);
+        assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
+        assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
+        assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
+        assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
+        assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
+
+        Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
+
+        assertThat(countyObject.getClass().getName()).contains("County");
+
+        assertThatMethodReturns(countyObject, "getCountyName", "Berks");
+
+        Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
+        assertThat(postCodeObject.getClass().getName()).contains("PostCode");
+
+        assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
+        assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
+
+    }
+
+    private Object buildObject() {
+        try (URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{tempdir.toURI().toURL()})) {
+            Class<?> cls = urlClassLoader.loadClass(PACKAGE_NAME + ".Address$AddressBuilder");
+            Object builder = cls.getConstructor().newInstance();
+            return cls.getMethod("build").invoke(builder);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void compileGeneratedFiles() throws IOException {
+        File input1 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
+        File input2 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "County.java");
+        File input3 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "PostCode.java");
+
+        List<File> javaFiles = List.of(input1, input2, input3);
+
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+
+        Iterable<? extends JavaFileObject> files = fileManager.getJavaFileObjectsFromFiles(javaFiles);
+
+        compiler.getTask(null, fileManager, null, null, null, files).call();
+
+        fileManager.close();
+    }
+
+    private @NotNull ClassMaker getClassMaker() {
         List<SchemaField<?>> postCode = List.of(
                 new SchemaField<>("firstPart", String.class, "RG40"),
                 new SchemaField<>("secondPart", String.class, "2LG")
@@ -51,59 +110,13 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
 
-        ClassMaker classMaker = new ClassMaker(classGenerationBuilder);
-
-        classMaker.makeBuilder();
-
-        File input1 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
-        File input2 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "County.java");
-        File input3 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "PostCode.java");
-
-        List<File> javaFiles = List.of(input1, input2, input3);
-
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-
-        Iterable<? extends JavaFileObject> files = fileManager.getJavaFileObjectsFromFiles(javaFiles);
-
-        compiler.getTask(null, fileManager, null, null, null, files).call();
-
-        fileManager.close();
-
-        try(URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{tempdir.toURI().toURL()})) {
-            Class<?> cls = urlClassLoader.loadClass(PACKAGE_NAME + ".Address$AddressBuilder");
-            Object builder = cls.getConstructor().newInstance();
-            Object createdObject = cls.getMethod("build").invoke(builder);
-
-            assertThatMethodReturns(createdObject, "getHouseNumber", 63);
-            assertThatMethodReturns(createdObject, "getName", null);
-            assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
-            assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
-            assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
-            assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
-            assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
-
-            Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
-
-            assertThat(countyObject.getClass().getName()).contains("County");
-
-            assertThatMethodReturns(countyObject, "getCountyName", "Berks");
-
-            Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
-            assertThat(postCodeObject.getClass().getName()).contains("PostCode");
-
-            assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
-            assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return new ClassMaker(classGenerationBuilder);
     }
 
     private static void assertThatMethodReturnsArray(Object createdObject, String methodName, Number... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         assertThat(((Number[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
     }
+
     private static void assertThatMethodReturnsArray(Object createdObject, String methodName, String... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         assertThat(((String[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
     }

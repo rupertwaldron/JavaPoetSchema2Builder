@@ -1,0 +1,118 @@
+package com.ruppyrup.javapoet.schema2;
+
+import java.lang.Integer;
+import java.lang.Number;
+import java.lang.String;
+
+public class Child {
+  private String name = "Rupert";
+
+  private Integer age = 33;
+
+  private Address address = Address.builder().build();
+
+  private String[] hobbies = new String[] {"fishing","triathlon"};
+
+  private Integer[] luckyNumbers = new Integer[] {77,39};
+
+  private Number yearsInHouse = 16.9;
+
+  private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
+
+  private Child(ChildBuilder childBuilder) {
+    this.name = childBuilder.name;
+    this.age = childBuilder.age;
+    this.address = childBuilder.address;
+    this.hobbies = childBuilder.hobbies;
+    this.luckyNumbers = childBuilder.luckyNumbers;
+    this.yearsInHouse = childBuilder.yearsInHouse;
+    this.meterReadings = childBuilder.meterReadings;
+  }
+
+  public static ChildBuilder builder() {
+    return new ChildBuilder();
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public Integer getAge() {
+    return this.age;
+  }
+
+  public Address getAddress() {
+    return this.address;
+  }
+
+  public String[] getHobbies() {
+    return this.hobbies;
+  }
+
+  public Integer[] getLuckyNumbers() {
+    return this.luckyNumbers;
+  }
+
+  public Number getYearsInHouse() {
+    return this.yearsInHouse;
+  }
+
+  public Number[] getMeterReadings() {
+    return this.meterReadings;
+  }
+
+  public static class ChildBuilder {
+    private String name = "Rupert";
+
+    private Integer age = 33;
+
+    private Address address = Address.builder().build();
+
+    private String[] hobbies = new String[] {"fishing","triathlon"};
+
+    private Integer[] luckyNumbers = new Integer[] {77,39};
+
+    private Number yearsInHouse = 16.9;
+
+    private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
+
+    public Child build() {
+      return new Child(this);
+    }
+
+    public ChildBuilder withName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public ChildBuilder withAge(Integer age) {
+      this.age = age;
+      return this;
+    }
+
+    public ChildBuilder withAddress(Address address) {
+      this.address = address;
+      return this;
+    }
+
+    public ChildBuilder withHobbies(String[] hobbies) {
+      this.hobbies = hobbies;
+      return this;
+    }
+
+    public ChildBuilder withLuckyNumbers(Integer[] luckyNumbers) {
+      this.luckyNumbers = luckyNumbers;
+      return this;
+    }
+
+    public ChildBuilder withYearsInHouse(Number yearsInHouse) {
+      this.yearsInHouse = yearsInHouse;
+      return this;
+    }
+
+    public ChildBuilder withMeterReadings(Number[] meterReadings) {
+      this.meterReadings = meterReadings;
+      return this;
+    }
+  }
+}

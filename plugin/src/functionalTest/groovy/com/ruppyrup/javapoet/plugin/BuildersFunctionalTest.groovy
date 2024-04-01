@@ -7,10 +7,9 @@ import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 import spock.lang.TempDir
-import org.apache.commons.io.IOUtils
 
 import java.nio.charset.Charset;
-import java.nio.file.Path
+
 
 /**
  * A simple functional test for the 'tasktimer.greeting' plugin.
@@ -55,14 +54,19 @@ poetBuilder {
         def result = runner.build()
 
         then:
-        def path = projectDir.toPath().resolve("com/ruppyrup/javapoet/schema1/Parent.java")
-        String person = IOUtils.toString(path.toUri(), Charset.defaultCharset())
+        assertGenertedClassMatchesExpected("schema1", "Parent")
+        assertGenertedClassMatchesExpected("schema1", "PostalCode")
+        assertGenertedClassMatchesExpected("schema1", "Address")
+        assertGenertedClassMatchesExpected("schema2", "Child")
+        assertGenertedClassMatchesExpected("schema2", "PostalCode")
+        assertGenertedClassMatchesExpected("schema2", "Address")
+    }
 
-//        String expected = new String(Files.readAllBytes(Paths.get("expected/bob.txt")))
-//        InputStream fisTargetFile = new InputStream(new File("expected/bob.txt"));
-//        def expected = IOUtils.toString(fisTargetFile, Charset.defaultCharset())
-        def expected = FileUtils.readFileToString(new File("src/functionalTest/resources/expected/Parent_Expected.txt"), Charset.defaultCharset())
+    private void assertGenertedClassMatchesExpected(String path, String className) {
+        def generated = projectDir.toPath().resolve("com/ruppyrup/javapoet/" + path + "/" + className + ".java").toFile()
+        def generatedString = FileUtils.readFileToString(generated, Charset.defaultCharset())
+        def expected = FileUtils.readFileToString(new File("src/functionalTest/resources/expected/" + path + "/" + className + "_Expected.txt"), Charset.defaultCharset())
 
-        person == expected
+        assert generatedString == expected
     }
 }

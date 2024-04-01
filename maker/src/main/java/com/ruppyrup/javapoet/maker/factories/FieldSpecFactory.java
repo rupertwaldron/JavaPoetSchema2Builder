@@ -18,6 +18,7 @@ import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER_ARRAY;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.OBJECT;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING_ARRAY;
+import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN;
 
 public class FieldSpecFactory {
 
@@ -28,6 +29,8 @@ public class FieldSpecFactory {
         } else if (schemaField.clazz().getName().equals(INTEGER.typeIdentifier)) {
             builder.initializer("$L", schemaField.initialValue());
         } else if (schemaField.clazz().getName().equals(NUMBER.typeIdentifier)) {
+            builder.initializer("$L", schemaField.initialValue());
+        } else if (schemaField.clazz().getName().equals(BOOLEAN.typeIdentifier)) {
             builder.initializer("$L", schemaField.initialValue());
         } else if (schemaField.clazz().getName().equals(STRING_ARRAY.typeIdentifier)) {
             setUpStringArray(schemaField, builder);

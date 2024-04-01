@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +24,9 @@ class DataTreeTest {
 
         JsonNode root;
 
-        try (FileInputStream fisTargetFile = new FileInputStream("src/test/resources/nested_schema.json")) {
+        File projectDir = new File(System.getProperty("user.dir"));
+
+        try (FileInputStream fisTargetFile = new FileInputStream(projectDir.getParent() + "/testdata/nested_schema.json")) {
             String targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
             root = mapper.readTree(targetFileStr);
         } catch (IOException iox) {

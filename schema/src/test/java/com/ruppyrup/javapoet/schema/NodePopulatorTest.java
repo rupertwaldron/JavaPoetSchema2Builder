@@ -24,7 +24,9 @@ class NodePopulatorTest {
 
         JsonNode root;
 
-        try (FileInputStream fisTargetFile = new FileInputStream("src/test/resources/nested_schema.json")) {
+        File projectDir = new File(System.getProperty("user.dir"));
+
+        try (FileInputStream fisTargetFile = new FileInputStream(projectDir.getParent() + "/testdata/nested_schema.json")) {
             String targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
             root = mapper.readTree(targetFileStr);
         } catch (IOException iox) {

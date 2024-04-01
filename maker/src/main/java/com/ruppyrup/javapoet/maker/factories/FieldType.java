@@ -8,6 +8,8 @@ public enum FieldType {
 
     NUMBER("java.lang.Number"),
     NUMBER_ARRAY("[Ljava.lang.Number;"),
+
+    BOOLEAN("java.lang.Boolean"),
     OBJECT("java.lang.Object");
 
     public final String typeIdentifier;

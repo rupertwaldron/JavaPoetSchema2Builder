@@ -8,6 +8,10 @@
       "type": "string",
       "sample": "Rupert"
     },
+    "male": {
+      "type": "boolean",
+      "sample": false
+    },
     "age": {
       "type": "integer",
       "sample": 33,

@@ -103,6 +103,7 @@ class ClassMakerTest {
                 .withClassName("Address")
                 .withField(new SchemaField<>("streetName", String.class, "Rances Lane"))
                 .withField(new SchemaField<>("name", String.class, null))
+                .withField(new SchemaField<>("male", Boolean.class, true))
                 .withField(new SchemaField<>("yearsInHouse", Number.class, 16.9))
                 .withField(new SchemaField<>("meterReadings", Number[].class, new Number[]{16.9, 120.9, 200.64}))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))

@@ -14,6 +14,5 @@ include 'maker'
 include 'parser'
 include 'schema'
 include 'app'
-include 'integrationtest'
 include 'plugin'
 

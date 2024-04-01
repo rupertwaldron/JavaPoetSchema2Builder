@@ -1,11 +1,14 @@
 package com.ruppyrup.javapoet.schema2;
 
+import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.Number;
 import java.lang.String;
 
 public class Child {
   private String name = "Rupert";
+
+  private Boolean male = true;
 
   private Integer age = 33;
 
@@ -21,6 +24,7 @@ public class Child {
 
   private Child(ChildBuilder childBuilder) {
     this.name = childBuilder.name;
+    this.male = childBuilder.male;
     this.age = childBuilder.age;
     this.address = childBuilder.address;
     this.hobbies = childBuilder.hobbies;
@@ -35,6 +39,10 @@ public class Child {
 
   public String getName() {
     return this.name;
+  }
+
+  public Boolean getMale() {
+    return this.male;
   }
 
   public Integer getAge() {
@@ -64,6 +72,8 @@ public class Child {
   public static class ChildBuilder {
     private String name = "Rupert";
 
+    private Boolean male = true;
+
     private Integer age = 33;
 
     private Address address = Address.builder().build();
@@ -82,6 +92,11 @@ public class Child {
 
     public ChildBuilder withName(String name) {
       this.name = name;
+      return this;
+    }
+
+    public ChildBuilder withMale(Boolean male) {
+      this.male = male;
       return this;
     }
 

@@ -14,7 +14,6 @@ class Schema2BuilderPluginTest {
         project.getPlugins().apply("com.ruppyrup.javapoet.plugin.poetBuilder");
 
         // Verify the result
-        assertNotNull(project.getTasks().findByName("greeting"));
         assertNotNull(project.getTasks().findByName("generateBuilders"));
     }
 }

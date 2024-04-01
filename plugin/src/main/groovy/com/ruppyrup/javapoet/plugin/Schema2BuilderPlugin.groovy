@@ -15,11 +15,6 @@ import org.gradle.api.plugins.JavaPluginExtension
 
 class Schema2BuilderPlugin implements Plugin<Project> {
     void apply(Project rootProject) {
-        // Register a task
-        rootProject.getTasks().register("greeting", task -> {
-            task.doLast(s -> System.out.println("Hello from plugin 'com.ruppyrup.javapoet.plugin.greeting'"));
-        })
-
         def extension = rootProject.extensions.create('poetBuilder', PoetBuilderExtension)
 
         rootProject.getTasks().register('generateBuilders', task ->  {

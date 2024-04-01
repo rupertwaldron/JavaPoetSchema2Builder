@@ -8,6 +8,10 @@
       "type": "string",
       "sample": "Rupert"
     },
+    "male": {
+      "type": "boolean",
+      "sample": true
+    },
     "age": {
       "type": "integer",
       "sample": 33,
@@ -29,9 +33,19 @@
           "sample": "Berkshire"
         },
         "postalCode": {
-          "type": "string",
-          "pattern": "\\d{5}",
-          "sample": "RG10 1LG"
+          "type": "object",
+          "properties": {
+            "codePart1": {
+              "type": "string",
+              "pattern": "\\d{3}",
+              "sample": "RG10"
+            },
+            "codePart2": {
+              "type": "string",
+              "pattern": "\\d{3}",
+              "sample": "1LG"
+            }
+          }
         }
       },
       "required": ["street", "city", "state", "postalCode"]

@@ -20,6 +20,8 @@ public class SchemaFieldFactory {
             return new SchemaField<>(next.getKey(), Integer.class, next.getValue().path("sample").intValue());
         } else if (next.getValue().path("type").asText().equals("number")) {
             return new SchemaField<>(next.getKey(), Number.class, next.getValue().path("sample").asDouble());
+        } else if (next.getValue().path("type").asText().equals("boolean")) {
+            return new SchemaField<>(next.getKey(), Boolean.class, next.getValue().path("sample").asBoolean());
         } else if (next.getValue().path("type").asText().equals("array")) {
             Iterator<JsonNode> elements = next.getValue().path("items").path("sample").elements();
             if (next.getValue().path("items").path("type").asText().equals("string")) {

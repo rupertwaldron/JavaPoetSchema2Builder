@@ -42,6 +42,8 @@ class DataTreeTest {
         schemaField = new SchemaField<>("age", Integer.class, 33);
         assertField(poetNode, schemaField);
 
+        schemaField = new SchemaField<>("codePart2", String.class, "1LG");
+        assertField(poetNode, schemaField);
     }
 
     private void assertField(PoetNode poetNode, SchemaField<?> expected) {

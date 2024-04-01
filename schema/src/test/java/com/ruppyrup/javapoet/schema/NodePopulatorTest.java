@@ -43,8 +43,10 @@ class NodePopulatorTest {
         assertThat(address.initialValue()).isInstanceOf(List.class);
         SchemaField<?> yearsInHouse = poetNode.traverse("yearsInHouse");
         assertThat(yearsInHouse.initialValue()).isEqualTo(16.9);
-        SchemaField<?> postCode = poetNode.traverse("postalCode");
-        assertThat(postCode.initialValue()).isEqualTo("RG10 1LG");
+        SchemaField<?> postCode = poetNode.traverse("codePart2");
+        assertThat(postCode.initialValue()).isEqualTo("1LG");
+        SchemaField<?> male = poetNode.traverse("male");
+        assertThat(male.initialValue()).isEqualTo(true);
         SchemaField<?> meterReadings = poetNode.traverse("meterReadings");
         assertThat((Number[]) meterReadings.initialValue()).contains(16.9, 120.9, 200.64);
     }

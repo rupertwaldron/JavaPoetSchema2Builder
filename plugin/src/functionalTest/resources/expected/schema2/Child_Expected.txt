@@ -22,6 +22,8 @@ public class Child {
 
   private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
 
+  private Boolean[] coinToss = new Boolean[] {true,false,true};
+
   private Child(ChildBuilder childBuilder) {
     this.name = childBuilder.name;
     this.male = childBuilder.male;
@@ -31,6 +33,7 @@ public class Child {
     this.luckyNumbers = childBuilder.luckyNumbers;
     this.yearsInHouse = childBuilder.yearsInHouse;
     this.meterReadings = childBuilder.meterReadings;
+    this.coinToss = childBuilder.coinToss;
   }
 
   public static ChildBuilder builder() {
@@ -69,6 +72,10 @@ public class Child {
     return this.meterReadings;
   }
 
+  public Boolean[] getCoinToss() {
+    return this.coinToss;
+  }
+
   public static class ChildBuilder {
     private String name = "Rupert";
 
@@ -85,6 +92,8 @@ public class Child {
     private Number yearsInHouse = 16.9;
 
     private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
+
+    private Boolean[] coinToss = new Boolean[] {true,false,true};
 
     public Child build() {
       return new Child(this);
@@ -127,6 +136,11 @@ public class Child {
 
     public ChildBuilder withMeterReadings(Number[] meterReadings) {
       this.meterReadings = meterReadings;
+      return this;
+    }
+
+    public ChildBuilder withCoinToss(Boolean[] coinToss) {
+      this.coinToss = coinToss;
       return this;
     }
   }

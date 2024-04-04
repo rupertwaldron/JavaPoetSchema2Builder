@@ -8,6 +8,13 @@
       "type": "string",
       "sample": "Rupert"
     },
+    "coinToss": {
+      "type": "array",
+      "items": {
+        "type": "boolean",
+        "sample": [true, false, true]
+      }
+    },
     "male": {
       "type": "boolean",
       "sample": false

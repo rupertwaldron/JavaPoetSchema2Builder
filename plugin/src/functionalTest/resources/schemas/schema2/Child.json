@@ -79,6 +79,13 @@
           200.64
         ]
       }
+    },
+    "coinToss": {
+      "type": "array",
+      "items": {
+        "type": "boolean",
+        "sample": [true, false, true]
+      }
     }
   },
   "required": ["name", "age"]

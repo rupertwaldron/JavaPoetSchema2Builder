@@ -8,6 +8,8 @@ import java.lang.String;
 public class Parent {
   private String name = "Rupert";
 
+  private Boolean[] coinToss = new Boolean[] {true,false,true};
+
   private Boolean male = false;
 
   private Integer age = 33;
@@ -24,6 +26,7 @@ public class Parent {
 
   private Parent(ParentBuilder parentBuilder) {
     this.name = parentBuilder.name;
+    this.coinToss = parentBuilder.coinToss;
     this.male = parentBuilder.male;
     this.age = parentBuilder.age;
     this.address = parentBuilder.address;
@@ -39,6 +42,10 @@ public class Parent {
 
   public String getName() {
     return this.name;
+  }
+
+  public Boolean[] getCoinToss() {
+    return this.coinToss;
   }
 
   public Boolean getMale() {
@@ -72,6 +79,8 @@ public class Parent {
   public static class ParentBuilder {
     private String name = "Rupert";
 
+    private Boolean[] coinToss = new Boolean[] {true,false,true};
+
     private Boolean male = false;
 
     private Integer age = 33;
@@ -92,6 +101,11 @@ public class Parent {
 
     public ParentBuilder withName(String name) {
       this.name = name;
+      return this;
+    }
+
+    public ParentBuilder withCoinToss(Boolean[] coinToss) {
+      this.coinToss = coinToss;
       return this;
     }
 

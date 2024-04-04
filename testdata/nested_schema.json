@@ -64,6 +64,13 @@
         "sample": [77, 39]
       }
     },
+    "coinToss": {
+      "type": "array",
+      "items": {
+        "type": "boolean",
+        "sample": [true, false, true]
+      }
+    },
     "yearsInHouse": {
       "type": "number",
       "sample": 16.9,

@@ -4,34 +4,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.app.SchemaField;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.ruppyrup.javapoet.schema.TestUtils.assertArrayField;
+import static com.ruppyrup.javapoet.schema.TestUtils.assertField;
+import static com.ruppyrup.javapoet.schema.TestUtils.getJsonNode;
 
 class DataTreeTest {
     private final static ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    void buildFromNode() {
+    void canBuildDataTreeFromJsonNode() {
         System.out.println(new File(".").getAbsolutePath());
 
-        JsonNode root;
-
-        File projectDir = new File(System.getProperty("user.dir"));
-
-        try (FileInputStream fisTargetFile = new FileInputStream(projectDir.getParent() + "/testdata/nested_schema.json")) {
-            String targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
-            root = mapper.readTree(targetFileStr);
-        } catch (IOException iox) {
-            throw new RuntimeException("Input stream failure whilst parsing: " + iox.getMessage());
-        }
+        JsonNode root = getJsonNode();
 
         DataTree dataTree = new DataTree();
         PoetNode poetNode = dataTree.buildFromNode(root, "Person");
@@ -47,10 +35,7 @@ class DataTreeTest {
 
         schemaField = new SchemaField<>("codePart2", String.class, "1LG");
         assertField(poetNode, schemaField);
-    }
 
-    private void assertField(PoetNode poetNode, SchemaField<?> expected) {
-        SchemaField<?> field = poetNode.traverse(expected.name());
-        assertThat(field).isEqualTo(expected);
+        assertArrayField(poetNode, "coinToss", true, false, true);
     }
 }

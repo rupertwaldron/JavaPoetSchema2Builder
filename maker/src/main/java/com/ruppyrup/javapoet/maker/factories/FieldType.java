@@ -10,6 +10,7 @@ public enum FieldType {
     NUMBER_ARRAY("[Ljava.lang.Number;"),
 
     BOOLEAN("java.lang.Boolean"),
+    BOOLEAN_ARRAY("[Ljava.lang.Boolean;"),
     OBJECT("java.lang.Object");
 
     public final String typeIdentifier;

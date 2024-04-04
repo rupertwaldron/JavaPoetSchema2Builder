@@ -44,6 +44,7 @@ class ClassMakerTest {
         assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
         assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
         assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
+        assertThatMethodReturnsArray(createdObject, "getCoinToss", true, false, true);
 
         Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
 
@@ -106,6 +107,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("male", Boolean.class, true))
                 .withField(new SchemaField<>("yearsInHouse", Number.class, 16.9))
                 .withField(new SchemaField<>("meterReadings", Number[].class, new Number[]{16.9, 120.9, 200.64}))
+                .withField(new SchemaField<>("coinToss", Boolean[].class, new Boolean[]{true, false, true}))
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
@@ -114,12 +116,8 @@ class ClassMakerTest {
         return new ClassMaker(classGenerationBuilder);
     }
 
-    private static void assertThatMethodReturnsArray(Object createdObject, String methodName, Number... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        assertThat(((Number[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
-    }
-
-    private static void assertThatMethodReturnsArray(Object createdObject, String methodName, String... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        assertThat(((String[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
+    private static <T> void assertThatMethodReturnsArray(Object createdObject, String methodName, T... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        assertThat(((T[]) createdObject.getClass().getMethod(methodName).invoke(createdObject))).contains(expectedResults);
     }
 
     private static void assertThatMethodReturns(Object createdObject, String methodName, Object expectedResult) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

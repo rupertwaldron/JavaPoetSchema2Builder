@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN_ARRAY;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER_ARRAY;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER;
@@ -38,6 +39,8 @@ public class FieldSpecFactory {
             setUpArray(schemaField, builder, Integer.class);
         } else if (schemaField.clazz().getName().equals(NUMBER_ARRAY.typeIdentifier)) {
             setUpArray(schemaField, builder, Number.class);
+        } else if (schemaField.clazz().getName().equals(BOOLEAN_ARRAY.typeIdentifier)) {
+                setUpArray(schemaField, builder, Boolean.class);
         } else if (schemaField.clazz().getName().equals(OBJECT.typeIdentifier)) {
             String name = StringUtils.capitalize(schemaField.name());
             TypeName childTypeName = ClassName.get("", name);

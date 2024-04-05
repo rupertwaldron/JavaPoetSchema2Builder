@@ -76,6 +76,12 @@
       "sample": 16.9,
       "minimum": 0.0
     },
+    "emptyInts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
     "meterReadings": {
       "type": "array",
       "items": {

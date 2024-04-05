@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN_ARRAY;
 import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER;
@@ -72,12 +73,18 @@ public class FieldSpecFactory {
             f.setAccessible(true);
             T[] initialValue = (T[])f.get(schemaField);
             StringBuilder sb = new StringBuilder("{");
-            Arrays.stream(initialValue)
-                    .forEach(i -> sb.append(i).append(","));
-            sb.deleteCharAt(sb.length() - 1);
+            if(initialValue != null) {
+                Arrays.stream(initialValue)
+                        .filter(Objects::nonNull)
+                        .forEach(i -> sb.append(i).append(","));
+                if (sb.length() > 1) {
+                    sb.deleteCharAt(sb.length() - 1);
+                }
+            }
             sb.append("}");
 
             ArrayTypeName numberArray = ArrayTypeName.of(type);
+            System.out.println("To sb for array = " + sb);
             CodeBlock block = CodeBlock.builder().add("new $1T $2L", numberArray, sb.toString()).build();
             builder.initializer(block);
         } catch (Exception e) {

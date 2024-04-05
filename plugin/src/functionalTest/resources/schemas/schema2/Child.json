@@ -80,6 +80,12 @@
         ]
       }
     },
+    "emptyInts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
     "coinToss": {
       "type": "array",
       "items": {

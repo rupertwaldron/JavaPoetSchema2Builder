@@ -35,5 +35,7 @@ class NodePopulatorTest {
         assertInitialValue(poetNode, "male", true);
         SchemaField<?> meterReadings = poetNode.traverse("meterReadings");
         assertThat((Number[]) meterReadings.initialValue()).contains(16.9, 120.9, 200.64);
+        SchemaField<?> emptyInts = poetNode.traverse("emptyInts");
+        assertThat((Integer []) emptyInts.initialValue()).isEmpty();
     }
 }

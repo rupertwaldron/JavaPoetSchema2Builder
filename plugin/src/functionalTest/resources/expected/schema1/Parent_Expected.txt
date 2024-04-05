@@ -22,6 +22,8 @@ public class Parent {
 
   private Number yearsInHouse = 16.9;
 
+  private Integer[] emptyInts = new Integer[] {};
+
   private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
 
   private Parent(ParentBuilder parentBuilder) {
@@ -33,6 +35,7 @@ public class Parent {
     this.hobbies = parentBuilder.hobbies;
     this.luckyNumbers = parentBuilder.luckyNumbers;
     this.yearsInHouse = parentBuilder.yearsInHouse;
+    this.emptyInts = parentBuilder.emptyInts;
     this.meterReadings = parentBuilder.meterReadings;
   }
 
@@ -72,6 +75,10 @@ public class Parent {
     return this.yearsInHouse;
   }
 
+  public Integer[] getEmptyInts() {
+    return this.emptyInts;
+  }
+
   public Number[] getMeterReadings() {
     return this.meterReadings;
   }
@@ -92,6 +99,8 @@ public class Parent {
     private Integer[] luckyNumbers = new Integer[] {77,39};
 
     private Number yearsInHouse = 16.9;
+
+    private Integer[] emptyInts = new Integer[] {};
 
     private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
 
@@ -136,6 +145,11 @@ public class Parent {
 
     public ParentBuilder withYearsInHouse(Number yearsInHouse) {
       this.yearsInHouse = yearsInHouse;
+      return this;
+    }
+
+    public ParentBuilder withEmptyInts(Integer[] emptyInts) {
+      this.emptyInts = emptyInts;
       return this;
     }
 

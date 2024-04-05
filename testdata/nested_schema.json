@@ -64,6 +64,12 @@
         "sample": [77, 39]
       }
     },
+    "emptyInts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
     "coinToss": {
       "type": "array",
       "items": {

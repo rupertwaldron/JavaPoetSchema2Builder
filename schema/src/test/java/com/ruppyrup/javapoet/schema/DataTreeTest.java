@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.app.SchemaField;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
 
@@ -15,14 +16,15 @@ import static com.ruppyrup.javapoet.schema.TestUtils.getJsonNode;
 class DataTreeTest {
     private final static ObjectMapper mapper = new ObjectMapper();
 
-    @Test
-    void canBuildDataTreeFromJsonNode() {
+    @ParameterizedTest
+    @CsvSource({"sample, nested_schema.json", "default, nested_schema_default.json"})
+    void canBuildDataTreeFromJsonNode(String defaultKey, String filename) {
         System.out.println(new File(".").getAbsolutePath());
 
-        JsonNode root = getJsonNode();
+        JsonNode root = getJsonNode(filename);
 
         DataTree dataTree = new DataTree();
-        PoetNode poetNode = dataTree.buildFromNode(root, "Person");
+        PoetNode poetNode = dataTree.buildFromNode(root, "Person", defaultKey);
 
         SchemaField<?> schemaField = new SchemaField<>("name", String.class, "Rupert");
         assertField(poetNode, schemaField);

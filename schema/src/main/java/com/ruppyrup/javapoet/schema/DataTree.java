@@ -11,25 +11,25 @@ import java.util.Map;
 
 public class DataTree implements IDataTree {
     @Override
-    public PoetNode buildFromNode(JsonNode root, String className) {
-        PoetNode poetNode = new TreePoetNode(SchemaFieldFactory.createSchemaField(Map.entry(className, root)));
-        myFillMap(root, poetNode);
+    public PoetNode buildFromNode(JsonNode root, String className, String sampleKey) {
+        PoetNode poetNode = new TreePoetNode(SchemaFieldFactory.createSchemaField(Map.entry(className, root), sampleKey));
+        myFillMap(root, poetNode, sampleKey);
         NodePopulator.populate(poetNode);
         return poetNode;
     }
 
-    private void myFillMap(JsonNode rootNode, PoetNode root) {
+    private void myFillMap(JsonNode rootNode, PoetNode root, String sampleKey) {
         JsonNode propertiesNode = rootNode.path("properties");
         Iterator<Map.Entry<String, JsonNode>> fields = propertiesNode.fields();
         while (fields.hasNext()) {
             Map.Entry<String, JsonNode> next = fields.next();
             if (next.getValue().path("type").asText().equals("object")) {
-                SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next);
+                SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next, sampleKey);
                 PoetNode nextPoetNode = new TreePoetNode(schemaField);
                 root.addChild(nextPoetNode);
-                myFillMap(next.getValue(), nextPoetNode);
+                myFillMap(next.getValue(), nextPoetNode, sampleKey);
             } else {
-                SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next);
+                SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next, sampleKey);
                 PoetNode nextPoetNode = new TreePoetNode(schemaField);
                 root.addChild(nextPoetNode);
             }

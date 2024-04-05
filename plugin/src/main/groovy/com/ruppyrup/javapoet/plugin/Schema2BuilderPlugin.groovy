@@ -16,6 +16,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 class Schema2BuilderPlugin implements Plugin<Project> {
     void apply(Project rootProject) {
         def extension = rootProject.extensions.create('poetBuilder', PoetBuilderExtension)
+        extension.getDefaultKey().convention("sample")
 
         rootProject.getTasks().register('generateBuilders', task ->  {
             task.doLast {
@@ -28,7 +29,7 @@ class Schema2BuilderPlugin implements Plugin<Project> {
                 App app = new App(poetParser, dataTree, generator)
                 println "Directory is :: " + System.getProperty("user.dir") + extension.schemaDir.get()
 
-                app.run(System.getProperty("user.dir") + "/" + extension.schemaDir.get(), extension.outputDir.get())
+                app.run(System.getProperty("user.dir") + "/" + extension.schemaDir.get(), extension.outputDir.get(), extension.defaultKey.get())
             }
         })
 

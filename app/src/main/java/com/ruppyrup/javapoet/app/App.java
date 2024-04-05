@@ -17,18 +17,18 @@ public class App {
         this.generator = generator;
     }
 
-    public void run(String schemaDir, String outputDir) {
+    public void run(String schemaDir, String outputDir, String sampleKey) {
         File dir= new File(schemaDir);
 
         File[] files = dir.listFiles();
 
         for (File file : files) {
             if (file.isDirectory()) {
-                run(schemaDir + "/" + file.getName(), outputDir);
+                run(schemaDir + "/" + file.getName(), outputDir, sampleKey);
             } else {
                 System.out.println("Parsing => " + schemaDir + "/" + file.getName());
                 JsonNode parse = poetParser.parse(schemaDir + "/" + file.getName());
-                PoetNode treeNode = dataTree.buildFromNode(parse, file.getName().split("\\.")[0]);
+                PoetNode treeNode = dataTree.buildFromNode(parse, file.getName().split("\\.")[0], sampleKey);
                 String[] split = schemaDir.split("/");
                 String packageName = "com.ruppyrup.javapoet." + split[split.length - 1];
                 generator.generate(treeNode, outputDir, packageName);

@@ -11,19 +11,19 @@ import java.util.Map;
 
 public class SchemaFieldFactory {
 
-    public static SchemaField<?> createSchemaField(Map.Entry<String, JsonNode> next) {
+    public static SchemaField<?> createSchemaField(Map.Entry<String, JsonNode> next, String sampleKey) {
         if (next.getValue().path("type").asText().equals("object")) {
             return new SchemaField<>(next.getKey(), Object.class, null);
         } else if (next.getValue().path("type").asText().equals("string")) {
-            return new SchemaField<>(next.getKey(), String.class, next.getValue().path("sample").textValue());
+            return new SchemaField<>(next.getKey(), String.class, next.getValue().path(sampleKey).textValue());
         } else if (next.getValue().path("type").asText().equals("integer")) {
-            return new SchemaField<>(next.getKey(), Integer.class, next.getValue().path("sample").intValue());
+            return new SchemaField<>(next.getKey(), Integer.class, next.getValue().path(sampleKey).intValue());
         } else if (next.getValue().path("type").asText().equals("number")) {
-            return new SchemaField<>(next.getKey(), Number.class, next.getValue().path("sample").asDouble());
+            return new SchemaField<>(next.getKey(), Number.class, next.getValue().path(sampleKey).asDouble());
         } else if (next.getValue().path("type").asText().equals("boolean")) {
-            return new SchemaField<>(next.getKey(), Boolean.class, next.getValue().path("sample").asBoolean());
+            return new SchemaField<>(next.getKey(), Boolean.class, next.getValue().path(sampleKey).asBoolean());
         } else if (next.getValue().path("type").asText().equals("array")) {
-            Iterator<JsonNode> elements = next.getValue().path("items").path("sample").elements();
+            Iterator<JsonNode> elements = next.getValue().path("items").path(sampleKey).elements();
             if (next.getValue().path("items").path("type").asText().equals("string")) {
                 List<String> elementsList = new ArrayList<>();
                 elements.forEachRemaining(el -> elementsList.add(el.asText()));

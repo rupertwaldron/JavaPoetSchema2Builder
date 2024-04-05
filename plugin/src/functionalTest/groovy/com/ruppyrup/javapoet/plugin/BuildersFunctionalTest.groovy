@@ -42,6 +42,7 @@ println System.getProperty("user.dir")
 poetBuilder {
     schemaDir = 'src/functionalTest/resources/schemas'
     outputDir = "${projectDir.getPath()}"
+    defaultKey = "sample"
 }
 """
 

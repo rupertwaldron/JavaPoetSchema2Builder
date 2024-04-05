@@ -20,12 +20,12 @@ public final class TestUtils {
     private TestUtils() {
     }
 
-    public static JsonNode getJsonNode() {
+    public static JsonNode getJsonNode(String filename) {
         JsonNode root;
 
         File projectDir = new File(System.getProperty("user.dir"));
 
-        try (FileInputStream fisTargetFile = new FileInputStream(projectDir.getParent() + "/testdata/nested_schema.json")) {
+        try (FileInputStream fisTargetFile = new FileInputStream(projectDir.getParent() + "/testdata/" + filename)) {
             String targetFileStr = IOUtils.toString(fisTargetFile, StandardCharsets.UTF_8);
             root = mapper.readTree(targetFileStr);
         } catch (IOException iox) {

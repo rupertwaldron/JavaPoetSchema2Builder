@@ -79,11 +79,13 @@ class Schema2BuilderPlugin implements Plugin<Project> {
 
 //                      SourceSet integrationTestSourceSet = javaPlugin.getSourceSets().getByName("integrationTest");
                         String implementation = sourceSet.getImplementationConfigurationName()
+                        def version = VersionHelper.getVersion()
+                        println "Version = " + version
 
-                        dependencies.add(implementation, "com.ruppyrup.javapoet:app:1.0-SNAPSHOT")
-                        dependencies.add(implementation, "com.ruppyrup.javapoet:maker:1.0-SNAPSHOT")
-                        dependencies.add(implementation, "com.ruppyrup.javapoet:parser:1.0-SNAPSHOT")
-                        dependencies.add(implementation, "com.ruppyrup.javapoet:schema:1.0-SNAPSHOT")
+                        dependencies.add(implementation, "com.ruppyrup.javapoet:app:" + version)
+                        dependencies.add(implementation, "com.ruppyrup.javapoet:maker:" + version)
+                        dependencies.add(implementation, "com.ruppyrup.javapoet:parser:" + version)
+                        dependencies.add(implementation, "com.ruppyrup.javapoet:schema:" + version)
 
                         System.out.println("---------------------- " + sourceSet.getName() + " Source Sets -------------------------");
                         sourceSet.getOutput().forEach(System.out::println);

@@ -1,11 +1,12 @@
-
 allprojects {
+    version = projVersion
+    group = 'com.ruppyrup.javapoet'
+}
+
+subprojects {
 //    apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     apply plugin: 'java-gradle-plugin'
-
-    version = projVersion
-    group = 'com.ruppyrup.javapoet'
 
     java {
         toolchain {

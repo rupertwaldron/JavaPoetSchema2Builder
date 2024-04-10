@@ -9,7 +9,16 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.6.1'
 }
 
-jar.finalizedBy(publishToMavenLocal)
+//jar.finalizedBy(publishToMavenLocal)
+
+jar {
+    finalizedBy publishToMavenLocal
+    manifest {
+        attributes (
+                'Built-By'  : 'Rupert'
+        )
+    }
+}
 
 //publishing {
 //    publications {

@@ -3,6 +3,7 @@ package com.ruppyrup.javapoet;
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
+import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -115,7 +116,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
 
-        return new ClassMaker(classGenerationBuilder);
+        return new StandardClassMaker(classGenerationBuilder);
     }
 
     private static <T> void assertThatMethodReturnsArray(Object createdObject, String methodName, T... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

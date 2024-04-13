@@ -20,7 +20,7 @@ public class ChildObjectMaker {
 
         ClassGenerationBuilder builder = generationBuilder.build();
         try {
-            ClassMaker classMaker = new ClassMaker(builder);
+            ClassMaker classMaker = new StandardClassMaker(builder);
             classMaker.makeBuilder();
         } catch (IOException e) {
             throw new RuntimeException(e);

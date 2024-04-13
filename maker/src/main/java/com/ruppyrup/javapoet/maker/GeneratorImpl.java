@@ -3,6 +3,7 @@ package com.ruppyrup.javapoet.maker;
 import com.ruppyrup.javapoet.app.IGenerator;
 import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
+import com.ruppyrup.javapoet.maker.factories.ClassMakerFactory;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
 import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
 
@@ -21,7 +22,7 @@ public class GeneratorImpl implements IGenerator {
             classGenerationBuilder.withField(child.getSchemaField());
         });
 
-        ClassMaker classMaker = new StandardClassMaker(classGenerationBuilder.build());
+        ClassMaker classMaker = ClassMakerFactory.getClassMakerOfType(classMakerType, classGenerationBuilder.build());
 
         try {
             classMaker.makeBuilder();

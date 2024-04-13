@@ -24,7 +24,7 @@ import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN;
 
 public class FieldSpecFactory {
 
-    public FieldSpec.Builder creatFieldSpec(SchemaField<?> schemaField) {
+    public static FieldSpec.Builder creatFieldSpec(SchemaField<?> schemaField) {
         var builder = FieldSpec.builder(schemaField.clazz(), schemaField.name());
         if (schemaField.clazz().getName().equals(STRING.typeIdentifier)) {
             builder.initializer("$S", schemaField.initialValue());

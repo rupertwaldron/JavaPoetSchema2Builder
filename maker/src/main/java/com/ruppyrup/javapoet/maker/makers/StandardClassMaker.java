@@ -25,10 +25,7 @@ public class StandardClassMaker implements ClassMaker {
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
-    private final FieldSpecFactory fieldSpecFactory;
-    private final GetterMethodFactory getterMethodFactory;
     private final ChildObjectMaker childObjectMaker;
-    private final WithMethodFactory withMethodFactory;
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
     public StandardClassMaker(ClassGenerationBuilder classGenerationBuilder) {
@@ -37,9 +34,6 @@ public class StandardClassMaker implements ClassMaker {
         this.packageName = classGenerationBuilder.getPackageName();
         this.dir = classGenerationBuilder.getDir();
         this.childObjectMaker = new ChildObjectMaker();
-        this.fieldSpecFactory = new FieldSpecFactory();
-        this.getterMethodFactory = new GetterMethodFactory();
-        this.withMethodFactory = new WithMethodFactory();
     }
 
     @Override
@@ -58,7 +52,7 @@ public class StandardClassMaker implements ClassMaker {
 
     private void fieldBuilders() {
         fields.stream()
-                .map(fieldSpecFactory::creatFieldSpec)
+                .map(FieldSpecFactory::creatFieldSpec)
                 .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
@@ -91,7 +85,7 @@ public class StandardClassMaker implements ClassMaker {
     }
 
     private MethodSpec buildersWithMethods(SchemaField<?> schemaField, TypeName builderTypeName) {
-        return withMethodFactory.getWithMethod(schemaField)
+        return WithMethodFactory.getWithMethod(schemaField)
                 .returns(builderTypeName)
                 .build();
     }
@@ -113,7 +107,7 @@ public class StandardClassMaker implements ClassMaker {
     }
 
     private MethodSpec createGetterFor(SchemaField<?> field) {
-        return getterMethodFactory.getGetterMethod(field).build();
+        return GetterMethodFactory.getGetterMethod(field).build();
     }
 
     private MethodSpec createStaticBuilder(TypeName builderTypeName) {

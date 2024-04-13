@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.lang.model.element.Modifier;
 
 public class WithMethodFactory {
-    public MethodSpec.Builder getWithMethod(SchemaField<?> schemaField) {
+    public static MethodSpec.Builder getWithMethod(SchemaField<?> schemaField) {
         String className = StringUtils.capitalize(schemaField.name());
         var builder = MethodSpec.methodBuilder("with" + className)
                 .addModifiers(Modifier.PUBLIC)

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.lang.model.element.Modifier;
 
 public class GetterMethodFactory {
-    public MethodSpec.Builder getGetterMethod(SchemaField<?> schemaField) {
+    public static MethodSpec.Builder getGetterMethod(SchemaField<?> schemaField) {
         String className = StringUtils.capitalize(schemaField.name());
         MethodSpec.Builder builder = MethodSpec.methodBuilder("get" + className)
                 .addModifiers(Modifier.PUBLIC);

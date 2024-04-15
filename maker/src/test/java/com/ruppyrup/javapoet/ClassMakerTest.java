@@ -36,7 +36,7 @@ class ClassMakerTest {
         //when
         classMaker.makeBuilder();
         compileGeneratedFiles();
-        Object createdObject = buildObject();
+        Object createdObject = buildObject("AddressBuilder");
 
         //then
         assertThatMethodReturns(createdObject, "getHouseNumber", 63);
@@ -71,7 +71,7 @@ class ClassMakerTest {
         //when
         classMaker.makeBuilder();
         compileGeneratedFiles();
-        Object createdObject = buildObject();
+        Object createdObject = buildObject("Builder");
 
         //then
         assertThatMethodReturns(createdObject, "getHouseNumber", 63);
@@ -98,9 +98,9 @@ class ClassMakerTest {
 
     }
 
-    private Object buildObject() {
+    private Object buildObject(String builderName) {
         try (URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{tempdir.toURI().toURL()})) {
-            Class<?> cls = urlClassLoader.loadClass(PACKAGE_NAME + ".Address$AddressBuilder");
+            Class<?> cls = urlClassLoader.loadClass(PACKAGE_NAME + ".Address$" + builderName);
             Object builder = cls.getConstructor().newInstance();
             return cls.getMethod("build").invoke(builder);
         } catch (Exception e) {

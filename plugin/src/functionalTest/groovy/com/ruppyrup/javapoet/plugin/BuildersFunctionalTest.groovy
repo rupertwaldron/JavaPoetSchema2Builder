@@ -26,7 +26,45 @@ class BuildersFunctionalTest extends Specification {
         new File(projectDir, "settings.gradle")
     }
 
-    def "can run task"() {
+    def "can create standard builders"() {
+        given:
+        settingsFile << ""
+        buildFile << """
+plugins {
+    id 'java-library'
+    id 'com.ruppyrup.javapoet.plugin.poetBuilder'
+}
+
+
+println System.getProperty("user.dir")
+
+
+poetBuilder {
+    schemaDir = 'src/functionalTest/resources/schemas'
+    outputDir = "${projectDir.getPath()}"
+    defaultKey = "sample"
+    builderType = "standard"
+}
+"""
+
+        when:
+        def runner = GradleRunner.create()
+        runner.forwardOutput()
+        runner.withPluginClasspath()
+        runner.withArguments("generateBuilders")
+        runner.withProjectDir(projectDir)
+        def result = runner.build()
+
+        then:
+        assertGenertedClassMatchesExpected("schema1", "Parent")
+        assertGenertedClassMatchesExpected("schema1", "PostalCode")
+        assertGenertedClassMatchesExpected("schema1", "Address")
+        assertGenertedClassMatchesExpected("schema2", "Child")
+        assertGenertedClassMatchesExpected("schema2", "PostalCode")
+        assertGenertedClassMatchesExpected("schema2", "Address")
+    }
+
+    def "can create lombok builders"() {
         given:
         settingsFile << ""
         buildFile << """

@@ -6,4 +6,5 @@ interface PoetBuilderExtension {
     Property<String> getSchemaDir()
     Property<String> getOutputDir()
     Property<String> getDefaultKey()
+    Property<String> getBuilderType()
 }

@@ -31,7 +31,7 @@ public class LombokClassMaker implements ClassMaker {
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
-    private final ChildObjectMaker childObjectMaker;
+    private final LombokChildObjectMaker childObjectMaker;
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
     public LombokClassMaker(ClassGenerationBuilder classGenerationBuilder) {
@@ -39,7 +39,7 @@ public class LombokClassMaker implements ClassMaker {
         this.fields = classGenerationBuilder.getFields();
         this.packageName = classGenerationBuilder.getPackageName();
         this.dir = classGenerationBuilder.getDir();
-        this.childObjectMaker = new ChildObjectMaker();
+        this.childObjectMaker = new LombokChildObjectMaker();
     }
 
     @Override
@@ -64,8 +64,8 @@ public class LombokClassMaker implements ClassMaker {
     }
 
     private TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
-        TypeName builderTypeName = ClassName.get("", className + "Builder");
-        String builderMethodName = className.toLowerCase() + "Builder";
+//        TypeName builderTypeName = ClassName.get("", "Builder1");
+        String builderMethodName = className.toLowerCase() + "Builder2";
 
         AnnotationSpec builderAnnotation = AnnotationSpec.builder(Builder.class)
                 .addMember("setterPrefix", "$S","with")
@@ -88,23 +88,23 @@ public class LombokClassMaker implements ClassMaker {
                 .addAnnotation(builderAnnotation)
                 .addAnnotation(fluentAnnotation)
                 .addAnnotation(Value.class)
-                .addType(builderForGeneratedClass(classNameType, fieldSpecBuilders, builderTypeName))
-                .addModifiers(Modifier.PUBLIC)
-                .addMethod(createConstructor(builderTypeName, builderMethodName))
-                .addMethod(createStaticBuilder(builderTypeName));
+                .addType(builderForGeneratedClass(classNameType, fieldSpecBuilders))
+                .addModifiers(Modifier.PUBLIC);
+//                .addMethod(createConstructor(builderTypeName, builderMethodName))
+//                .addMethod(createStaticBuilder(builderTypeName));
 
         fieldSpecBuilders.forEach(fsb -> classTypeSpecBuilder.addField(fsb.build()));
-        fields.forEach(field -> classTypeSpecBuilder.addMethod(createGetterFor(field)));
+//        fields.forEach(field -> classTypeSpecBuilder.addMethod(createGetterFor(field)));
         return classTypeSpecBuilder.build();
     }
 
-    private TypeSpec builderForGeneratedClass(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders, TypeName builderTypeName) {
-        TypeSpec.Builder builderType = TypeSpec.classBuilder(className + "Builder")
+    private TypeSpec builderForGeneratedClass(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+        TypeSpec.Builder builderType = TypeSpec.classBuilder("Builder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(createBuildMethod(classNameType));
 
-        fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
-        fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
+//        fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
+//        fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
 
         return builderType.build();
     }
@@ -146,7 +146,7 @@ public class LombokClassMaker implements ClassMaker {
     private MethodSpec createBuildMethod(TypeName classNameType) {
         return MethodSpec.methodBuilder("build")
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("return new $T(this)", classNameType)
+                .addStatement("return this.build0()")
                 .returns(classNameType)
                 .build();
     }

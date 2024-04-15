@@ -2,6 +2,7 @@ package com.ruppyrup.javapoet;
 
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
+import com.ruppyrup.javapoet.maker.factories.ClassMakerFactory;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
 import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,42 @@ class ClassMakerTest {
     @Test
     void checkGettersReturnCorrectFieldValues() throws Exception {
         //given
-        ClassMaker classMaker = getClassMaker();
+        ClassMaker classMaker = getClassMaker("standard");
+
+        //when
+        classMaker.makeBuilder();
+        compileGeneratedFiles();
+        Object createdObject = buildObject();
+
+        //then
+        assertThatMethodReturns(createdObject, "getHouseNumber", 63);
+        assertThatMethodReturns(createdObject, "getName", null);
+        assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
+        assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
+        assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
+        assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
+        assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
+        assertThatMethodReturnsArray(createdObject, "getCoinToss", true, false, true);
+        assertThatMethodReturnsArray(createdObject, "getEmptyInts");
+
+        Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
+
+        assertThat(countyObject.getClass().getName()).contains("County");
+
+        assertThatMethodReturns(countyObject, "getCountyName", "Berks");
+
+        Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
+        assertThat(postCodeObject.getClass().getName()).contains("PostCode");
+
+        assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
+        assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
+
+    }
+
+    @Test
+    void checkGettersReturnCorrectFieldValuesWithLombok() throws Exception {
+        //given
+        ClassMaker classMaker = getClassMaker("lombok");
 
         //when
         classMaker.makeBuilder();
@@ -89,7 +125,7 @@ class ClassMakerTest {
         fileManager.close();
     }
 
-    private @NotNull ClassMaker getClassMaker() {
+    private @NotNull ClassMaker getClassMaker(String classMakerType) {
         List<SchemaField<?>> postCode = List.of(
                 new SchemaField<>("firstPart", String.class, "RG40"),
                 new SchemaField<>("secondPart", String.class, "2LG")
@@ -116,7 +152,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .build();
 
-        return new StandardClassMaker(classGenerationBuilder);
+        return ClassMakerFactory.getClassMakerOfType(classMakerType, classGenerationBuilder);
     }
 
     private static <T> void assertThatMethodReturnsArray(Object createdObject, String methodName, T... expectedResults) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

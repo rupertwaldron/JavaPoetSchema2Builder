@@ -1,10 +1,13 @@
 package com.ruppyrup.javapoet.maker.makers;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.factories.FieldSpecFactory;
 import com.ruppyrup.javapoet.maker.factories.GetterMethodFactory;
+import com.ruppyrup.javapoet.maker.factories.LombokFieldSpecFactory;
 import com.ruppyrup.javapoet.maker.factories.WithMethodFactory;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -12,11 +15,14 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import lombok.Builder;
+import lombok.Value;
+import lombok.experimental.Accessors;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -52,7 +58,7 @@ public class LombokClassMaker implements ClassMaker {
 
     private void fieldBuilders() {
         fields.stream()
-                .map(FieldSpecFactory::creatFieldSpec)
+                .map(LombokFieldSpecFactory::creatFieldSpec)
                 .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
@@ -61,9 +67,27 @@ public class LombokClassMaker implements ClassMaker {
         TypeName builderTypeName = ClassName.get("", className + "Builder");
         String builderMethodName = className.toLowerCase() + "Builder";
 
+        AnnotationSpec builderAnnotation = AnnotationSpec.builder(Builder.class)
+                .addMember("setterPrefix", "$S","with")
+                .addMember("builderClassName", "$S","Builder")
+                .addMember("buildMethodName", "$S","build0")
+                .addMember("toBuilder", "$L", true)
+                .build();
+
+        AnnotationSpec fluentAnnotation = AnnotationSpec.builder(Accessors.class)
+                .addMember("fluent", "$L", true)
+                .build();
+
+        AnnotationSpec jacksonAutoInclude = AnnotationSpec.builder(JsonAutoDetect.class)
+                .addMember("fieldVisibility", "$T.ANY", JsonAutoDetect.Visibility.ANY.getClass())
+                .build();
+
         TypeSpec.Builder classTypeSpecBuilder = TypeSpec
                 .classBuilder(className)
-                .addAnnotation(Builder.class)
+//                .addAnnotation(jacksonAutoInclude)
+                .addAnnotation(builderAnnotation)
+                .addAnnotation(fluentAnnotation)
+                .addAnnotation(Value.class)
                 .addType(builderForGeneratedClass(classNameType, fieldSpecBuilders, builderTypeName))
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(createConstructor(builderTypeName, builderMethodName))
@@ -127,6 +151,38 @@ public class LombokClassMaker implements ClassMaker {
                 .build();
     }
 }
+
+//JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
+//@Builder(setterPrefix = "with", builderClassName = "Builder", buildMethodName = "build0", toBuilder = true)
+//@Value
+////@Jacksonized
+//@Accessors(fluent = true)
+//public class Address {
+//    @lombok.Builder.Default
+//    int houseNumber = 63;
+//    @lombok.Builder.Default
+//    String roadName = "Rances Lane";
+//    @lombok.Builder.Default
+//    List<Number> meterReadings = Arrays.asList(16.9, 120.9, 200.64);
+//    County county;
+//
+//    public static class Builder {
+//        County.Builder countyBuilder = County.builder();
+//
+//        public Address build() {
+//            return this
+//                    .withCounty(countyBuilder.build())
+//                    .build0();
+//
+//        }
+//
+//        public Address.Builder county(Consumer<County.Builder> countyAction) {
+//            countyAction.accept(countyBuilder);
+//            return this;
+//        }
+//    }
+//}
 
 
 //public class Address {

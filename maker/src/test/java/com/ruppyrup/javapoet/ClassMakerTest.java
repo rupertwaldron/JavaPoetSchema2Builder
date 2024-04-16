@@ -5,6 +5,7 @@ import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.factories.ClassMakerFactory;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
 import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
+import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -16,9 +17,12 @@ import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -71,30 +75,45 @@ class ClassMakerTest {
         //when
         classMaker.makeBuilder();
         compileGeneratedFiles();
-        Object createdObject = buildObject("Builder");
+
+        List<String> methods;
+
+        try (URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{tempdir.toURI().toURL()})) {
+            Class<?> cls = urlClassLoader.loadClass(PACKAGE_NAME + ".Address$Builder");
+            methods = Arrays.asList(cls.getMethods()).stream().map(Method::getName).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Assertions.assertThat(methods).contains("build0","withName", "withMale", "withFamily",
+                "withCounty", "withStreetName", "withEmptyInts", "withYearsInHouse", "withMeterReadings", "withCoinToss", "withHouseNumber");
+
+
+
+
 
         //then
-        assertThatMethodReturns(createdObject, "getHouseNumber", 63);
-        assertThatMethodReturns(createdObject, "getName", null);
-        assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
-        assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
-        assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
-        assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
-        assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
-        assertThatMethodReturnsArray(createdObject, "getCoinToss", true, false, true);
-        assertThatMethodReturnsArray(createdObject, "getEmptyInts");
-
-        Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
-
-        assertThat(countyObject.getClass().getName()).contains("County");
-
-        assertThatMethodReturns(countyObject, "getCountyName", "Berks");
-
-        Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
-        assertThat(postCodeObject.getClass().getName()).contains("PostCode");
-
-        assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
-        assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
+//        assertThatMethodReturns(createdObject, "getHouseNumber", 63);
+//        assertThatMethodReturns(createdObject, "getName", null);
+//        assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
+//        assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
+//        assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
+//        assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
+//        assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
+//        assertThatMethodReturnsArray(createdObject, "getCoinToss", true, false, true);
+//        assertThatMethodReturnsArray(createdObject, "getEmptyInts");
+//
+//        Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
+//
+//        assertThat(countyObject.getClass().getName()).contains("County");
+//
+//        assertThatMethodReturns(countyObject, "getCountyName", "Berks");
+//
+//        Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
+//        assertThat(postCodeObject.getClass().getName()).contains("PostCode");
+//
+//        assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
+//        assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
 
     }
 

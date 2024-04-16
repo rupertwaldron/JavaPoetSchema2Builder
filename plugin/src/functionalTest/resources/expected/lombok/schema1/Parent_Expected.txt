@@ -22,33 +22,33 @@ import lombok.experimental.Accessors;
 @Value
 public class Parent {
   @lombok.Builder.Default
-  private String name = "Rupert";
+  String name = "Rupert";
 
   @lombok.Builder.Default
-  private List<Boolean> coinToss = Arrays.asList(true,false,true);
+  List<Boolean> coinToss = Arrays.asList(true,false,true);
 
   @lombok.Builder.Default
-  private Boolean male = false;
+  Boolean male = false;
 
   @lombok.Builder.Default
-  private Integer age = 33;
+  Integer age = 33;
 
-  private Address address;
-
-  @lombok.Builder.Default
-  private List<String> hobbies = Arrays.asList("fishing","triathlon");
+  Address address;
 
   @lombok.Builder.Default
-  private List<Integer> luckyNumbers = Arrays.asList(77,39);
+  List<String> hobbies = Arrays.asList("fishing","triathlon");
 
   @lombok.Builder.Default
-  private Number yearsInHouse = 16.9;
+  List<Integer> luckyNumbers = Arrays.asList(77,39);
 
   @lombok.Builder.Default
-  private List<Integer> emptyInts = Arrays.asList();
+  Number yearsInHouse = 16.9;
 
   @lombok.Builder.Default
-  private List<Number> meterReadings = Arrays.asList(16.9,120.9,200.64);
+  List<Integer> emptyInts = Arrays.asList();
+
+  @lombok.Builder.Default
+  List<Number> meterReadings = Arrays.asList(16.9,120.9,200.64);
 
   public static class Builder {
     public Parent build() {

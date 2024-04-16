@@ -17,10 +17,10 @@ import lombok.experimental.Accessors;
 @Value
 public class PostalCode {
   @lombok.Builder.Default
-  private String codePart1 = "RG10";
+  String codePart1 = "RG10";
 
   @lombok.Builder.Default
-  private String codePart2 = "1LG";
+  String codePart2 = "1LG";
 
   public static class Builder {
     public PostalCode build() {

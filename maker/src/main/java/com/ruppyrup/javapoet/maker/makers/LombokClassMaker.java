@@ -59,7 +59,7 @@ public class LombokClassMaker implements ClassMaker {
     private void fieldBuilders() {
         fields.stream()
                 .map(LombokFieldSpecFactory::creatFieldSpec)
-                .map(builder -> builder.addModifiers(Modifier.PRIVATE))
+//                .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
 

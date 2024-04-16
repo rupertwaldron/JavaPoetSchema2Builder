@@ -1,0 +1,35 @@
+package com.ruppyrup.javapoet.schema1;
+
+import java.lang.String;
+import lombok.Builder;
+import lombok.Value;
+import lombok.experimental.Accessors;
+
+@Builder(
+    setterPrefix = "with",
+    builderClassName = "Builder",
+    buildMethodName = "build0",
+    toBuilder = true
+)
+@Accessors(
+    fluent = true
+)
+@Value
+public class Address {
+  @lombok.Builder.Default
+  private String street = "Rances Lane";
+
+  @lombok.Builder.Default
+  private String city = "Wokingham";
+
+  @lombok.Builder.Default
+  private String state = "Berkshire";
+
+  private PostalCode postalCode;
+
+  public static class Builder {
+    public Address build() {
+      return this.build0();
+    }
+  }
+}

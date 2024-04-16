@@ -47,7 +47,7 @@ public class StandardClassMaker implements ClassMaker {
     private void generateChildObjects() {
         fields.stream()
                 .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
-                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName));
+                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "standard"));
     }
 
     private void fieldBuilders() {

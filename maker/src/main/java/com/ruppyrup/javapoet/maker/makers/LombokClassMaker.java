@@ -31,7 +31,7 @@ public class LombokClassMaker implements ClassMaker {
     private final String packageName;
     private final String className;
     private final List<SchemaField<?>> fields;
-    private final LombokChildObjectMaker childObjectMaker;
+    private final ChildObjectMaker childObjectMaker;
     List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
 
     public LombokClassMaker(ClassGenerationBuilder classGenerationBuilder) {
@@ -39,7 +39,7 @@ public class LombokClassMaker implements ClassMaker {
         this.fields = classGenerationBuilder.getFields();
         this.packageName = classGenerationBuilder.getPackageName();
         this.dir = classGenerationBuilder.getDir();
-        this.childObjectMaker = new LombokChildObjectMaker();
+        this.childObjectMaker = new ChildObjectMaker();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LombokClassMaker implements ClassMaker {
     private void generateChildObjects() {
         fields.stream()
                 .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
-                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName));
+                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "lombok"));
     }
 
     private void fieldBuilders() {

@@ -5,7 +5,6 @@ import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.factories.ClassMakerFactory;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
-import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
 
 import java.io.IOException;
 

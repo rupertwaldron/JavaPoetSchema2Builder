@@ -26,44 +26,29 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class LombokClassMaker implements ClassMaker {
-    private final String dir;
-    private final String packageName;
-    private final String className;
-    private final List<SchemaField<?>> fields;
-    private final ChildObjectMaker childObjectMaker;
-    List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
+public class LombokClassMaker extends AbstractClassMaker {
 
     public LombokClassMaker(ClassGenerationBuilder classGenerationBuilder) {
-        this.className = classGenerationBuilder.getClassName();
-        this.fields = classGenerationBuilder.getFields();
-        this.packageName = classGenerationBuilder.getPackageName();
-        this.dir = classGenerationBuilder.getDir();
-        this.childObjectMaker = new ChildObjectMaker();
+        super(classGenerationBuilder);
     }
 
     @Override
-    public void makeBuilder() throws IOException {
-        TypeName generatedClass = ClassName.get("", className);
-        fieldBuilders();
-        generateChildObjects();
-        createJavaFile(generatedClassSpec(generatedClass, fieldSpecBuilders));
-    }
-
-    private void generateChildObjects() {
-        fields.stream()
-                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
-                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "lombok"));
-    }
-
-    private void fieldBuilders() {
+    protected void fieldBuilders() {
         fields.stream()
                 .map(LombokFieldSpecFactory::creatFieldSpec)
 //                .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
 
-    private TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+    @Override
+    protected void generateChildObjects() {
+        fields.stream()
+                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "lombok"));
+    }
+
+    @Override
+    protected TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
 //        TypeName builderTypeName = ClassName.get("", "Builder1");
         String builderMethodName = className.toLowerCase() + "Builder2";
 
@@ -111,34 +96,6 @@ public class LombokClassMaker implements ClassMaker {
 
     private MethodSpec buildersWithMethods(SchemaField<?> schemaField, TypeName builderTypeName) {
         return WithMethodFactory.getWithMethod(schemaField)
-                .returns(builderTypeName)
-                .build();
-    }
-
-    private void createJavaFile(TypeSpec classTypeSpec) throws IOException {
-        JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
-
-        file.writeTo(System.out);
-        file.writeTo(new File(dir));
-    }
-
-    private MethodSpec createConstructor(TypeName builderTypeName, String builderMethodName) {
-        MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
-                .addParameter(builderTypeName, builderMethodName)
-                .addModifiers(Modifier.PRIVATE);
-
-        fields.forEach(field -> constructor.addStatement("this.$N = $N.$N", field.name(), builderMethodName, field.name()));
-        return constructor.build();
-    }
-
-    private MethodSpec createGetterFor(SchemaField<?> field) {
-        return GetterMethodFactory.getGetterMethod(field).build();
-    }
-
-    private MethodSpec createStaticBuilder(TypeName builderTypeName) {
-        return MethodSpec.methodBuilder("builder")
-                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
-                .addStatement("return new $T()", builderTypeName)
                 .returns(builderTypeName)
                 .build();
     }

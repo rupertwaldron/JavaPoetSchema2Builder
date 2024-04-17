@@ -4,7 +4,6 @@ import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.factories.ClassMakerFactory;
 import com.ruppyrup.javapoet.maker.makers.ClassMaker;
-import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;

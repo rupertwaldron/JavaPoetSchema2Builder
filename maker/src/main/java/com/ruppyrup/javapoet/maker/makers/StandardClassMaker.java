@@ -20,44 +20,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StandardClassMaker implements ClassMaker {
-    private final String dir;
-    private final String packageName;
-    private final String className;
-    private final List<SchemaField<?>> fields;
-    private final ChildObjectMaker childObjectMaker;
-    List<FieldSpec.Builder> fieldSpecBuilders = new ArrayList<>();
+public class StandardClassMaker extends AbstractClassMaker {
 
     public StandardClassMaker(ClassGenerationBuilder classGenerationBuilder) {
-        this.className = classGenerationBuilder.getClassName();
-        this.fields = classGenerationBuilder.getFields();
-        this.packageName = classGenerationBuilder.getPackageName();
-        this.dir = classGenerationBuilder.getDir();
-        this.childObjectMaker = new ChildObjectMaker();
+        super(classGenerationBuilder);
     }
 
     @Override
-    public void makeBuilder() throws IOException {
-        TypeName generatedClass = ClassName.get("", className);
-        fieldBuilders();
-        generateChildObjects();
-        createJavaFile(generatedClassSpec(generatedClass, fieldSpecBuilders));
-    }
-
-    private void generateChildObjects() {
-        fields.stream()
-                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
-                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "standard"));
-    }
-
-    private void fieldBuilders() {
+    protected void fieldBuilders() {
         fields.stream()
                 .map(FieldSpecFactory::creatFieldSpec)
                 .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
 
-    private TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+    @Override
+    protected void generateChildObjects() {
+        fields.stream()
+                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "standard"));
+    }
+
+    @Override
+    protected TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
         TypeName builderTypeName = ClassName.get("", className + "Builder");
         String builderMethodName = className.toLowerCase() + "Builder";
 
@@ -90,13 +75,6 @@ public class StandardClassMaker implements ClassMaker {
                 .build();
     }
 
-    private void createJavaFile(TypeSpec classTypeSpec) throws IOException {
-        JavaFile file = JavaFile.builder(packageName, classTypeSpec).build();
-
-        file.writeTo(System.out);
-        file.writeTo(new File(dir));
-    }
-
     private MethodSpec createConstructor(TypeName builderTypeName, String builderMethodName) {
         MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
                 .addParameter(builderTypeName, builderMethodName)
@@ -125,6 +103,7 @@ public class StandardClassMaker implements ClassMaker {
                 .returns(classNameType)
                 .build();
     }
+
 }
 
 

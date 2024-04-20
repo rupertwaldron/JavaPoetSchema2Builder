@@ -112,9 +112,27 @@ public class LombokClassMaker extends AbstractClassMaker {
     }
 
     private MethodSpec createBuildMethod(TypeName classNameType) {
+        CodeBlock.Builder builderMethodBlock = CodeBlock.builder()
+                .add("return this");
+//                .add(".withCounty(countyBuilder.build())")
+
+        fields.stream()
+                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .map(schemaField -> {
+                    String className = StringUtils.capitalize(schemaField.name());
+                    TypeName builderTypeName = ClassName.get("", className + ".Builder");
+                    TypeName classTypeName = ClassName.get("", className);
+
+                    return CodeBlock.builder().add(".with$1T($2LBuilder.build())", classTypeName, schemaField.name).build();
+//                    return FieldSpec.builder(builderTypeName, schemaField.name() + "Builder")
+//                            .initializer(initBlock).build();
+                })
+                .forEach(builderMethodBlock::add);
+
+                builderMethodBlock.add(".build0()");
         return MethodSpec.methodBuilder("build")
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("return this.build0()")
+                .addStatement(builderMethodBlock.build())
                 .returns(classNameType)
                 .build();
     }

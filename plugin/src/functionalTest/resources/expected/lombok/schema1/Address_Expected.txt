@@ -28,6 +28,8 @@ public class Address {
   PostalCode postalCode;
 
   public static class Builder {
+    PostalCode.Builder postalCode = PostalCode.builder();
+
     public Address build() {
       return this.build0();
     }

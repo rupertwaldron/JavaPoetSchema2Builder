@@ -3,25 +3,21 @@ package com.ruppyrup.javapoet.maker.makers;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
-import com.ruppyrup.javapoet.maker.factories.FieldSpecFactory;
-import com.ruppyrup.javapoet.maker.factories.GetterMethodFactory;
 import com.ruppyrup.javapoet.maker.factories.LombokFieldSpecFactory;
 import com.ruppyrup.javapoet.maker.factories.WithMethodFactory;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,9 +49,9 @@ public class LombokClassMaker extends AbstractClassMaker {
         String builderMethodName = className.toLowerCase() + "Builder2";
 
         AnnotationSpec builderAnnotation = AnnotationSpec.builder(Builder.class)
-                .addMember("setterPrefix", "$S","with")
-                .addMember("builderClassName", "$S","Builder")
-                .addMember("buildMethodName", "$S","build0")
+                .addMember("setterPrefix", "$S", "with")
+                .addMember("builderClassName", "$S", "Builder")
+                .addMember("buildMethodName", "$S", "build0")
                 .addMember("toBuilder", "$L", true)
                 .build();
 
@@ -89,6 +85,21 @@ public class LombokClassMaker extends AbstractClassMaker {
                 .addMethod(createBuildMethod(classNameType));
 
 //        fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
+
+
+        fields.stream()
+                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .map(schemaField -> {
+                    String className = StringUtils.capitalize(schemaField.name());
+                    TypeName builderTypeName = ClassName.get("", className + ".Builder");
+                    TypeName classTypeName = ClassName.get("", className);
+
+                    CodeBlock initBlock = CodeBlock.builder().add("$1T.builder()", classTypeName).build();
+                    return FieldSpec.builder(builderTypeName, schemaField.name())
+                            .initializer(initBlock).build();
+                })
+                .forEach(builderType::addField);
+
 //        fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
 
         return builderType.build();

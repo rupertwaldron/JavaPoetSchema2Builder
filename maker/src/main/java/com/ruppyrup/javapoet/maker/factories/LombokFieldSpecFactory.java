@@ -53,9 +53,10 @@ public class LombokFieldSpecFactory {
             return setUpList(schemaField, Boolean.class);
         } else if (schemaField.clazz().getName().equals(OBJECT.typeIdentifier)) {
             String name = StringUtils.capitalize(schemaField.name());
-            TypeName childTypeName = ClassName.get("", name);
-            return FieldSpec.builder(childTypeName, schemaField.name());
-//            builder.initializer("$L.builder().build()", name);
+            TypeName childTypeName = ClassName.get("", name + ".Builder");
+            return FieldSpec.builder(childTypeName, schemaField.name())
+                    .addAnnotation(lombok.Builder.Default.class)
+                    .initializer("$L.builder()", name);
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());
         }

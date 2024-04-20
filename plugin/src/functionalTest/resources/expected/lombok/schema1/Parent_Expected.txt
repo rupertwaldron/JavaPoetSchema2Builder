@@ -51,6 +51,8 @@ public class Parent {
   List<Number> meterReadings = Arrays.asList(16.9,120.9,200.64);
 
   public static class Builder {
+    Address.Builder address = Address.builder();
+
     public Parent build() {
       return this.build0();
     }

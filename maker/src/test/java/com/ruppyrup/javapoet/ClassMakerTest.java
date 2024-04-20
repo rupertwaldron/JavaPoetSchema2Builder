@@ -64,6 +64,14 @@ class ClassMakerTest {
         assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
         assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
 
+        Object countryObject = createdObject.getClass().getMethod("getCountry").invoke(createdObject);
+
+        assertThat(countryObject.getClass().getName()).contains("Country");
+
+        assertThatMethodReturns(countryObject, "getCountryName", "UK");
+
+
+
     }
 
     @Test
@@ -85,7 +93,7 @@ class ClassMakerTest {
         }
 
         Assertions.assertThat(methods).contains("build0","withName", "withMale", "withFamily",
-                "withCounty", "withStreetName", "withEmptyInts", "withYearsInHouse", "withMeterReadings", "withCoinToss", "withHouseNumber");
+                "withCounty", "withCountry", "withStreetName", "withEmptyInts", "withYearsInHouse", "withMeterReadings", "withCoinToss", "withHouseNumber");
 
 
 
@@ -130,8 +138,9 @@ class ClassMakerTest {
         File input1 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Address.java");
         File input2 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "County.java");
         File input3 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "PostCode.java");
+        File input4 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Country.java");
 
-        List<File> javaFiles = List.of(input1, input2, input3);
+        List<File> javaFiles = List.of(input1, input2, input3, input4);
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
@@ -154,6 +163,10 @@ class ClassMakerTest {
                 new SchemaField<>("postCode", Object.class, postCode)
         );
 
+        List<SchemaField<?>> countryField = List.of(
+                new SchemaField<>("countryName", String.class, "UK")
+        );
+
         ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
                 .withDir(tempdir.getPath())
                 .withPackageName(PACKAGE_NAME)
@@ -168,6 +181,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("houseNumber", Integer.class, 63))
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
+                .withField(new SchemaField<>("country", Object.class, countryField))
                 .build();
 
         return ClassMakerFactory.getClassMakerOfType(classMakerType, classGenerationBuilder);

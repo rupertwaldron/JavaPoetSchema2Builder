@@ -113,7 +113,7 @@ public class LombokClassMaker extends AbstractClassMaker {
 
     private MethodSpec createBuildMethod(TypeName classNameType) {
         CodeBlock.Builder builderMethodBlock = CodeBlock.builder()
-                .add("return this");
+                .add("return this\n");
 //                .add(".withCounty(countyBuilder.build())")
 
         fields.stream()
@@ -123,7 +123,10 @@ public class LombokClassMaker extends AbstractClassMaker {
                     TypeName builderTypeName = ClassName.get("", className + ".Builder");
                     TypeName classTypeName = ClassName.get("", className);
 
-                    return CodeBlock.builder().add(".with$1T($2LBuilder.build())", classTypeName, schemaField.name).build();
+                    return CodeBlock.builder().add(".with$1T($2LBuilder.build())", classTypeName, schemaField.name)
+                            .add("\n")
+
+                            .build();
 //                    return FieldSpec.builder(builderTypeName, schemaField.name() + "Builder")
 //                            .initializer(initBlock).build();
                 })

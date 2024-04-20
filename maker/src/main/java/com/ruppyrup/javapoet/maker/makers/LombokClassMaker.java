@@ -95,7 +95,7 @@ public class LombokClassMaker extends AbstractClassMaker {
                     TypeName classTypeName = ClassName.get("", className);
 
                     CodeBlock initBlock = CodeBlock.builder().add("$1T.builder()", classTypeName).build();
-                    return FieldSpec.builder(builderTypeName, schemaField.name())
+                    return FieldSpec.builder(builderTypeName, schemaField.name() + "Builder")
                             .initializer(initBlock).build();
                 })
                 .forEach(builderType::addField);

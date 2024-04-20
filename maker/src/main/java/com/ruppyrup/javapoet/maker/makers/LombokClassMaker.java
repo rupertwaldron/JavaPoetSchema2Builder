@@ -52,11 +52,11 @@ public class LombokClassMaker extends AbstractClassMaker {
                 .addMember("setterPrefix", "$S", "with")
                 .addMember("builderClassName", "$S", "Builder")
                 .addMember("buildMethodName", "$S", "build0")
-                .addMember("toBuilder", "$L", true)
+                .addMember("toBuilder", "$L", Boolean.TRUE)
                 .build();
 
         AnnotationSpec fluentAnnotation = AnnotationSpec.builder(Accessors.class)
-                .addMember("fluent", "$L", true)
+                .addMember("fluent", "$L", Boolean.TRUE)
                 .build();
 
         AnnotationSpec jacksonAutoInclude = AnnotationSpec.builder(JsonAutoDetect.class)

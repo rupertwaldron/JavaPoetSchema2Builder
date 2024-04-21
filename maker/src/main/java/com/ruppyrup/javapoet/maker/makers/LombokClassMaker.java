@@ -10,8 +10,10 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -20,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.lang.model.element.Modifier;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class LombokClassMaker extends AbstractClassMaker {
@@ -45,7 +48,7 @@ public class LombokClassMaker extends AbstractClassMaker {
 
     @Override
     protected TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
-//        TypeName builderTypeName = ClassName.get("", "Builder1");
+        TypeName builderTypeName = ClassName.get("", "Builder");
         String builderMethodName = className.toLowerCase() + "Builder2";
 
         AnnotationSpec builderAnnotation = AnnotationSpec.builder(Builder.class)
@@ -69,7 +72,7 @@ public class LombokClassMaker extends AbstractClassMaker {
                 .addAnnotation(builderAnnotation)
                 .addAnnotation(fluentAnnotation)
                 .addAnnotation(Value.class)
-                .addType(builderForGeneratedClass(classNameType, fieldSpecBuilders))
+                .addType(builderForGeneratedClass(classNameType, fieldSpecBuilders, builderTypeName))
                 .addModifiers(Modifier.PUBLIC);
 //                .addMethod(createConstructor(builderTypeName, builderMethodName))
 //                .addMethod(createStaticBuilder(builderTypeName));
@@ -79,34 +82,47 @@ public class LombokClassMaker extends AbstractClassMaker {
         return classTypeSpecBuilder.build();
     }
 
-    private TypeSpec builderForGeneratedClass(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
+    private TypeSpec builderForGeneratedClass(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders, TypeName builderTypeName) {
         TypeSpec.Builder builderType = TypeSpec.classBuilder("Builder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(createBuildMethod(classNameType));
-
-//        fields.forEach(field -> builderType.addMethod(buildersWithMethods(field, builderTypeName)));
 
 
         fields.stream()
                 .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
                 .map(schemaField -> {
                     String className = StringUtils.capitalize(schemaField.name());
-                    TypeName builderTypeName = ClassName.get("", className + ".Builder");
+                    TypeName builderTN = ClassName.get("", className + ".Builder");
                     TypeName classTypeName = ClassName.get("", className);
 
                     CodeBlock initBlock = CodeBlock.builder().add("$1T.builder()", classTypeName).build();
-                    return FieldSpec.builder(builderTypeName, schemaField.name() + "Builder")
+                    return FieldSpec.builder(builderTN, schemaField.name() + "Builder")
                             .initializer(initBlock).build();
                 })
                 .forEach(builderType::addField);
+
+        fields.stream()
+                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .forEach(schemaField -> {
+                    String className = StringUtils.capitalize(schemaField.name());
+                    TypeName childBuilder = ClassName.get("", className + ".Builder");
+                    TypeName classTypeName = ClassName.get("", className);
+                    builderType.addMethod(buildersWithMethods(schemaField, builderTypeName, childBuilder));
+                });
 
 //        fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
 
         return builderType.build();
     }
 
-    private MethodSpec buildersWithMethods(SchemaField<?> schemaField, TypeName builderTypeName) {
-        return WithMethodFactory.getWithMethod(schemaField)
+    private MethodSpec buildersWithMethods(SchemaField<?> fieldSpec, TypeName builderTypeName, TypeName childBuilder) {
+        ClassName consumer = ClassName.get(Consumer.class);
+        ParameterizedTypeName consumerArg = ParameterizedTypeName.get(consumer, childBuilder);
+        return MethodSpec.methodBuilder(fieldSpec.name)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(consumerArg, fieldSpec.name + "Action")
+                .addStatement("$1NAction.accept($2N)", fieldSpec.name, fieldSpec.name + "Builder")
+                .addStatement("return this")
                 .returns(builderTypeName)
                 .build();
     }

@@ -24,7 +24,8 @@ public class PostalCode {
 
   public static class Builder {
     public PostalCode build() {
-      return this.build0();
+      return this
+          .build0();
     }
   }
 }

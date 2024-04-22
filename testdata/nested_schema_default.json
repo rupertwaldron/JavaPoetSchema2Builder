@@ -32,6 +32,15 @@
           "type": "string",
           "default": "Berkshire"
         },
+        "country": {
+          "type": "object",
+          "properties": {
+            "countryName": {
+              "type": "string",
+              "default": "England"
+            }
+          }
+        },
         "postalCode": {
           "type": "object",
           "properties": {

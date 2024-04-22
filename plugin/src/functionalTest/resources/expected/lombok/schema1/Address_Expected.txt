@@ -1,6 +1,7 @@
 package com.ruppyrup.javapoet.schema1;
 
 import java.lang.String;
+import java.util.function.Consumer;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -25,13 +26,21 @@ public class Address {
   @lombok.Builder.Default
   String state = "Berkshire";
 
-  PostalCode postalCode;
+  @lombok.Builder.Default
+  PostalCode postalCode = null;
 
   public static class Builder {
-    PostalCode.Builder postalCode = PostalCode.builder();
+    PostalCode.Builder postalCodeBuilder = PostalCode.builder();
 
     public Address build() {
-      return this.build0();
+      return this
+          .withPostalCode(postalCodeBuilder.build())
+          .build0();
+    }
+
+    public Builder postalCode(Consumer<PostalCode.Builder> postalCodeAction) {
+      postalCodeAction.accept(postalCodeBuilder);
+      return this;
     }
   }
 }

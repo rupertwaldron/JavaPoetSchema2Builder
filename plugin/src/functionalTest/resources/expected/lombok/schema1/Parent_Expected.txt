@@ -6,6 +6,7 @@ import java.lang.Number;
 import java.lang.String;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -33,7 +34,8 @@ public class Parent {
   @lombok.Builder.Default
   Integer age = 33;
 
-  Address address;
+  @lombok.Builder.Default
+  Address address = null;
 
   @lombok.Builder.Default
   List<String> hobbies = Arrays.asList("fishing","triathlon");
@@ -51,10 +53,17 @@ public class Parent {
   List<Number> meterReadings = Arrays.asList(16.9,120.9,200.64);
 
   public static class Builder {
-    Address.Builder address = Address.builder();
+    Address.Builder addressBuilder = Address.builder();
 
     public Parent build() {
-      return this.build0();
+      return this
+          .withAddress(addressBuilder.build())
+          .build0();
+    }
+
+    public Builder address(Consumer<Address.Builder> addressAction) {
+      addressAction.accept(addressBuilder);
+      return this;
     }
   }
 }

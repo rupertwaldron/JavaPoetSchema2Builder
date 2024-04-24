@@ -9,6 +9,6 @@ class VersionHelperTest {
 
     @Test
     void getVersionReturnsCorrectVersion() {
-        assertThat(VersionHelper.getVersion()).isEqualTo("1.0-SNAPSHOT");
+        assertThat(VersionHelper.getVersion()).isEqualTo("1.1-SNAPPY");
     }
 }

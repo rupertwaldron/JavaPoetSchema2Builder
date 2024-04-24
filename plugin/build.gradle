@@ -1,6 +1,7 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
+    id 'com.netflix.nebula.info' version '13.0.0'
 }
 
 // Add a source set for the functional test suite
@@ -50,4 +51,13 @@ tasks.named('check') {
     dependsOn(tasks.functionalTest)
 }
 
-jar.finalizedBy(publishToMavenLocal)
+//jar.finalizedBy(publishToMavenLocal)
+
+jar {
+    finalizedBy publishToMavenLocal
+    manifest {
+        attributes (
+                'Version'  : project.version
+        )
+    }
+}

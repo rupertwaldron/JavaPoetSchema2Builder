@@ -26,8 +26,14 @@ class ClassPathTest extends Specification {
         new File(projectDir, "settings.gradle")
     }
 
+    private getPropertiesFile() {
+        File propsFile = new File(projectDir, '/META-INF/plugin.properties')
+        FileUtils.copyFile(new File("src/functionalTest/resources/META-INF/plugin.properties"), propsFile)
+    }
+
     def "can run task"() {
         given:
+//        getPropertiesFile()
         settingsFile << ""
         buildFile << """
 plugins {
@@ -59,9 +65,9 @@ poetBuilder {
         def values = runner.metaPropertyValues
 
         then:
-        classpath.contains("app-1.0-SNAPSHOT.jar")
-        classpath.contains("parser-1.0-SNAPSHOT.jar")
-        classpath.contains("schema-1.0-SNAPSHOT.jar")
-        classpath.contains("maker-1.0-SNAPSHOT.jar")
+        classpath.contains("app-1.1-SNAPSHOT.jar")
+        classpath.contains("parser-1.1-SNAPSHOT.jar")
+        classpath.contains("schema-1.1-SNAPSHOT.jar")
+        classpath.contains("maker-1.1-SNAPSHOT.jar")
     }
 }

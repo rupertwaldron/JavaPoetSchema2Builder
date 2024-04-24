@@ -94,34 +94,6 @@ class ClassMakerTest {
 
         Assertions.assertThat(methods).contains("build0","withName", "withMale", "withFamily",
                 "withCounty", "withCountry", "withStreetName", "withEmptyInts", "withYearsInHouse", "withMeterReadings", "withCoinToss", "withHouseNumber");
-
-
-
-
-
-        //then
-//        assertThatMethodReturns(createdObject, "getHouseNumber", 63);
-//        assertThatMethodReturns(createdObject, "getName", null);
-//        assertThatMethodReturns(createdObject, "getStreetName", "Rances Lane");
-//        assertThatMethodReturns(createdObject, "getYearsInHouse", 16.9);
-//        assertThatGetterReturnsCorrectType(createdObject, "getCounty", "county");
-//        assertThatMethodReturnsArray(createdObject, "getFamily", "Ben", "Sam", "Joe");
-//        assertThatMethodReturnsArray(createdObject, "getMeterReadings", 16.9, 120.9, 200.64);
-//        assertThatMethodReturnsArray(createdObject, "getCoinToss", true, false, true);
-//        assertThatMethodReturnsArray(createdObject, "getEmptyInts");
-//
-//        Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
-//
-//        assertThat(countyObject.getClass().getName()).contains("County");
-//
-//        assertThatMethodReturns(countyObject, "getCountyName", "Berks");
-//
-//        Object postCodeObject = countyObject.getClass().getMethod("getPostCode").invoke(countyObject);
-//        assertThat(postCodeObject.getClass().getName()).contains("PostCode");
-//
-//        assertThatMethodReturns(postCodeObject, "getFirstPart", "RG40");
-//        assertThatMethodReturns(postCodeObject, "getSecondPart", "2LG");
-
     }
 
     private Object buildObject(String builderName) {

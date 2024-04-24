@@ -65,9 +65,9 @@ poetBuilder {
         def values = runner.metaPropertyValues
 
         then:
-        classpath.contains("app-1.1-SNAPSHOT.jar")
-        classpath.contains("parser-1.1-SNAPSHOT.jar")
-        classpath.contains("schema-1.1-SNAPSHOT.jar")
-        classpath.contains("maker-1.1-SNAPSHOT.jar")
+        classpath.contains("app-1.2-SNAPSHOT.jar")
+        classpath.contains("parser-1.2-SNAPSHOT.jar")
+        classpath.contains("schema-1.2-SNAPSHOT.jar")
+        classpath.contains("maker-1.2-SNAPSHOT.jar")
     }
 }

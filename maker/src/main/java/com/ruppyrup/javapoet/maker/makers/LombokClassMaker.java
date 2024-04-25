@@ -35,7 +35,6 @@ public class LombokClassMaker extends AbstractClassMaker {
     protected void fieldBuilders() {
         fields.stream()
                 .map(LombokFieldSpecFactory::creatFieldSpec)
-//                .map(builder -> builder.addModifiers(Modifier.PRIVATE))
                 .forEach(fieldSpecBuilders::add);
     }
 
@@ -49,7 +48,6 @@ public class LombokClassMaker extends AbstractClassMaker {
     @Override
     protected TypeSpec generatedClassSpec(TypeName classNameType, List<FieldSpec.Builder> fieldSpecBuilders) {
         TypeName builderTypeName = ClassName.get("", "Builder");
-        String builderMethodName = className.toLowerCase() + "Builder2";
 
         AnnotationSpec builderAnnotation = AnnotationSpec.builder(Builder.class)
                 .addMember("setterPrefix", "$S", "with")
@@ -68,17 +66,16 @@ public class LombokClassMaker extends AbstractClassMaker {
 
         TypeSpec.Builder classTypeSpecBuilder = TypeSpec
                 .classBuilder(className)
+                //todo Add Jackson Annotations
 //                .addAnnotation(jacksonAutoInclude)
                 .addAnnotation(builderAnnotation)
                 .addAnnotation(fluentAnnotation)
                 .addAnnotation(Value.class)
                 .addType(builderForGeneratedClass(classNameType, fieldSpecBuilders, builderTypeName))
                 .addModifiers(Modifier.PUBLIC);
-//                .addMethod(createConstructor(builderTypeName, builderMethodName))
-//                .addMethod(createStaticBuilder(builderTypeName));
 
         fieldSpecBuilders.forEach(fsb -> classTypeSpecBuilder.addField(fsb.build()));
-//        fields.forEach(field -> classTypeSpecBuilder.addMethod(createGetterFor(field)));
+
         return classTypeSpecBuilder.build();
     }
 
@@ -110,8 +107,6 @@ public class LombokClassMaker extends AbstractClassMaker {
                     builderType.addMethod(buildersWithMethods(schemaField, builderTypeName, childBuilder));
                 });
 
-//        fieldSpecBuilders.forEach(fsb -> builderType.addField(fsb.build()));
-
         return builderType.build();
     }
 
@@ -130,7 +125,6 @@ public class LombokClassMaker extends AbstractClassMaker {
     private MethodSpec createBuildMethod(TypeName classNameType) {
         CodeBlock.Builder builderMethodBlock = CodeBlock.builder()
                 .add("return this\n");
-//                .add(".withCounty(countyBuilder.build())")
 
         fields.stream()
                 .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
@@ -141,10 +135,7 @@ public class LombokClassMaker extends AbstractClassMaker {
 
                     return CodeBlock.builder().add(".with$1T($2LBuilder.build())", classTypeName, schemaField.name)
                             .add("\n")
-
                             .build();
-//                    return FieldSpec.builder(builderTypeName, schemaField.name() + "Builder")
-//                            .initializer(initBlock).build();
                 })
                 .forEach(builderMethodBlock::add);
 
@@ -185,48 +176,6 @@ public class LombokClassMaker extends AbstractClassMaker {
 //        public Address.Builder county(Consumer<County.Builder> countyAction) {
 //            countyAction.accept(countyBuilder);
 //            return this;
-//        }
-//    }
-//}
-
-
-//public class Address {
-//    int houseNumber = 63;
-//
-//    String streetName = "Rances Lane";
-//
-//    Address(int houseNumber, String streetName) {
-//        this.houseNumber = houseNumber;
-//        this.streetName = streetName;
-//    }
-//
-//    public static AddressBuilder builder() {
-//        return new AddressBuilder();
-//    }
-//
-//    public static class AddressBuilder {
-//        private int houseNumber;
-//        private String streetName;
-//
-//        AddressBuilder() {
-//        }
-//
-//        public AddressBuilder houseNumber(int houseNumber) {
-//            this.houseNumber = houseNumber;
-//            return this;
-//        }
-//
-//        public AddressBuilder streetName(String streetName) {
-//            this.streetName = streetName;
-//            return this;
-//        }
-//
-//        public Address build() {
-//            return new Address(this.houseNumber, this.streetName);
-//        }
-//
-//        public String toString() {
-//            return "Address.AddressBuilder(houseNumber=" + this.houseNumber + ", streetName=" + this.streetName + ")";
 //        }
 //    }
 //}

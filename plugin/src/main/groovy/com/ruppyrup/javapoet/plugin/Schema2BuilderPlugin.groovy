@@ -66,11 +66,9 @@ class Schema2BuilderPlugin implements Plugin<Project> {
     private void createLocalTestSourceSet(Project project, PoetBuilderExtension extension) {
         project.afterEvaluate(ignored -> {
             JavaPluginExtension javaPlugin = project.getExtensions().getByType(JavaPluginExtension.class)
-//            ConfigurationContainer configurations = project.getConfigurations()
             DependencyHandler dependencies = project.getDependencies()
 
             javaPlugin.getSourceSets().stream()
-//                    .filter(sourceSet -> sourceSet.getName().toLowerCase().contains("test"))
                     .forEach(sourceSet -> {
 
                         sourceSet.java {
@@ -78,7 +76,6 @@ class Schema2BuilderPlugin implements Plugin<Project> {
                             srcDirs += extension.outputDir.get()
                         }
 
-//                      SourceSet integrationTestSourceSet = javaPlugin.getSourceSets().getByName("integrationTest");
                         String implementation = sourceSet.getImplementationConfigurationName()
                         def version = VersionHelper.getVersion()
                         println "Version = " + version

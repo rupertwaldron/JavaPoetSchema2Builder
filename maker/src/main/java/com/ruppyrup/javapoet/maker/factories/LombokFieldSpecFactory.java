@@ -53,7 +53,6 @@ public class LombokFieldSpecFactory {
             return setUpList(schemaField, Boolean.class);
         } else if (schemaField.clazz().getName().equals(OBJECT.typeIdentifier)) {
             String name = StringUtils.capitalize(schemaField.name());
-//            TypeName childTypeName = ClassName.get("", name + ".Builder");
             TypeName childTypeName = ClassName.get("", name);
             return FieldSpec.builder(childTypeName, schemaField.name())
                     .addAnnotation(lombok.Builder.Default.class)
@@ -97,36 +96,6 @@ public class LombokFieldSpecFactory {
 
             System.out.println("To sb for array = " + sb);
             CodeBlock block = CodeBlock.builder().add("$1T.asList($2L)", Arrays.class, sb.toString()).build();
-            builder.addAnnotation(lombok.Builder.Default.class);
-            builder.initializer(block);
-            return builder;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-    private static <T> FieldSpec.Builder setUpArray(SchemaField<?> schemaField, Class<T> type) {
-        try {
-            var builder = FieldSpec.builder(schemaField.clazz(), schemaField.name());
-            Field f = schemaField.getClass().getDeclaredField("initialValue");
-            f.setAccessible(true);
-            T[] initialValue = (T[]) f.get(schemaField);
-            StringBuilder sb = new StringBuilder("{");
-            if (initialValue != null) {
-                Arrays.stream(initialValue)
-                        .filter(Objects::nonNull)
-                        .forEach(i -> sb.append(i).append(","));
-                if (sb.length() > 1) {
-                    sb.deleteCharAt(sb.length() - 1);
-                }
-            }
-            sb.append("}");
-
-            ArrayTypeName numberArray = ArrayTypeName.of(type);
-            System.out.println("To sb for array = " + sb);
-            CodeBlock block = CodeBlock.builder().add("new $1T $2L", numberArray, sb.toString()).build();
             builder.addAnnotation(lombok.Builder.Default.class);
             builder.initializer(block);
             return builder;

@@ -6,7 +6,6 @@ import com.ruppyrup.javapoet.maker.makers.LombokClassMaker;
 import com.ruppyrup.javapoet.maker.makers.StandardClassMaker;
 
 public class ClassMakerFactory {
-
     public static ClassMaker getClassMakerOfType(String classMakerType, ClassGenerationBuilder builder) {
         if ("standard".equals(classMakerType)) {
             return new StandardClassMaker(builder);

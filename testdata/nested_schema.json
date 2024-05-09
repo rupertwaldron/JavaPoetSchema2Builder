@@ -57,20 +57,31 @@
           }
         }
       },
-      "required": ["street", "city", "state", "postalCode"]
+      "required": [
+        "street",
+        "city",
+        "state",
+        "postalCode"
+      ]
     },
     "hobbies": {
       "type": "array",
       "items": {
         "type": "string",
-        "sample": ["fishing", "triathlon"]
+        "sample": [
+          "fishing",
+          "triathlon"
+        ]
       }
     },
     "luckyNumbers": {
       "type": "array",
       "items": {
         "type": "integer",
-        "sample": [77, 39]
+        "sample": [
+          77,
+          39
+        ]
       }
     },
     "emptyInts": {
@@ -83,7 +94,11 @@
       "type": "array",
       "items": {
         "type": "boolean",
-        "sample": [true, false, true]
+        "sample": [
+          true,
+          false,
+          true
+        ]
       }
     },
     "yearsInHouse": {
@@ -100,6 +115,40 @@
           120.9,
           200.64
         ]
+      }
+    },
+    "keepsakes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "jewelery": {
+            "type": "object",
+            "properties": {
+              "metal": {
+                "type": "string",
+                "sample": "Gold"
+              },
+              "stone": {
+                "type": "string",
+                "sample": "Saphire"
+              }
+            }
+          },
+          "book": {
+            "type": "object",
+            "properties": {
+              "metal": {
+                "type": "string",
+                "sample": "Gold"
+              },
+              "stone": {
+                "type": "string",
+                "sample": "Saphire"
+              }
+            }
+          }
+        }
       }
     }
   },

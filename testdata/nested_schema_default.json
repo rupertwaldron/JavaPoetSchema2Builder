@@ -101,6 +101,40 @@
           200.64
         ]
       }
+    },
+    "keepsakes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "jewelery": {
+            "type": "object",
+            "properties": {
+              "metal": {
+                "type": "string",
+                "default": "Gold"
+              },
+              "stone": {
+                "type": "string",
+                "default": "Saphire"
+              }
+            }
+          },
+          "book": {
+            "type": "object",
+            "properties": {
+              "metal": {
+                "type": "string",
+                "default": "Gold"
+              },
+              "stone": {
+                "type": "string",
+                "default": "Saphire"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "required": ["name", "age"]

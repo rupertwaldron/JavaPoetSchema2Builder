@@ -1,7 +1,7 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
-    id 'com.netflix.nebula.info' version '13.0.0'
+    id 'com.netflix.nebula.info' version '13.0.0' // adds gradle properties
 }
 
 // Add a source set for the functional test suite

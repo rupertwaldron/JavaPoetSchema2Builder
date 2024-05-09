@@ -1,10 +1,12 @@
 package com.ruppyrup.javapoet.schema;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ruppyrup.javapoet.app.IDataTree;
 import com.ruppyrup.javapoet.app.PoetNode;
 import com.ruppyrup.javapoet.app.SchemaField;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -28,6 +30,13 @@ public class DataTree implements IDataTree {
                 PoetNode nextPoetNode = new TreePoetNode(schemaField);
                 root.addChild(nextPoetNode);
                 myFillMap(next.getValue(), nextPoetNode, sampleKey);
+            } else if (next.getValue().path("type").asText().equals("array") && next.getValue().path("items").path("type").asText().equals("object")) {
+                SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next, sampleKey);
+                PoetNode nextPoetNode = new TreePoetNode(schemaField);
+                root.addChild(nextPoetNode);
+                ArrayNode bob = (ArrayNode) next.getValue().path("items").path("sample");
+                System.out.println(bob);
+//                Arrays.asList((Object[]) schemaField.initialValue()).forEach();
             } else {
                 SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next, sampleKey);
                 PoetNode nextPoetNode = new TreePoetNode(schemaField);

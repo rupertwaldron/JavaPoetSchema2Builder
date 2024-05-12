@@ -1,4 +1,4 @@
-package com.ruppyrup.javapoet.maker.factories;
+package com.ruppyrup.javapoet.app;
 
 public enum FieldType {
     STRING("java.lang.String"),
@@ -11,7 +11,8 @@ public enum FieldType {
 
     BOOLEAN("java.lang.Boolean"),
     BOOLEAN_ARRAY("[Ljava.lang.Boolean;"),
-    OBJECT("java.lang.Object");
+    OBJECT("java.lang.Object"),
+    OBJECT_ARRAY("[Ljava.lang.Object;");
 
     public final String typeIdentifier;
     FieldType(String typeIdentifier) {

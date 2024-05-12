@@ -2,16 +2,12 @@ package com.ruppyrup.javapoet.schema;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ruppyrup.javapoet.app.SchemaField;
-import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class SchemaFieldFactory {
 
@@ -45,7 +41,7 @@ public class SchemaFieldFactory {
                 elements.forEachRemaining(el -> elementsList.add(el.booleanValue()));
                 return new SchemaField<>(next.getKey(), Boolean[].class, elementsList.toArray(new Boolean[0]));
             } else if (next.getValue().path("items").path("type").asText().equals("object")) {
-                List<Boolean> elementsList = new ArrayList<>();
+                List<Object> elementsList = new ArrayList<>();
 //                elements.forEachRemaining(el -> elementsList.add(el.booleanValue()));
                 return new SchemaField<>(next.getKey(), Object[].class, elementsList.toArray(new Object[0]));
             } else {

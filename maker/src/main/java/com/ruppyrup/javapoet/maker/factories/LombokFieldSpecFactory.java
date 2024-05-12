@@ -1,7 +1,6 @@
 package com.ruppyrup.javapoet.maker.factories;
 
 import com.ruppyrup.javapoet.app.SchemaField;
-import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -14,15 +13,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.OBJECT;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.BOOLEAN;
+import static com.ruppyrup.javapoet.app.FieldType.BOOLEAN_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.INTEGER;
+import static com.ruppyrup.javapoet.app.FieldType.INTEGER_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.NUMBER;
+import static com.ruppyrup.javapoet.app.FieldType.NUMBER_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.OBJECT;
+import static com.ruppyrup.javapoet.app.FieldType.STRING;
+import static com.ruppyrup.javapoet.app.FieldType.STRING_ARRAY;
 
 public class LombokFieldSpecFactory {
 

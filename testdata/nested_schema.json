@@ -138,13 +138,13 @@
           "book": {
             "type": "object",
             "properties": {
-              "metal": {
+              "author": {
                 "type": "string",
-                "sample": "Gold"
+                "sample": "J R Hartley"
               },
-              "stone": {
+              "title": {
                 "type": "string",
-                "sample": "Saphire"
+                "sample": "Fly Fishing"
               }
             }
           }

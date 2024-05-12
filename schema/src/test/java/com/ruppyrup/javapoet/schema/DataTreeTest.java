@@ -40,5 +40,7 @@ class DataTreeTest {
 
         assertArrayField(poetNode, "coinToss", true, false, true);
         assertArrayField(poetNode, "emptyInts");
+
+        assertArrayField(poetNode, "keepsakes", new Object());
     }
 }

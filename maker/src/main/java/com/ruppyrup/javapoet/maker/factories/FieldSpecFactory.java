@@ -12,15 +12,15 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.INTEGER_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.NUMBER_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.OBJECT;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.STRING_ARRAY;
-import static com.ruppyrup.javapoet.maker.factories.FieldType.BOOLEAN;
+import static com.ruppyrup.javapoet.app.FieldType.BOOLEAN_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.INTEGER;
+import static com.ruppyrup.javapoet.app.FieldType.INTEGER_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.NUMBER;
+import static com.ruppyrup.javapoet.app.FieldType.NUMBER_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.OBJECT;
+import static com.ruppyrup.javapoet.app.FieldType.STRING;
+import static com.ruppyrup.javapoet.app.FieldType.STRING_ARRAY;
+import static com.ruppyrup.javapoet.app.FieldType.BOOLEAN;
 
 public class FieldSpecFactory {
 

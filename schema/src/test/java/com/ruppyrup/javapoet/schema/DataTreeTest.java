@@ -8,10 +8,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static com.ruppyrup.javapoet.schema.TestUtils.assertArrayField;
 import static com.ruppyrup.javapoet.schema.TestUtils.assertField;
 import static com.ruppyrup.javapoet.schema.TestUtils.getJsonNode;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DataTreeTest {
     private final static ObjectMapper mapper = new ObjectMapper();
@@ -41,6 +43,14 @@ class DataTreeTest {
         assertArrayField(poetNode, "coinToss", true, false, true);
         assertArrayField(poetNode, "emptyInts");
 
-        assertArrayField(poetNode, "keepsakes", new Object());
+        ArrayList<SchemaField<?>> listOfObjects = (ArrayList<SchemaField<?>>) (poetNode.traverse("keepsakes")).initialValue;
+
+        assertThat(listOfObjects).hasSize(2);
+
+        Object[] array = listOfObjects.stream()
+                .map(SchemaField::name)
+                .toArray();
+
+        assertThat(array).contains("jewelery", "book");
     }
 }

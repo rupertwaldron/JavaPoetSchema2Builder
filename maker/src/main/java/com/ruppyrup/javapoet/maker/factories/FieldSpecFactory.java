@@ -5,12 +5,16 @@ import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.lang.model.element.Parameterizable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import static com.ruppyrup.javapoet.app.FieldType.BOOLEAN_ARRAY;
 import static com.ruppyrup.javapoet.app.FieldType.INTEGER;
@@ -18,6 +22,7 @@ import static com.ruppyrup.javapoet.app.FieldType.INTEGER_ARRAY;
 import static com.ruppyrup.javapoet.app.FieldType.NUMBER;
 import static com.ruppyrup.javapoet.app.FieldType.NUMBER_ARRAY;
 import static com.ruppyrup.javapoet.app.FieldType.OBJECT;
+import static com.ruppyrup.javapoet.app.FieldType.OBJECT_ARRAY;
 import static com.ruppyrup.javapoet.app.FieldType.STRING;
 import static com.ruppyrup.javapoet.app.FieldType.STRING_ARRAY;
 import static com.ruppyrup.javapoet.app.FieldType.BOOLEAN;
@@ -47,6 +52,15 @@ public class FieldSpecFactory {
             TypeName childTypeName = ClassName.get("", name);
             builder = FieldSpec.builder(childTypeName, schemaField.name());
             builder.initializer("$L.builder().build()", name);
+        } else if (schemaField.clazz().getName().equals(OBJECT_ARRAY.typeIdentifier)) {
+            String capitalize = StringUtils.capitalize(schemaField.name());
+            String name = StringUtils.chop(capitalize);
+            TypeName childTypeName = ClassName.get("", name);
+            // Todo need to do Keepsake[] rather than keepsakes
+            ClassName list = ClassName.get(List.class);
+            ParameterizedTypeName listOfItems = ParameterizedTypeName.get(list, childTypeName);
+            builder = FieldSpec.builder(listOfItems, schemaField.name());
+            setUpObjectArray(schemaField, builder, childTypeName);
         } else {
             throw new IncompatibleClassChangeError("Type found = " + schemaField.clazz());
         }
@@ -86,6 +100,34 @@ public class FieldSpecFactory {
             ArrayTypeName numberArray = ArrayTypeName.of(type);
             System.out.println("To sb for array = " + sb);
             CodeBlock block = CodeBlock.builder().add("new $1T $2L", numberArray, sb.toString()).build();
+            builder.initializer(block);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private static void setUpObjectArray(SchemaField<?> schemaField, FieldSpec.Builder builder, TypeName type) {
+        try {
+            Field f = schemaField.getClass().getDeclaredField("initialValue");
+            f.setAccessible(true);
+            Object[] initialValue = (Object[])f.get(schemaField);
+            StringBuilder sb = new StringBuilder("{");
+            if(initialValue != null) {
+                Arrays.stream(initialValue)
+                        .filter(Objects::nonNull)
+                        .map(iv -> ((SchemaField<?>) iv).name)
+                        .map(name -> StringUtils.capitalize(name) + ".builder().build()")
+                        .forEach(i -> sb.append(i).append(","));
+                if (sb.length() > 1) {
+                    sb.deleteCharAt(sb.length() - 1);
+                }
+            }
+            sb.append("}");
+
+            ArrayTypeName numberArray = ArrayTypeName.of(type);
+            System.out.println("To sb for array = " + sb);
+            CodeBlock block = CodeBlock.builder().add("List.of($T.builder().build())", type).build();
             builder.initializer(block);
         } catch (Exception e) {
             throw new RuntimeException(e);

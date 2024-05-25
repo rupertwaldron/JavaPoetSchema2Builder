@@ -139,6 +139,11 @@ class ClassMakerTest {
                 new SchemaField<>("countryName", String.class, "UK")
         );
 
+        List<SchemaField<?>> book = List.of(
+                new SchemaField<>("author", String.class, "J R Hartley"),
+                new SchemaField<>("title", String.class, "J R Hartley")
+        );
+
         ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
                 .withDir(tempdir.getPath())
                 .withPackageName(PACKAGE_NAME)
@@ -154,6 +159,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .withField(new SchemaField<>("country", Object.class, countryField))
+                .withField(new SchemaField<>("books", Object[].class, book.toArray(new SchemaField[0])))
                 .build();
 
         return ClassMakerFactory.getClassMakerOfType(classMakerType, classGenerationBuilder);

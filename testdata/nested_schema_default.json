@@ -57,20 +57,31 @@
           }
         }
       },
-      "required": ["street", "city", "state", "postalCode"]
+      "required": [
+        "street",
+        "city",
+        "state",
+        "postalCode"
+      ]
     },
     "hobbies": {
       "type": "array",
       "items": {
         "type": "string",
-        "default": ["fishing", "triathlon"]
+        "default": [
+          "fishing",
+          "triathlon"
+        ]
       }
     },
     "luckyNumbers": {
       "type": "array",
       "items": {
         "type": "integer",
-        "default": [77, 39]
+        "default": [
+          77,
+          39
+        ]
       }
     },
     "emptyInts": {
@@ -83,7 +94,11 @@
       "type": "array",
       "items": {
         "type": "boolean",
-        "default": [true, false, true]
+        "default": [
+          true,
+          false,
+          true
+        ]
       }
     },
     "yearsInHouse": {
@@ -102,36 +117,18 @@
         ]
       }
     },
-    "keepsakes": {
+    "books": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "jewelery": {
-            "type": "object",
-            "properties": {
-              "metal": {
-                "type": "string",
-                "default": "Gold"
-              },
-              "stone": {
-                "type": "string",
-                "default": "Saphire"
-              }
-            }
+          "author": {
+            "type": "string",
+            "default": "J R Hartley"
           },
-          "book": {
-            "type": "object",
-            "properties": {
-              "metal": {
-                "type": "string",
-                "default": "Gold"
-              },
-              "stone": {
-                "type": "string",
-                "default": "Saphire"
-              }
-            }
+          "title": {
+            "type": "string",
+            "default": "Fly fishing"
           }
         }
       }

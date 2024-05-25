@@ -43,7 +43,7 @@ class DataTreeTest {
         assertArrayField(poetNode, "coinToss", true, false, true);
         assertArrayField(poetNode, "emptyInts");
 
-        ArrayList<SchemaField<?>> listOfObjects = (ArrayList<SchemaField<?>>) (poetNode.traverse("keepsakes")).initialValue;
+        ArrayList<SchemaField<?>> listOfObjects = (ArrayList<SchemaField<?>>) (poetNode.traverse("books")).initialValue;
 
         assertThat(listOfObjects).hasSize(2);
 
@@ -51,6 +51,6 @@ class DataTreeTest {
                 .map(SchemaField::name)
                 .toArray();
 
-        assertThat(array).contains("jewelery", "book");
+        assertThat(array).contains("author", "title");
     }
 }

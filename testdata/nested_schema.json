@@ -117,36 +117,18 @@
         ]
       }
     },
-    "keepsakes": {
+    "books": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "jewelery": {
-            "type": "object",
-            "properties": {
-              "metal": {
-                "type": "string",
-                "sample": "Gold"
-              },
-              "stone": {
-                "type": "string",
-                "sample": "Saphire"
-              }
-            }
+          "author": {
+            "type": "string",
+            "sample": "J R Hartley"
           },
-          "book": {
-            "type": "object",
-            "properties": {
-              "author": {
-                "type": "string",
-                "sample": "J R Hartley"
-              },
-              "title": {
-                "type": "string",
-                "sample": "Fly Fishing"
-              }
-            }
+          "title": {
+            "type": "string",
+            "sample": "Fly fishing"
           }
         }
       }

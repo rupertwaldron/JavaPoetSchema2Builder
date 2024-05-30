@@ -1,5 +1,6 @@
 package com.ruppyrup.javapoet.maker.makers;
 
+import com.ruppyrup.javapoet.app.FieldType;
 import com.ruppyrup.javapoet.app.SchemaField;
 import com.ruppyrup.javapoet.maker.builders.ClassGenerationBuilder;
 import com.ruppyrup.javapoet.maker.factories.FieldSpecFactory;
@@ -37,7 +38,8 @@ public class StandardClassMaker extends AbstractClassMaker {
     @Override
     protected void generateChildObjects() {
         fields.stream()
-                .filter(schemaField -> schemaField.clazz().getName().equals("java.lang.Object"))
+                .filter(schemaField -> schemaField.clazz().getName().equals(FieldType.OBJECT.typeIdentifier) ||
+                        schemaField.clazz().getName().equals(FieldType.OBJECT_ARRAY.typeIdentifier))
                 .forEach(schemaField -> childObjectMaker.makeChild(schemaField, dir, packageName, "standard"));
     }
 

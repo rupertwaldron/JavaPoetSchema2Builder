@@ -56,7 +56,6 @@ public class FieldSpecFactory {
             String capitalize = StringUtils.capitalize(schemaField.name());
             String name = StringUtils.chop(capitalize);
             TypeName childTypeName = ClassName.get("", name);
-            // Todo need to do Keepsake[] rather than keepsakes
             ClassName list = ClassName.get(List.class);
             ParameterizedTypeName listOfItems = ParameterizedTypeName.get(list, childTypeName);
             builder = FieldSpec.builder(listOfItems, schemaField.name());

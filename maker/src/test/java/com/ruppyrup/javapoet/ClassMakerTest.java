@@ -111,8 +111,9 @@ class ClassMakerTest {
         File input2 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "County.java");
         File input3 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "PostCode.java");
         File input4 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Country.java");
+        File input5 = new File(tempdir + "/com/ruppyrup/javapoet/generated/" + "Book.java");
 
-        List<File> javaFiles = List.of(input1, input2, input3, input4);
+        List<File> javaFiles = List.of(input1, input2, input3, input4, input5);
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
@@ -141,7 +142,7 @@ class ClassMakerTest {
 
         List<SchemaField<?>> book = List.of(
                 new SchemaField<>("author", String.class, "J R Hartley"),
-                new SchemaField<>("title", String.class, "J R Hartley")
+                new SchemaField<>("title", String.class, "Fly Fishing")
         );
 
         ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()

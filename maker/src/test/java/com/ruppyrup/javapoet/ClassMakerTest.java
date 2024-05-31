@@ -52,6 +52,10 @@ class ClassMakerTest {
         assertThatMethodReturnsArray(createdObject, "getCoinToss", true, false, true);
         assertThatMethodReturnsArray(createdObject, "getEmptyInts");
 
+        List<?> getBooks = (List<?>) createdObject.getClass().getMethod("getBooks").invoke(createdObject);
+
+        assertThat(getBooks).hasSize(1);
+
         Object countyObject = createdObject.getClass().getMethod("getCounty").invoke(createdObject);
 
         assertThat(countyObject.getClass().getName()).contains("County");
@@ -69,9 +73,6 @@ class ClassMakerTest {
         assertThat(countryObject.getClass().getName()).contains("Country");
 
         assertThatMethodReturns(countryObject, "getCountryName", "UK");
-
-
-
     }
 
     @Test

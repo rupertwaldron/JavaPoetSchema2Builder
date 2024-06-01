@@ -59,6 +59,7 @@ poetBuilder {
         assertGenertedClassMatchesExpected("standard","schema1", "Parent")
         assertGenertedClassMatchesExpected("standard", "schema1", "PostalCode")
         assertGenertedClassMatchesExpected("standard", "schema1", "Address")
+        assertGenertedClassMatchesExpected("standard", "schema1", "Book")
         assertGenertedClassMatchesExpected("standard", "schema2", "Child")
         assertGenertedClassMatchesExpected("standard", "schema2", "PostalCode")
         assertGenertedClassMatchesExpected("standard", "schema2", "Address")

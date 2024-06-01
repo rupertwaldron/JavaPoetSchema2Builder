@@ -4,6 +4,7 @@ import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.Number;
 import java.lang.String;
+import java.util.List;
 
 public class Parent {
   private String name = "Rupert";
@@ -26,6 +27,8 @@ public class Parent {
 
   private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
 
+  private List<Book> books = List.of(Book.builder().build());
+
   private Parent(ParentBuilder parentBuilder) {
     this.name = parentBuilder.name;
     this.coinToss = parentBuilder.coinToss;
@@ -37,6 +40,7 @@ public class Parent {
     this.yearsInHouse = parentBuilder.yearsInHouse;
     this.emptyInts = parentBuilder.emptyInts;
     this.meterReadings = parentBuilder.meterReadings;
+    this.books = parentBuilder.books;
   }
 
   public static ParentBuilder builder() {
@@ -83,6 +87,10 @@ public class Parent {
     return this.meterReadings;
   }
 
+  public List<Book> getBooks() {
+    return this.books;
+  }
+
   public static class ParentBuilder {
     private String name = "Rupert";
 
@@ -103,6 +111,8 @@ public class Parent {
     private Integer[] emptyInts = new Integer[] {};
 
     private Number[] meterReadings = new Number[] {16.9,120.9,200.64};
+
+    private List<Book> books = List.of(Book.builder().build());
 
     public Parent build() {
       return new Parent(this);
@@ -155,6 +165,11 @@ public class Parent {
 
     public ParentBuilder withMeterReadings(Number[] meterReadings) {
       this.meterReadings = meterReadings;
+      return this;
+    }
+
+    public ParentBuilder withBooks(List<Book> books) {
+      this.books = books;
       return this;
     }
   }

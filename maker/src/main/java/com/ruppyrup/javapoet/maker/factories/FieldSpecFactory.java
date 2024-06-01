@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.lang.model.element.Parameterizable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -110,10 +111,12 @@ public class FieldSpecFactory {
         try {
             Field f = schemaField.getClass().getDeclaredField("initialValue");
             f.setAccessible(true);
-            Object[] initialValue = (Object[])f.get(schemaField);
+//            Object[] initialValue = (Object[])f.get(schemaField);
+            List<SchemaField<?>> initialValue = ((ArrayList<SchemaField<?>>)f.get(schemaField));
             StringBuilder sb = new StringBuilder("{");
             if(initialValue != null) {
-                Arrays.stream(initialValue)
+//                Arrays.stream(initialValue)
+                initialValue.stream()
                         .filter(Objects::nonNull)
                         .map(iv -> ((SchemaField<?>) iv).name)
                         .map(name -> StringUtils.capitalize(name) + ".builder().build()")

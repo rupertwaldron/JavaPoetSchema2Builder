@@ -8,20 +8,9 @@
       "type": "string",
       "sample": "Rupert"
     },
-    "coinToss": {
-      "type": "array",
-      "items": {
-        "type": "boolean",
-        "sample": [
-          true,
-          false,
-          true
-        ]
-      }
-    },
     "male": {
       "type": "boolean",
-      "sample": false
+      "sample": true
     },
     "age": {
       "type": "integer",
@@ -42,6 +31,15 @@
         "state": {
           "type": "string",
           "sample": "Berkshire"
+        },
+        "country": {
+          "type": "object",
+          "properties": {
+            "countryName": {
+              "type": "string",
+              "sample": "England"
+            }
+          }
         },
         "postalCode": {
           "type": "object",
@@ -86,16 +84,27 @@
         ]
       }
     },
-    "yearsInHouse": {
-      "type": "number",
-      "sample": 16.9,
-      "minimum": 0.0
-    },
     "emptyInts": {
       "type": "array",
       "items": {
         "type": "integer"
       }
+    },
+    "coinToss": {
+      "type": "array",
+      "items": {
+        "type": "boolean",
+        "sample": [
+          true,
+          false,
+          true
+        ]
+      }
+    },
+    "yearsInHouse": {
+      "type": "number",
+      "sample": 16.9,
+      "minimum": 0.0
     },
     "meterReadings": {
       "type": "array",
@@ -127,4 +136,3 @@
   },
   "required": ["name", "age"]
 }
-

@@ -7,6 +7,7 @@ import com.ruppyrup.javapoet.maker.factories.ClassMakerFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +18,11 @@ public class ChildObjectMaker {
         List<SchemaField<?>> initialFields = null;
         if (FieldType.OBJECT_ARRAY.typeIdentifier.equals(schemaField.clazz.getName())) {
             name = StringUtils.chop(name);
-            Object[] bob = ((Object[]) schemaField.initialValue());
-            initialFields = Arrays.stream(bob)
-                            .map(obj -> (SchemaField<?>) obj)
-                                    .collect(Collectors.toList());
+            initialFields = (ArrayList<SchemaField<?>>)schemaField.initialValue();
+//            Object[] bob = ((Object[]) schemaField.initialValue());
+//            initialFields = initialValue.stream()
+//                            .map(obj -> (SchemaField<?>) obj)
+//                                    .collect(Collectors.toList());
         } else {
             initialFields = (List<SchemaField<?>>) schemaField.initialValue();
         }

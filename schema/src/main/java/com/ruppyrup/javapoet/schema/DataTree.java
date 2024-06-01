@@ -36,15 +36,6 @@ public class DataTree implements IDataTree {
                 PoetNode nextPoetNode = new TreePoetNode(schemaField);
                 root.addChild(nextPoetNode);
                 myFillMap(next.getValue(), nextPoetNode, sampleKey);
-//            } else if (next.getValue().path("type").asText().equals("array") && next.getValue().path("items").path("type").asText().equals("object")) {
-////                SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next, sampleKey);
-//                Object[] array = next.getValue().path("items").path("properties").properties().stream()
-//                        .map(prop -> SchemaFieldFactory.createSchemaField(prop, sampleKey))
-//                        .toArray();
-//                SchemaField<?> schemaField = new SchemaField<>(next.getKey(), Object[].class, array);
-//                PoetNode nextPoetNode = new TreePoetNode(schemaField);
-//                root.addChild(nextPoetNode);
-//                Arrays.asList((Object[]) schemaField.initialValue()).forEach();
             } else {
                 SchemaField<?> schemaField = SchemaFieldFactory.createSchemaField(next, sampleKey);
                 PoetNode nextPoetNode = new TreePoetNode(schemaField);

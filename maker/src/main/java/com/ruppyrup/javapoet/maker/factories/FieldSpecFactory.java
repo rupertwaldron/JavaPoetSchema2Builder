@@ -112,7 +112,7 @@ public class FieldSpecFactory {
             Field f = schemaField.getClass().getDeclaredField("initialValue");
             f.setAccessible(true);
 //            Object[] initialValue = (Object[])f.get(schemaField);
-            List<SchemaField<?>> initialValue = ((ArrayList<SchemaField<?>>)f.get(schemaField));
+            List<SchemaField<?>> initialValue = (List<SchemaField<?>>) f.get(schemaField);
             StringBuilder sb = new StringBuilder("{");
             if(initialValue != null) {
 //                Arrays.stream(initialValue)

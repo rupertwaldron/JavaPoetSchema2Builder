@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -141,10 +142,15 @@ class ClassMakerTest {
                 new SchemaField<>("countryName", String.class, "UK")
         );
 
-        List<SchemaField<?>> book = List.of(
-                new SchemaField<>("author", String.class, "J R Hartley"),
-                new SchemaField<>("title", String.class, "Fly Fishing")
-        );
+        List<SchemaField<?>> book = new ArrayList<>();
+
+        book.add(new SchemaField<>("author", String.class, "J R Hartley"));
+        book.add(new SchemaField<>("title", String.class, "Fly Fishing"));
+
+        SchemaField<?> books = new SchemaField<>("books", Object[].class, null);
+        ((SchemaField<Object>)books).initialValue(book);
+
+
 
         ClassGenerationBuilder classGenerationBuilder = ClassGenerationBuilder.builder()
                 .withDir(tempdir.getPath())
@@ -161,7 +167,7 @@ class ClassMakerTest {
                 .withField(new SchemaField<>("family", String[].class, new String[]{"Ben", "Sam", "Joe"}))
                 .withField(new SchemaField<>("county", Object.class, countyFields))
                 .withField(new SchemaField<>("country", Object.class, countryField))
-                .withField(new SchemaField<>("books", Object[].class, book.toArray(new SchemaField[0])))
+                .withField(books)
                 .build();
 
         return ClassMakerFactory.getClassMakerOfType(classMakerType, classGenerationBuilder);

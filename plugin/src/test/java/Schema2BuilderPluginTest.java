@@ -1,5 +1,3 @@
-package com.ruppyrup.javapoet.plugin;
-
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.Test;

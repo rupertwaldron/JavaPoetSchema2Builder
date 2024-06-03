@@ -1,14 +1,13 @@
-package com.ruppyrup.javapoet.plugin;
-
+import com.ruppyrup.javapoet.plugin.VersionHelper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class VersionHelperTest {
 
     @Test
     void getVersionReturnsCorrectVersion() {
-        assertThat(VersionHelper.getVersion()).isEqualTo("1.1-SNAPPY");
+        Assertions.assertThat(VersionHelper.getVersion()).isEqualTo("1.1-SNAPPY");
     }
 }

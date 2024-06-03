@@ -95,7 +95,7 @@ class ClassMakerTest {
         }
 
         Assertions.assertThat(methods).contains("build0","withName", "withMale", "withFamily",
-                "withCounty", "withCountry", "withStreetName", "withEmptyInts", "withYearsInHouse", "withMeterReadings", "withCoinToss", "withHouseNumber");
+                "withCounty", "withCountry", "withStreetName", "withEmptyInts", "withYearsInHouse", "withMeterReadings", "withCoinToss", "withHouseNumber", "withBooks");
     }
 
     private Object buildObject(String builderName) {

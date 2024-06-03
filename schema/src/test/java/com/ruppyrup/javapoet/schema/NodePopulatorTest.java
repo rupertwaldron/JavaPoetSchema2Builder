@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ruppyrup.javapoet.schema.TestUtils.assertField;
@@ -40,5 +41,15 @@ class NodePopulatorTest {
         assertThat((Number[]) meterReadings.initialValue()).contains(16.9, 120.9, 200.64);
         SchemaField<?> emptyInts = poetNode.traverse("emptyInts");
         assertThat((Integer []) emptyInts.initialValue()).isEmpty();
+
+        ArrayList<SchemaField<?>> listOfObjects = (ArrayList<SchemaField<?>>) (poetNode.traverse("books")).initialValue;
+
+        assertThat(listOfObjects).hasSize(2);
+
+        Object[] array = listOfObjects.stream()
+                .map(SchemaField::name)
+                .toArray();
+
+        assertThat(array).contains("author", "title");
     }
 }

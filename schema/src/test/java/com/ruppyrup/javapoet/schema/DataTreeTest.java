@@ -16,8 +16,6 @@ import static com.ruppyrup.javapoet.schema.TestUtils.getJsonNode;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DataTreeTest {
-    private final static ObjectMapper mapper = new ObjectMapper();
-
     @ParameterizedTest
     @CsvSource({"sample, nested_schema.json", "default, nested_schema_default.json"})
     void canBuildDataTreeFromJsonNode(String defaultKey, String filename) {

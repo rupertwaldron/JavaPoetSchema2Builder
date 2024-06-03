@@ -42,7 +42,6 @@ public class SchemaFieldFactory {
                 return new SchemaField<>(next.getKey(), Boolean[].class, elementsList.toArray(new Boolean[0]));
             } else if (next.getValue().path("items").path("type").asText().equals("object")) {
                 List<Object> elementsList = new ArrayList<>();
-//                elements.forEachRemaining(el -> elementsList.add(el.booleanValue()));
                 return new SchemaField<>(next.getKey(), Object[].class, elementsList.toArray(new Object[0]));
             } else {
                 throw new InvalidParameterException(next.getKey() + " is not a valid schema field");

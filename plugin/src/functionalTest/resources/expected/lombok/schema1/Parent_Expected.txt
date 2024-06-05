@@ -52,6 +52,9 @@ public class Parent {
   @lombok.Builder.Default
   List<Number> meterReadings = Arrays.asList(16.9,120.9,200.64);
 
+  @lombok.Builder.Default
+  List<Book> books = List.of(Book.builder().build());
+
   public static class Builder {
     Address.Builder addressBuilder = Address.builder();
 

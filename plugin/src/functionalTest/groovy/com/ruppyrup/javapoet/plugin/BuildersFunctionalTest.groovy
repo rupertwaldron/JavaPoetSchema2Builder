@@ -98,9 +98,7 @@ poetBuilder {
         assertGenertedClassMatchesExpected("lombok","schema1", "Parent")
         assertGenertedClassMatchesExpected("lombok","schema1", "PostalCode")
         assertGenertedClassMatchesExpected("lombok","schema1", "Address")
-//        assertGenertedClassMatchesExpected("schema2", "Child")
-//        assertGenertedClassMatchesExpected("schema2", "PostalCode")
-//        assertGenertedClassMatchesExpected("schema2", "Address")
+        assertGenertedClassMatchesExpected("lombok","schema1", "Book")
     }
 
     private void assertGenertedClassMatchesExpected(String builderType, String path, String className) {
